@@ -30,6 +30,7 @@
 #endif
 
 #include "gtk/gtkaccessibleprivate.h"
+#include "gtk/gtkaccessiblehypertextprivate.h"
 #include "gtk/a11y/gtkatspicontextprivate.h"
 #include "gtk/a11y/gtkatspirootprivate.h"
 
@@ -61,6 +62,56 @@ typedef struct
   char change;
   int  index;
 } ChildEvent;
+
+typedef struct
+{
+  GtkWidget               parent_instance;
+  GtkLabel               *label;
+  GtkAccessibleHyperlink *weak_link;
+} ReentrantWidget;
+
+typedef struct
+{
+  GtkWidgetClass parent_class;
+} ReentrantWidgetClass;
+
+static gboolean
+reentrant_get_platform_state (GtkAccessible              *accessible,
+                              GtkAccessiblePlatformState  state)
+{
+  ReentrantWidget *self = (ReentrantWidget *) accessible;
+
+  if (self->label != NULL)
+    {
+      GtkLabel *label = self->label;
+
+      self->label = NULL;
+      gtk_label_set_label (label, "Link removed during serialization");
+
+      g_assert_nonnull (self->weak_link);
+    }
+
+  return FALSE;
+}
+
+static void
+reentrant_widget_accessible_init (GtkAccessibleInterface *iface)
+{
+  iface->get_platform_state = reentrant_get_platform_state;
+}
+
+G_DEFINE_TYPE_WITH_CODE (ReentrantWidget, reentrant_widget, GTK_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE, reentrant_widget_accessible_init))
+
+static void
+reentrant_widget_class_init (ReentrantWidgetClass *klass)
+{
+}
+
+static void
+reentrant_widget_init (ReentrantWidget *self)
+{
+}
 
 static void
 registry_method_call (GDBusConnection       *connection,
@@ -315,6 +366,54 @@ check_cache_and_order (TestBus   *bus,
 }
 
 static void
+check_cache_lifetime (TestBus *bus)
+{
+  ReentrantWidget *widget = g_object_ref_sink (g_object_new (reentrant_widget_get_type (), NULL));
+  GtkWidget *label = g_object_ref_sink (gtk_label_new (NULL));
+  GtkAccessibleHyperlink *link;
+  GtkATContext *context;
+  GtkATContext *weak_context;
+  GVariant *reference;
+  GVariant *reply;
+  const char *destination;
+  const char *path;
+
+  context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (widget));
+  gtk_at_context_realize (context);
+  reference = gtk_at_spi_context_to_ref (GTK_AT_SPI_CONTEXT (context));
+  g_variant_get (reference, "(&s&o)", &destination, &path);
+  g_object_unref (context);
+
+  gtk_label_set_markup (GTK_LABEL (label), "<a href=\"https://www.gtk.org\">GTK</a>");
+  link = gtk_accessible_hypertext_get_link (GTK_ACCESSIBLE_HYPERTEXT (label), 0);
+  context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (link));
+  gtk_at_context_realize (context);
+  weak_context = context;
+  g_object_add_weak_pointer (G_OBJECT (context), (gpointer *) &weak_context);
+  g_object_unref (context);
+
+  /* Arm the callback after registration, which also serializes the objects. */
+  widget->label = GTK_LABEL (label);
+  widget->weak_link = link;
+  g_object_add_weak_pointer (G_OBJECT (link), (gpointer *) &widget->weak_link);
+
+  reply = call_application (bus,
+                            destination,
+                            "/org/a11y/atspi/cache",
+                            "org.a11y.atspi.Cache",
+                            "GetItems");
+
+  g_assert_null (widget->label);
+  g_assert_null (widget->weak_link);
+  g_assert_null (weak_context);
+
+  g_variant_unref (reply);
+  g_variant_unref (reference);
+  g_object_unref (widget);
+  g_object_unref (label);
+}
+
+static void
 test_connected_index (gconstpointer data)
 {
   GdkDisplay *display = gdk_display_get_default ();
@@ -431,6 +530,7 @@ test_connected_index (gconstpointer data)
   check_cache_and_order (&bus, box, children[0], children[2]);
 
   g_dbus_connection_signal_unsubscribe (connection, subscription);
+  check_cache_lifetime (&bus);
   gtk_window_destroy (GTK_WINDOW (window));
   g_object_unref (context);
   g_array_unref (bus.events);

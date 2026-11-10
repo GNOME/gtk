@@ -48,6 +48,12 @@
 #define ITEM_SIGNATURE          "(so)(so)(so)iiassusau"
 #define GET_ITEMS_SIGNATURE     "a(" ITEM_SIGNATURE ")"
 
+typedef struct
+{
+  GtkAtSpiContext *pointer;
+  GWeakRef weak_context;
+} GtkAtSpiCacheEntry;
+
 struct _GtkAtSpiCache
 {
   GObject parent_instance;
@@ -55,7 +61,7 @@ struct _GtkAtSpiCache
   char *cache_path;
   GDBusConnection *connection;
 
-  /* HashTable<str, GtkAtSpiContext> */
+  /* HashTable<str, GtkAtSpiCacheEntry> */
   GHashTable *contexts_by_path;
 
   /* HashTable<GtkAtSpiContext, str> */
@@ -78,6 +84,15 @@ enum
 static GParamSpec *obj_props[N_PROPS];
 
 G_DEFINE_TYPE (GtkAtSpiCache, gtk_at_spi_cache, G_TYPE_OBJECT)
+
+static void
+gtk_at_spi_cache_entry_free (gpointer data)
+{
+  GtkAtSpiCacheEntry *entry = data;
+
+  g_weak_ref_clear (&entry->weak_context);
+  g_free (entry);
+}
 
 static void
 gtk_at_spi_cache_finalize (GObject *gobject)
@@ -182,17 +197,37 @@ static void
 collect_cached_objects (GtkAtSpiCache   *self,
                         GVariantBuilder *builder)
 {
-  GHashTable *collection = g_hash_table_new (NULL, NULL);
+  GHashTable *collection = g_hash_table_new_full (NULL, NULL, g_object_unref, NULL);
+  GPtrArray *accessibles = g_ptr_array_new_with_free_func (g_object_unref);
   GHashTableIter iter;
   gpointer key_p, value_p;
 
   /* Serializing the contexts might re-enter, and end up modifying the hash
-   * table, so we take a snapshot here and return the items we have at the
-   * moment of the GetItems() call
+   * table, so we take a snapshot here and hold references to its contexts
+   * and their accessibles. Contexts only borrow their accessible pointers.
+   * Contexts removed before serialization are skipped.
    */
   g_hash_table_iter_init (&iter, self->contexts_by_path);
   while (g_hash_table_iter_next (&iter, &key_p, &value_p))
-    g_hash_table_add (collection, value_p);
+    {
+      GtkAtSpiCacheEntry *entry = value_p;
+      GtkAtSpiContext *context = g_weak_ref_get (&entry->weak_context);
+      const char *path = g_hash_table_lookup (self->contexts_to_path, entry->pointer);
+
+      if (context == NULL || path != key_p)
+        {
+          if (path == key_p)
+            g_hash_table_remove (self->contexts_to_path, entry->pointer);
+
+          g_hash_table_iter_remove (&iter);
+          g_clear_object (&context);
+          continue;
+        }
+
+      g_ptr_array_add (accessibles,
+                       g_object_ref (gtk_at_context_get_accessible (GTK_AT_CONTEXT (context))));
+      g_hash_table_add (collection, context);
+    }
 
   g_variant_builder_open (builder, G_VARIANT_TYPE ("(" ITEM_SIGNATURE ")"));
   collect_root (self, builder);
@@ -201,16 +236,19 @@ collect_cached_objects (GtkAtSpiCache   *self,
   g_hash_table_iter_init (&iter, collection);
   while (g_hash_table_iter_next (&iter, &key_p, &value_p))
     {
-      g_variant_builder_open (builder, G_VARIANT_TYPE ("(" ITEM_SIGNATURE ")"));
-
       GtkAtSpiContext *context = value_p;
 
+      if (!g_hash_table_contains (self->contexts_to_path, context))
+        continue;
+
+      g_variant_builder_open (builder, G_VARIANT_TYPE ("(" ITEM_SIGNATURE ")"));
       collect_object (self, builder, context);
 
       g_variant_builder_close (builder);
     }
 
   g_hash_table_unref (collection);
+  g_ptr_array_unref (accessibles);
 }
 
 static void
@@ -393,7 +431,7 @@ gtk_at_spi_cache_init (GtkAtSpiCache *self)
 {
   self->contexts_by_path = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                   g_free,
-                                                  NULL);
+                                                  gtk_at_spi_cache_entry_free);
   self->contexts_to_path = g_hash_table_new (NULL, NULL);
 }
 
@@ -431,7 +469,12 @@ gtk_at_spi_cache_add_context (GtkAtSpiCache   *self,
     return;
 
   char *path_key = g_strdup (path);
-  g_hash_table_insert (self->contexts_by_path, path_key, context);
+  GtkAtSpiCacheEntry *entry = g_new0 (GtkAtSpiCacheEntry, 1);
+
+  entry->pointer = context;
+  g_weak_ref_init (&entry->weak_context, G_OBJECT (context));
+
+  g_hash_table_insert (self->contexts_by_path, path_key, entry);
   g_hash_table_insert (self->contexts_to_path, context, path_key);
 
   GTK_DEBUG (A11Y, "Adding context '%s' to cache", path_key);
@@ -450,20 +493,18 @@ gtk_at_spi_cache_remove_context (GtkAtSpiCache   *self,
   g_return_if_fail (GTK_IS_AT_SPI_CACHE (self));
   g_return_if_fail (GTK_IS_AT_SPI_CONTEXT (context));
 
-  const char *path = gtk_at_spi_context_get_context_path (context);
+  const char *path = g_hash_table_lookup (self->contexts_to_path, context);
   if (path == NULL)
     return;
 
-  if (!g_hash_table_contains (self->contexts_by_path, path))
+  GtkAtSpiCacheEntry *entry = g_hash_table_lookup (self->contexts_by_path, path);
+  if (entry == NULL || entry->pointer != context)
     return;
 
   emit_remove_accessible (self, context);
 
-  /* The order is important: the value in contexts_by_path is the
-   * key in contexts_to_path
-   */
+  GTK_DEBUG (A11Y, "Removing context '%s' from cache", path);
+
   g_hash_table_remove (self->contexts_to_path, context);
   g_hash_table_remove (self->contexts_by_path, path);
-
-  GTK_DEBUG (A11Y, "Removing context '%s' from cache", path);
 }
