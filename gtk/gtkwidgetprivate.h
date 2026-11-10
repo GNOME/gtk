@@ -45,6 +45,7 @@ typedef gboolean (*GtkSurfaceTransformChangedCallback) (GtkWidget               
                                                         const graphene_matrix_t *surface_transform,
                                                         gpointer                 user_data);
 
+typedef struct _GtkAccessibleChildIndex GtkAccessibleChildIndex;
 typedef struct _GtkWidgetAction GtkWidgetAction;
 
 struct _GtkWidgetAction
@@ -201,6 +202,12 @@ struct _GtkWidgetPrivate
   GtkWidget *next_sibling;
   GtkWidget *first_child;
   GtkWidget *last_child;
+
+  /* a11y child indexing */
+  GtkAccessibleChildIndex *accessible_child_index;
+  guint accessible_child_index_version;
+  guint accessible_child_index_busy : 1;
+  guint accessible_child_index_disabled : 1;
 
   /* only created on-demand */
   GtkListListModel *children_observer;

@@ -165,6 +165,7 @@ gtk_public_sources = files([
   'gtkaboutdialog.c',
   'gtkaccelgroup.c',
   'gtkaccessible.c',
+  'gtkaccessiblechildindex.c',
   'gtkaccessiblerange.c',
   'gtkaccessiblehypertext.c',
   'gtkaccessibletext.c',

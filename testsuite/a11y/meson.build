@@ -44,6 +44,18 @@ internal_tests = [
   { 'name': 'names' },
 ]
 
+if gtk_a11y_backends.contains('atspi')
+  internal_tests += [
+    { 'name': 'child-index' },
+  ]
+
+  if x11_enabled or wayland_enabled
+    internal_tests += [
+      { 'name': 'atspi-child-index' },
+    ]
+  endif
+endif
+
 is_debug = get_option('buildtype').startswith('debug')
 
 test_cargs = []

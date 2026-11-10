@@ -308,10 +308,11 @@ handle_accessible_method (GDBusConnection       *connection,
         {
           window = g_list_model_get_item (self->toplevels, i);
 
-          g_object_unref (window);
-
           if (!gtk_widget_get_visible (window))
-            continue;
+            {
+              g_object_unref (window);
+              continue;
+            }
 
           if (real_idx == idx)
             {
@@ -320,6 +321,7 @@ handle_accessible_method (GDBusConnection       *connection,
             }
 
           real_idx += 1;
+          g_object_unref (window);
         }
 
       if (child == NULL)
@@ -339,6 +341,7 @@ handle_accessible_method (GDBusConnection       *connection,
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("((so))", name, path));
 
       g_object_unref (context);
+      g_object_unref (child);
     }
   else if (g_strcmp0 (method_name, "GetChildren") == 0)
     {
@@ -349,10 +352,11 @@ handle_accessible_method (GDBusConnection       *connection,
         {
           GtkWidget *window = g_list_model_get_item (self->toplevels, i);
 
-          g_object_unref (window);
-
           if (!gtk_widget_get_visible (window))
-            continue;
+            {
+              g_object_unref (window);
+              continue;
+            }
 
           GtkATContext *context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (window));
           const char *name = g_dbus_connection_get_unique_name (self->connection);
@@ -361,6 +365,7 @@ handle_accessible_method (GDBusConnection       *connection,
           g_variant_builder_add (&builder, "(so)", name, path);
 
           g_object_unref (context);
+          g_object_unref (window);
         }
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a(so))", &builder));
