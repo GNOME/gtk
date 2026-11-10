@@ -316,13 +316,14 @@ gsk_gpu_occlusion_try_node (GskGpuOcclusion *self,
 static gboolean
 gsk_gpu_occlusion_run (GskGpuOcclusion       *self,
                        cairo_rectangle_int_t *device_clip,
+                       gboolean               subdivide,
                        GskRenderNode         *node)
 {
   gboolean result;
 
   self->device_clip = *device_clip;
 
-  if (gsk_gpu_occlusion_try_node_untracked (self, node))
+  if (subdivide && gsk_gpu_occlusion_try_node_untracked (self, node))
     result = TRUE;
   else
     {
@@ -383,7 +384,7 @@ gsk_gpu_occlusion_render_node (GskGpuFrame           *frame,
         break;
 
       cairo_region_get_rectangle (clip, best, &rect);
-      if (!gsk_gpu_occlusion_run (&self, &rect, node))
+      if (!gsk_gpu_occlusion_run (&self, &rect, TRUE, node))
         break;
     }
 
@@ -391,7 +392,7 @@ gsk_gpu_occlusion_render_node (GskGpuFrame           *frame,
     {
       cairo_region_get_rectangle (clip, 0, &rect);
 
-      gsk_gpu_occlusion_run (&self, &rect, node);
+      gsk_gpu_occlusion_run (&self, &rect, FALSE, node);
     }
 
   gsk_gpu_occlusion_finish (&self);
