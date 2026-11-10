@@ -409,7 +409,18 @@ gtk_filter_paintable_class_init (GtkFilterPaintableClass *klass)
 static void
 gtk_filter_paintable_init (GtkFilterPaintable *image)
 {
-  image->texture = gdk_texture_new_from_resource ("/image_filtering/portland-rose.jpg");
+  static GdkTexture *texture;
+
+  if (texture == NULL)
+    {
+      texture = gdk_texture_new_from_resource ("/image_filtering/portland-rose.jpg");
+      g_object_add_weak_pointer (G_OBJECT (texture), (gpointer *) &texture);
+      image->texture = texture;
+    }
+  else
+    {
+      image->texture = g_object_ref (texture);
+    }
   image->brightness = 1;
   image->contrast = 1;
   image->saturation = 1;

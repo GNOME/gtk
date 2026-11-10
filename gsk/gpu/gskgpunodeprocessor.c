@@ -98,16 +98,6 @@
  */
 #define EPSILON 0.001
 
-/* the amount of pixels for us to potentially save to warrant
- * carving out a rectangle for an extra render pass
- */
-#define MIN_PIXELS_FOR_OCCLUSION_PASS 1000 * 100
-
-/* the amount of the whole image for us to potentially save to warrant
- * carving out a rectangle for an extra render pass
- */
-#define MIN_PERCENTAGE_FOR_OCCLUSION_PASS 10
-
 /* A note about coordinate systems
  *
  * The rendering code keeps track of multiple coordinate systems to optimize rendering as
