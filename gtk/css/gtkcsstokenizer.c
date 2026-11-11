@@ -1095,6 +1095,7 @@ gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
 {
   int sign = 1, exponent_sign = 1;
   gint64 integer, fractional = 0, fractional_length = 1, exponent = 0;
+  gint64 dropped_digits = 0;
   gboolean is_int = TRUE, has_sign = FALSE;
   const char *data = tokenizer->data;
   double value;
@@ -1113,8 +1114,10 @@ gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
 
   for (integer = 0; data < tokenizer->end && g_ascii_isdigit (*data); data++)
     {
-      /* check for overflow here? */
-      integer = 10 * integer + g_ascii_digit_value (*data);
+      if (integer < (G_MAXINT64 - 9) / 10)
+        integer = 10 * integer + g_ascii_digit_value (*data);
+      else
+        dropped_digits++;
     }
 
   if (data + 1 < tokenizer->end && *data == '.' && g_ascii_isdigit (data[1]))
@@ -1156,14 +1159,16 @@ gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
 
       while (data < tokenizer->end && g_ascii_isdigit (*data))
         {
-          exponent = 10 * exponent + g_ascii_digit_value (*data);
+          if (exponent < G_MAXINT32)
+            exponent = 10 * exponent + g_ascii_digit_value (*data);
           data++;
         }
     }
 
   gtk_css_tokenizer_consume (tokenizer, data - tokenizer->data, data - tokenizer->data);
 
-  value = sign * (integer + ((double) fractional / fractional_length)) * exp10i (exponent_sign * exponent);
+  value = sign * (integer + ((double) fractional / fractional_length)) *
+          exp10i (exponent_sign * exponent + dropped_digits);
 
   if (gtk_css_tokenizer_has_identifier (tokenizer))
     {

@@ -1,0 +1,7 @@
+a {
+  animation-iteration-count: 1e+20;
+}
+
+b {
+  animation-iteration-count: 1.2345678901234568e+22;
+}
