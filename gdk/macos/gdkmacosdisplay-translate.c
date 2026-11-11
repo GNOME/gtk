@@ -100,7 +100,8 @@ get_mouse_button_from_ns_event (NSEvent *event)
     case 2:
       return 2;
     default:
-      return button + 1;
+      /* For compatibility reasons, all additional buttons go after the old 4-7 scroll ones */
+      return button + 5;
     }
 }
 
@@ -126,15 +127,7 @@ get_mouse_button_modifiers_from_ns_buttons (NSUInteger nsbuttons)
 static GdkModifierType
 get_mouse_button_modifiers_from_ns_event (NSEvent *event)
 {
-  GdkModifierType state = 0;
-  int button;
-
-  /* This maps buttons 1 to 5 to GDK_BUTTON[1-5]_MASK */
-  button = get_mouse_button_from_ns_event (event);
-  if (button >= 1 && button <= 5)
-    state = (1 << (button + 7));
-
-  return state;
+  return get_mouse_button_modifiers_from_ns_buttons ((NSUInteger) 1 << [event buttonNumber]);
 }
 
 static GdkModifierType
@@ -273,7 +266,7 @@ fill_button_event (GdkMacosDisplay *display,
   if (type == GDK_BUTTON_PRESS && ((state & BUTTON_MASK) == 0))
     gdk_macos_device_set_implicit_grab (pointer, GDK_SURFACE (surface));
   else if (type == GDK_BUTTON_RELEASE &&
-           ((state & BUTTON_MASK & ~(GDK_BUTTON1_MASK << (n_button - 1))) == 0))
+           ((state & BUTTON_MASK & ~get_mouse_button_modifiers_from_ns_event (nsevent)) == 0))
     gdk_macos_device_set_implicit_grab (pointer, NULL);
 
   return gdk_button_event_new (type,
