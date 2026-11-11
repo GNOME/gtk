@@ -3763,6 +3763,147 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuRenderPass *self,
     }
 }
 
+static GskGpuImage *
+gsk_gpu_node_processor_get_repeat_node_as_image (GskGpuFrame           *frame,
+                                                 GskGpuAsImageFlags     flags,
+                                                 GdkColorState         *ccs,
+                                                 const graphene_rect_t *clip_bounds,
+                                                 const graphene_size_t *scale,
+                                                 GskRenderNode         *node,
+                                                 graphene_rect_t       *out_bounds,
+                                                 GskGpuSampler         *out_sampler)
+              {
+  graphene_rect_t child_bounds, bounds;
+  GskRenderNode *child;
+  GskRectSnap snap, child_snap;
+  GskRepeat repeat;
+
+  snap = gsk_repeat_node_get_snap (node);
+  child = gsk_repeat_node_get_child (node);
+  child_bounds = *gsk_repeat_node_get_child_bounds (node);
+  child_snap = gsk_repeat_node_get_child_snap (node);
+  repeat = gsk_repeat_node_get_repeat (node);
+  if (!gsk_rect_snap_to_grid (&node->bounds, snap, scale, &clip_bounds->origin, &bounds) ||
+      !gsk_rect_snap_to_grid (&child_bounds, child_snap, scale, &clip_bounds->origin, &child_bounds))
+    return NULL;
+  if (gsk_rect_contains_rect (&child_bounds, clip_bounds) &&
+      gsk_rect_contains_rect (&bounds, clip_bounds))
+    return gsk_gpu_get_child_as_image (frame,
+                                       flags,
+                                       ccs,
+                                       clip_bounds,
+                                       scale,
+                                       child,
+                                       0,
+                                       out_bounds,
+                                       out_sampler);
+
+  if (repeat == GSK_REPEAT_NONE)
+    {
+      if (gsk_rect_contains_rect (&child->bounds, &child_bounds) &&
+          gsk_rect_contains_rect (&bounds, clip_bounds))
+        return gsk_gpu_get_child_as_image (frame, flags, ccs, clip_bounds, scale, child, 0, out_bounds, out_sampler);
+      else
+        return gsk_gpu_get_node_as_image_via_offscreen (frame, flags, ccs, clip_bounds, scale, node, out_bounds, out_sampler);
+    }
+
+  if ((flags & GSK_GPU_AS_IMAGE_EXACT_SIZE) &&
+      !gsk_rect_equal (clip_bounds, &child_bounds))
+    return gsk_gpu_get_node_as_image_via_offscreen (frame, flags, ccs, clip_bounds, scale, node, out_bounds, out_sampler);
+
+  /* We can't rewrite the repeat mode if we need to provide transparency for our bounds */
+  if (!gsk_rect_contains_rect (&bounds, clip_bounds))
+    return gsk_gpu_get_node_as_image_via_offscreen (frame, flags, ccs, clip_bounds, scale, node, out_bounds, out_sampler);
+
+  switch (repeat)
+    {
+      case GSK_REPEAT_PAD:
+        {
+          graphene_rect_t clipped_child_bounds;
+          GskGpuImage *result;
+
+          gsk_repeat_node_compute_rect_for_pad (&bounds,
+                                                &child_bounds,
+                                                &clipped_child_bounds);
+          if (!gsk_rect_snap_to_grid_grow (&clipped_child_bounds, scale, &clip_bounds->origin, &clipped_child_bounds))
+            return NULL;
+          result = gsk_gpu_get_child_as_image (frame,
+                                               flags | GSK_GPU_AS_IMAGE_EXACT_SIZE,
+                                               ccs,
+                                               &clipped_child_bounds,
+                                               scale,
+                                               child,
+                                               0,
+                                               out_bounds,
+                                               out_sampler);
+          *out_sampler = GSK_GPU_SAMPLER_DEFAULT;
+          return result;
+        }
+
+      case GSK_REPEAT_REPEAT:
+        {
+          GskGpuImage *result;
+
+          /* don't create images larger than necessary */
+          if (child_bounds.size.width > clip_bounds->size.width ||
+              child_bounds.size.height > clip_bounds->size.height)
+            break;
+
+          result = gsk_gpu_get_child_as_image (frame,
+                                               flags | GSK_GPU_AS_IMAGE_EXACT_SIZE,
+                                               ccs,
+                                               &child_bounds,
+                                               scale,
+                                               child,
+                                               0,
+                                               out_bounds,
+                                               out_sampler);
+          *out_sampler = GSK_GPU_SAMPLER_REPEAT;
+          return result;
+        }
+
+      case GSK_REPEAT_REFLECT:
+        {
+          graphene_rect_t clipped_child_bounds, snapped_child_bounds;
+          graphene_point_t pos;
+          GskGpuImage *result;
+
+          gsk_repeat_node_compute_rect_for_reflect (clip_bounds,
+                                                    &child_bounds,
+                                                    &clipped_child_bounds,
+                                                    &pos);
+          if (!gsk_rect_snap_to_grid_grow (&clipped_child_bounds, scale, &clip_bounds->origin, &snapped_child_bounds))
+            return NULL;
+          if (gsk_rect_contains_rect (&child_bounds, &snapped_child_bounds))
+            {
+              pos.x += snapped_child_bounds.origin.x - clipped_child_bounds.origin.x;
+              pos.y += snapped_child_bounds.origin.y - clipped_child_bounds.origin.y;
+              clipped_child_bounds = snapped_child_bounds;
+            }
+
+          result = gsk_gpu_get_child_as_image (frame,
+                                               flags | GSK_GPU_AS_IMAGE_EXACT_SIZE,
+                                               ccs,
+                                               &clipped_child_bounds,
+                                               scale,
+                                               child,
+                                               0,
+                                               out_bounds,
+                                               out_sampler);
+          out_bounds->origin = pos;
+          *out_sampler = GSK_GPU_SAMPLER_REFLECT;
+          return result;
+        }
+
+      case GSK_REPEAT_NONE:
+      default:
+        g_assert_not_reached ();
+        break;
+    }
+  
+  return gsk_gpu_get_node_as_image_via_offscreen (frame, flags, ccs, clip_bounds, scale, node, out_bounds, out_sampler);
+}
+
 static void
 gsk_gpu_node_processor_add_fill_node (GskGpuRenderPass *self,
                                       GskRenderNode    *node)
@@ -4562,7 +4703,7 @@ static const struct
   },
   [GSK_REPEAT_NODE] = {
     gsk_gpu_node_processor_add_repeat_node,
-    NULL,
+    gsk_gpu_node_processor_get_repeat_node_as_image,
   },
   [GSK_CLIP_NODE] = {
     gsk_gpu_node_processor_add_clip_node,
