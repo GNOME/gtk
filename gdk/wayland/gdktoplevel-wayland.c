@@ -112,6 +112,7 @@ struct _GdkWaylandToplevel
   struct {
       gboolean should_constrain;
       gboolean size_is_fixed;
+      gboolean has_size_proposal;
   } next_layout;
 
   struct {
@@ -481,7 +482,21 @@ gdk_wayland_toplevel_compute_size (GdkSurface *surface)
       bounds_height = display_geometry.height;
     }
 
+  layout = wayland_toplevel->layout;
+
   gdk_toplevel_size_init (&size, bounds_width, bounds_height);
+  size.shadow.left = wayland_surface->shadow_left;
+  size.shadow.right = wayland_surface->shadow_right;
+  size.shadow.top = wayland_surface->shadow_top;
+  size.shadow.bottom = wayland_surface->shadow_bottom;
+
+  if (wayland_toplevel->next_layout.has_size_proposal &&
+      gdk_toplevel_layout_get_resizable (layout))
+    {
+      size.proposed_width = wayland_surface->next_layout.configured_width;
+      size.proposed_height = wayland_surface->next_layout.configured_height;
+    }
+
   gdk_toplevel_notify_compute_size (GDK_TOPLEVEL (surface), &size);
   g_warn_if_fail (size.width > 0);
   g_warn_if_fail (size.height > 0);
@@ -500,8 +515,6 @@ gdk_wayland_toplevel_compute_size (GdkSurface *surface)
       mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE;
     }
 
-  gdk_wayland_toplevel_set_geometry_hints (wayland_toplevel, &geometry, mask);
-
   if (size.shadow.is_valid)
     {
       wayland_surface->shadow_left = size.shadow.left;
@@ -510,15 +523,25 @@ gdk_wayland_toplevel_compute_size (GdkSurface *surface)
       wayland_surface->shadow_bottom = size.shadow.bottom;
     }
 
-  if (wayland_surface->next_layout.configured_width > 0 &&
+  gdk_wayland_toplevel_set_geometry_hints (wayland_toplevel, &geometry, mask);
+
+  if (wayland_surface->next_layout.configured_width > 0 ||
       wayland_surface->next_layout.configured_height > 0)
     {
       int width, height;
 
-      width = wayland_surface->next_layout.configured_width +
-        wayland_surface->shadow_left + wayland_surface->shadow_right;
-      height = wayland_surface->next_layout.configured_height +
-        wayland_surface->shadow_top + wayland_surface->shadow_bottom;
+      width = size.width;
+      height = size.height;
+
+      if (!size.reply_to_proposal)
+        {
+          if (wayland_surface->next_layout.configured_width > 0)
+            width = wayland_surface->next_layout.configured_width +
+              wayland_surface->shadow_left + wayland_surface->shadow_right;
+          if (wayland_surface->next_layout.configured_height > 0)
+            height = wayland_surface->next_layout.configured_height +
+              wayland_surface->shadow_top + wayland_surface->shadow_bottom;
+        }
 
       if (wayland_toplevel->next_layout.should_constrain)
         {
@@ -527,11 +550,27 @@ gdk_wayland_toplevel_compute_size (GdkSurface *surface)
                                       width, height,
                                       &width, &height);
         }
+
+      if (size.reply_to_proposal)
+        {
+          int proposed_width, proposed_height;
+
+          gdk_toplevel_size_get_proposed_size (&size,
+                                               &proposed_width,
+                                               &proposed_height);
+
+          if (proposed_width > 0)
+            width = MIN (width, proposed_width);
+          if (proposed_height > 0)
+            height = MIN (height, proposed_height);
+        }
+
       gdk_wayland_toplevel_update_size (surface, width, height, &wayland_surface->scale);
 
       if (!wayland_toplevel->next_layout.size_is_fixed)
         {
           wayland_toplevel->next_layout.should_constrain = FALSE;
+          wayland_toplevel->next_layout.has_size_proposal = FALSE;
           wayland_surface->next_layout.configured_width = 0;
           wayland_surface->next_layout.configured_height = 0;
         }
@@ -659,7 +698,13 @@ gdk_wayland_toplevel_handle_configure (GdkWaylandSurface *wayland_surface)
       height = wayland_toplevel->saved_height;
     }
 
-  if (width > 0 && height > 0)
+  wayland_toplevel->next_layout.has_size_proposal =
+    !saved_size &&
+    !(new_state & (GDK_TOPLEVEL_STATE_MAXIMIZED |
+                   GDK_TOPLEVEL_STATE_FULLSCREEN |
+                   GDK_TOPLEVEL_STATE_TILED));
+
+  if (width > 0 || height > 0)
     {
       if (!saved_size)
         {
@@ -685,6 +730,7 @@ gdk_wayland_toplevel_handle_configure (GdkWaylandSurface *wayland_surface)
     {
       wayland_toplevel->next_layout.should_constrain = FALSE;
       wayland_toplevel->next_layout.size_is_fixed = FALSE;
+      wayland_toplevel->next_layout.has_size_proposal = FALSE;
       wayland_surface->next_layout.configured_width = 0;
       wayland_surface->next_layout.configured_height = 0;
     }
