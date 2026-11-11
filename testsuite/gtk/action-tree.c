@@ -378,6 +378,82 @@ test_large_route_subtree_move (void)
 
 typedef struct
 {
+  GtkActionTree *tree;
+  GtkActionNode *old_parent;
+  GtkActionNode *node;
+  GtkActionKey  *key;
+  guint          removals;
+} ReparentRemovalState;
+
+static void
+remove_reparented_node (GtkActionSubscription   *subscription,
+                        GtkActionChange          changed,
+                        const GtkActionSnapshot *snapshot,
+                        gpointer                 user_data)
+{
+  ReparentRemovalState *state = user_data;
+
+  if (snapshot->present)
+    return;
+
+  g_assert_null (gtk_action_node_lookup_route (state->old_parent, state->key));
+  g_assert_true (gtk_action_tree_check_invariants (state->tree));
+  state->removals++;
+  g_clear_pointer (&state->node, gtk_action_node_remove);
+}
+
+static void
+test_reparent_callback_removal (gconstpointer data)
+{
+  gboolean synthetic = GPOINTER_TO_INT (data);
+  GtkActionTree *tree = gtk_action_tree_new ();
+  GtkWidget *parent = g_object_ref_sink (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
+  GtkWidget *child = g_object_ref_sink (gtk_box_new (GTK_ORIENTATION_VERTICAL, 0));
+  GtkActionKey *key = gtk_action_key_new ("win.save");
+  GSimpleActionGroup *group = g_simple_action_group_new ();
+  GSimpleAction *action = g_simple_action_new ("save", NULL);
+  ReparentRemovalState state = { .tree = tree, .key = key };
+
+  if (synthetic)
+    {
+      state.old_parent = gtk_action_tree_add_synthetic (tree, parent);
+      state.node = gtk_action_tree_add_synthetic (tree, child);
+      gtk_action_node_set_synthetic_parent (state.node, state.old_parent);
+    }
+  else
+    {
+      gtk_box_append (GTK_BOX (parent), child);
+      state.old_parent = gtk_action_tree_add_widget (tree, parent);
+      state.node = gtk_action_tree_add_widget (tree, child);
+    }
+
+  g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
+  gtk_action_node_insert_group (state.old_parent, "win", G_ACTION_GROUP (group));
+  gtk_action_node_subscribe (state.node, key, NULL, GTK_ACTION_INTEREST_PRESENT,
+                             remove_reparented_node, &state, NULL);
+
+  if (synthetic)
+    gtk_action_node_set_synthetic_parent (state.node, NULL);
+  else
+    {
+      gtk_box_remove (GTK_BOX (parent), child);
+      gtk_action_node_sync_parent (state.node);
+    }
+
+  g_assert_cmpuint (state.removals, ==, 1);
+  g_assert_null (state.node);
+  g_assert_true (gtk_action_tree_check_invariants (tree));
+
+  gtk_action_tree_free (tree);
+  gtk_action_key_unref (key);
+  g_object_unref (action);
+  g_object_unref (group);
+  g_object_unref (child);
+  g_object_unref (parent);
+}
+
+typedef struct
+{
   GtkActionNode     *node;
   GtkActionProvider *provider;
   guint              changes;
@@ -2122,6 +2198,8 @@ main (int   argc,
                    test_route_inheritance_and_shadowing);
   g_test_add_func ("/action-tree/routes/identity-and-counts", test_route_identity_and_counts);
   g_test_add_func ("/action-tree/routes/reparenting", test_route_reparenting);
+  g_test_add_data_func ("/action-tree/routes/reparent-callback-removal", GINT_TO_POINTER (FALSE), test_reparent_callback_removal);
+  g_test_add_data_func ("/action-tree/routes/synthetic-reparent-callback-removal", GINT_TO_POINTER (TRUE), test_reparent_callback_removal);
   g_test_add_func ("/action-tree/routes/large-subtree-move", test_large_route_subtree_move);
   g_test_add_func ("/action-tree/providers/group-changes", test_group_provider_changes);
   g_test_add_func ("/action-tree/providers/dynamic-shadow-and-replacement",
