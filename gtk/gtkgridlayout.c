@@ -1,5 +1,5 @@
 /* gtkgridlayout.c: Layout manager for grid-like widgets
- * Copyright 2019  GNOME Foundation
+ * Copyright 2019-2026  GNOME Foundation, Sergey Bugaev
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
  *
@@ -47,7 +47,6 @@
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkdebug.h"
 #include "gtklayoutchild.h"
-#include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtksizerequest.h"
 #include "gtkwidgetprivate.h"
@@ -98,7 +97,7 @@ gtk_grid_layout_child_set_property (GObject      *gobject,
       gtk_grid_layout_child_set_column (self, g_value_get_int (value));
       break;
 
-    case PROP_CHILD_ROW :
+    case PROP_CHILD_ROW:
       gtk_grid_layout_child_set_row (self, g_value_get_int (value));
       break;
 
@@ -387,29 +386,10 @@ typedef struct {
 #define ROWS(layout)    (&(layout)->linedata[GTK_ORIENTATION_HORIZONTAL])
 #define COLUMNS(layout) (&(layout)->linedata[GTK_ORIENTATION_VERTICAL])
 
-/* A GridLine struct represents a single row or column
- * during size requests
- */
 typedef struct {
-  int minimum;
-  int natural;
-  int minimum_above;
-  int minimum_below;
-  int natural_above;
-  int natural_below;
-
-  int position;
-  int allocation;
-  int allocated_baseline;
-
-  guint need_expand : 1;
-  guint expand      : 1;
-  guint empty       : 1;
-} GridLine;
-
-typedef struct {
-  GridLine *lines;
-  int min, max;
+  gsize *edge_order;
+  int min;
+  int num;
 } GridLines;
 
 typedef struct {
@@ -417,7 +397,9 @@ typedef struct {
   GtkWidget *widget;
 
   GridLines lines[2];
-} GridRequest;
+  GtkWidget **children;
+  gsize n_children;
+} GridContext;
 
 struct _GtkGridLayout
 {
@@ -426,7 +408,6 @@ struct _GtkGridLayout
   /* Array<GridRowProperties> */
   GArray *row_properties;
 
-  GtkOrientation orientation;
   int baseline_row;
 
   GridLineData linedata[2];
@@ -475,22 +456,116 @@ get_spacing (GtkGridLayout  *self,
   return css_spacing + self->linedata[orientation].spacing;
 }
 
-/* Calculates the min and max numbers for both orientations. */
 static void
-grid_request_count_lines (GridRequest *request)
+grid_context_clear (GridContext *context)
+{
+  g_free_sized (context->lines[0].edge_order,
+                (context->n_children + context->lines[0].num)
+                * sizeof (gsize));
+  g_free_sized (context->lines[1].edge_order,
+                (context->n_children + context->lines[1].num)
+                * sizeof (gsize));
+  g_free_sized (context->children,
+                context->n_children * sizeof (GtkWidget *));
+}
+
+/**
+ * get_edge:
+ * @index: an edge index, as stored in edge_order
+ * @start: (out): start line of the edge, inclusive
+ * @end: (out): end line of the edge, exclusive
+ *
+ * Both @start and @end are returned relative to the minimum user value for
+ * lines in this orientation. In other words, the smallest @start can be is 0,
+ * and the largest @end can be is context->lines[orientation].min.
+ *
+ * Returns: (nullable): the corresponding widget for child edges.
+ */
+static inline GtkWidget *
+get_edge (GridContext    *context,
+          GtkOrientation  orientation,
+          gsize           index,
+          gsize          *start,
+          gsize          *end)
+{
+  GtkWidget *child;
+  GtkGridLayoutChild *grid_child;
+
+  if (index >= context->n_children)
+    {
+      /* Line edge */
+      *start = index - context->n_children;
+      *end = *start + 1;
+      return NULL;
+    }
+  else
+    {
+      /* Child edge */
+      child = context->children[index];
+      grid_child = get_grid_child (context->layout, child);
+      *start = grid_child->attach[orientation].pos -
+        context->lines[orientation].min;
+      *end = *start + grid_child->attach[orientation].span;
+      return child;
+    }
+}
+
+static int G_GNUC_PURE
+compare_ends (const void    *a,
+              const void    *b,
+              void          *user_data,
+              GtkOrientation orientation)
+{
+  gsize index1 = *(const gsize *) a;
+  gsize index2 = *(const gsize *) b;
+  GridContext *context = user_data;
+  gsize start1, start2, end1, end2;
+
+  get_edge (context, orientation, index1, &start1, &end1);
+  get_edge (context, orientation, index2, &start2, &end2);
+
+  return end1 - end2;
+}
+
+static int G_GNUC_PURE
+compare_horizontal_ends (const void *a,
+                         const void *b,
+                         void       *user_data)
+{
+  return compare_ends (a, b, user_data, GTK_ORIENTATION_HORIZONTAL);
+}
+
+static int G_GNUC_PURE
+compare_vertical_ends (const void *a,
+                       const void *b,
+                       void       *user_data)
+{
+  return compare_ends (a, b, user_data, GTK_ORIENTATION_VERTICAL);
+}
+
+static void
+grid_context_init (GridContext *context)
 {
   GtkWidget *child;
   int min[2];
   int max[2];
+  gsize num_edges[2];
+  int i;
 
   min[0] = min[1] = G_MAXINT;
   max[0] = max[1] = G_MININT;
 
-  for (child = _gtk_widget_get_first_child (request->widget);
+  /* Count visible children and the used line ranges */
+  context->n_children = 0;
+
+  for (child = _gtk_widget_get_first_child (context->widget);
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
-      GtkGridLayoutChild *grid_child = get_grid_child (request->layout, child);
+      if (!gtk_widget_should_layout (child))
+        continue;
+      context->n_children++;
+      GtkGridLayoutChild *grid_child = get_grid_child (context->layout, child);
       GridChildAttach *attach = grid_child->attach;
 
       min[0] = MIN (min[0], attach[0].pos);
@@ -499,924 +574,808 @@ grid_request_count_lines (GridRequest *request)
       max[1] = MAX (max[1], attach[1].pos + attach[1].span);
     }
 
-  request->lines[0].min = min[0];
-  request->lines[0].max = max[0];
-  request->lines[1].min = min[1];
-  request->lines[1].max = max[1];
-}
-
-/* Sets line sizes to 0 and marks lines as expand
- * if they have a non-spanning expanding child.
- */
-static void
-grid_request_init (GridRequest    *request,
-                   GtkOrientation  orientation)
-{
-  GtkWidget *child;
-  GridLines *lines;
-  int i;
-
-  lines = &request->lines[orientation];
-
-  for (i = 0; i < lines->max - lines->min; i++)
+  if (context->n_children == 0)
     {
-      lines->lines[i].minimum = 0;
-      lines->lines[i].natural = 0;
-      lines->lines[i].minimum_above = -1;
-      lines->lines[i].minimum_below = -1;
-      lines->lines[i].natural_above = -1;
-      lines->lines[i].natural_below = -1;
-      lines->lines[i].expand = FALSE;
-      lines->lines[i].empty = TRUE;
+      context->children = NULL;
+      context->lines[0].min = context->lines[1].min = 0;
+      context->lines[0].num = context->lines[1].num = 0;
+      context->lines[0].edge_order = context->lines[1].edge_order = NULL;
+      return;
     }
 
+  context->lines[0].min = min[0];
+  context->lines[0].num = max[0] - min[0];
+  context->lines[1].min = min[1];
+  context->lines[1].num = max[1] - min[1];
 
-  for (child = _gtk_widget_get_first_child (request->widget);
+  num_edges[0] = context->n_children + context->lines[0].num;
+  num_edges[1] = context->n_children + context->lines[1].num;
+
+  context->children = g_new (GtkWidget *, context->n_children);
+  context->lines[0].edge_order = g_new (gsize, num_edges[0]);
+  context->lines[1].edge_order = g_new (gsize, num_edges[1]);
+
+  i = 0;
+  for (child = _gtk_widget_get_first_child (context->widget);
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
-      GtkGridLayoutChild *grid_child = get_grid_child (request->layout, child);
-      GridChildAttach *attach;
+      if (!gtk_widget_should_layout (child))
+        continue;
+      context->children[i] = child;
+      context->lines[0].edge_order[i] = context->lines[1].edge_order[i] = i;
+      i++;
+    }
+  g_assert (i == context->n_children);
+  for (i = context->n_children; i < num_edges[0]; i++)
+    context->lines[0].edge_order[i] = i;
+  for (i = context->n_children; i < num_edges[1]; i++)
+    context->lines[1].edge_order[i] = i;
 
-      attach = &grid_child->attach[orientation];
-      if (attach->span == 1 && gtk_widget_compute_expand (child, orientation))
-        lines->lines[attach->pos - lines->min].expand = TRUE;
+  g_sort_array (context->lines[0].edge_order, num_edges[0],
+                sizeof (gsize), compare_horizontal_ends, context);
+  g_sort_array (context->lines[1].edge_order, num_edges[1],
+                sizeof (gsize), compare_vertical_ends, context);
+}
+
+static GtkOrientation G_GNUC_PURE
+grid_primary_orientation (GtkLayoutManager *manager)
+{
+  /* We could optimize for width-for-height grids here.  However, we expect
+   * those to be rare; at the same time we want to maintain the invariant that
+   * switching the request mode (which we can do depending on our children
+   * switching theirs) never changes the produced layout and only affects
+   * optimizations.
+   */
+#if 0
+  if (gtk_layout_manager_get_request_mode (manager) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
+    return GTK_ORIENTATION_VERTICAL;
+#endif
+  return GTK_ORIENTATION_HORIZONTAL;
+}
+
+static inline void
+update_max (int *max, int value)
+{
+  if (value > *max)
+    *max = value;
+}
+
+/* TODO: baselines */
+static void
+grid_context_measure (GridContext    *context,
+                      GtkOrientation  orientation,
+                      const int      *for_size_min,
+                      const int      *for_size_nat,
+                      int            *minimum,
+                      int            *natural)
+{
+  int n_lines, i, j, line;
+  int *min_sizes, *nat_sizes;
+  int spacing = get_spacing (context->layout, context->widget, orientation);
+  int homogeneous = context->layout->linedata[orientation].homogeneous;
+
+  n_lines = context->lines[orientation].num;
+  if (n_lines == 0)
+    {
+      g_assert (context->n_children == 0);
+      *minimum = *natural = 0;
+      return;
+    }
+  if (!homogeneous)
+    {
+      min_sizes = g_newa (int, n_lines + 1);
+      nat_sizes = g_newa (int, n_lines + 1);
+
+      min_sizes[0] = nat_sizes[0] = 0;
+      line = 0;
+    }
+  else
+    {
+      *minimum = 0;
+      *natural = 0;
+    }
+
+  for (i = j = 0; i < context->n_children; j++)
+    {
+      gsize edge_index;
+      GtkWidget *child;
+      int child_for_size_min, child_for_size_nat, child_min, child_nat;
+      gsize start, end;
+
+      /* Traverse child edges in the provided order, and skip over line edges */
+      edge_index = context->lines[orientation].edge_order[j];
+      if (edge_index < context->n_children)
+        i++;
+      else
+        continue;
+      child = get_edge (context, orientation, edge_index, &start, &end);
+
+      child_for_size_min = for_size_min ? for_size_min[edge_index] : -1;
+      child_for_size_nat = for_size_nat ? for_size_nat[edge_index] : -1;
+      gtk_widget_measure (child, orientation, child_for_size_min,
+                          &child_min, &child_nat, NULL, NULL);
+      if (child_for_size_nat != child_for_size_min)
+        gtk_widget_measure (child, orientation, child_for_size_nat,
+                            NULL, &child_nat, NULL, NULL);
+
+      if (!homogeneous)
+        {
+          int spacing_before;
+
+          while (end > line)
+            {
+              min_sizes[line + 1] = min_sizes[line];
+              nat_sizes[line + 1] = nat_sizes[line];
+              if (line > 0)
+                {
+                  min_sizes[line + 1] += spacing;
+                  nat_sizes[line + 1] += spacing;
+                }
+              line++;
+            }
+          spacing_before = start > 0 ? spacing : 0;
+          update_max (&min_sizes[end], min_sizes[start] + spacing_before + child_min);
+          update_max (&nat_sizes[end], nat_sizes[start] + spacing_before + child_nat);
+        }
+      else
+        {
+          int d = end - start;
+          int full_spacing = (d-1) * spacing;
+
+          if (child_min > full_spacing)
+            update_max (minimum, (child_min - full_spacing + d-1) / d);
+          if (child_nat > full_spacing)
+            update_max (natural, (child_nat - full_spacing + d-1) / d);
+        }
+    }
+
+  if (!homogeneous)
+    {
+      g_assert (line == n_lines);
+
+      *minimum = min_sizes[n_lines];
+      *natural = MAX (nat_sizes[n_lines], *minimum);
+    }
+  else
+    {
+      *minimum = *minimum * n_lines + (n_lines - 1) * spacing;
+      *natural = *natural * n_lines + (n_lines - 1) * spacing;
+      /* This can happen when for_size_nat[i] > for_size_min[i] */
+      *natural = MAX (*minimum, *natural);
     }
 }
 
-/* Sums allocations for lines spanned by child and their spacing.
+/**
+ * forward_dp:
+ * @spacing: spacing between lines
+ * @n_edges: number of edges, either n_children or n_children + n_lines
+ * @reqs: (in) (array length=n_edges): base per-edge size requirements
+ * @active: (in) (array length=n_edges): which edges are active
+ * @whole: common increment for active edges' requirements on top of @reqs
+ * @extra: additional increment for active edges' requirements
+ * @dp: (out caller-allocates) (array): dynamic programming values
+ *
+ * Performs a single forward run of dynamic programming, aggregating the
+ * requirements in @reqs (to which @whole and @extra are added for active
+ * children). Sets 'dp[i]' equal to the minimum space required to fit the edges
+ * that end before the i-th line; in particular 'dp[0]' should be zero, and
+ * 'dp[n_lines]' equal to the overall required space for satisfying these
+ * per-edge requirements.
+ *
+ * The semantics of @whole and @extra match how the two values are produced in
+ * 'grid_grow_requirements'. This function is able to evaluate those potential
+ * requirement increments just like if they were already committed to @reqs.
+ * Pass 'whole = 0, extra = 0' to ignore this mechanism entirely.
+ *
+ * This is somewhat similar to 'grid_context_measure' above.
+ */
+static void
+forward_dp (GridContext    *context,
+            GtkOrientation  orientation,
+            int             spacing,
+            gsize           n_edges,
+            const int      *reqs,
+            const guint8   *active,
+            guint           whole,
+            guint           extra,
+            int            *dp)
+{
+  gsize i, j, rank, edge_index, line, start, end;
+  int spacing_before, req;
+
+  line = 0;
+  dp[line] = 0;
+
+  for (i = j = 0, rank = 0; i < n_edges; j++)
+    {
+      edge_index = context->lines[orientation].edge_order[j];
+      if (edge_index < n_edges)
+        i++;
+      else
+        continue;
+      get_edge (context, orientation, edge_index, &start, &end);
+
+      req = reqs[edge_index];
+      if (active[edge_index])
+        req += whole + (rank++ < extra);
+      while (end > line)
+        {
+          dp[line + 1] = dp[line];
+          if (line > 0)
+            dp[line + 1] += spacing;
+          line++;
+        }
+      spacing_before = start > 0 ? spacing : 0;
+      update_max (&dp[end], dp[start] + spacing_before + req);
+    }
+  g_assert (line == context->lines[orientation].num);
+}
+
+/**
+ * backward_dp:
+ * @spacing: spacing between lines
+ * @n_edges: number of edges, either n_children or n_children + n_lines
+ * @reqs: (in) (array length=n_edges): base per-edge size requirements
+ * @dpb: (out caller-allocates) (array): dynamic programming values
+ *
+ * Performs a single backward run of dynamic programming, aggregating the
+ * requirements in @reqs. Sets 'dpb[i]' equal to the minimum space required to
+ * fit the edges that start after the i-th line; in particular 'dpb[n_lines]'
+ * should be zero, and 'dpb[0]' equal to the overall required space for
+ * satisfying these per-edge requirements.
+ */
+static void
+backward_dp (GridContext    *context,
+             GtkOrientation  orientation,
+             int             spacing,
+             gsize           n_edges,
+             const int      *reqs,
+             int            *dpb)
+{
+  gsize i, j, tmp, edge_index, line, start, end;
+  int spacing_after, req;
+  int n_lines = context->lines[orientation].num;
+
+  /* dpb[n_lines] = 0; */
+  memset (dpb, 0, sizeof (int) * (n_lines + 1));
+  line = n_lines;
+
+  for (i = j = 0; i < n_edges; j++)
+    {
+      tmp = context->n_children + n_lines - j - 1;
+      edge_index = context->lines[orientation].edge_order[tmp];
+      if (edge_index < n_edges)
+        i++;
+      else
+        continue;
+      get_edge (context, orientation, edge_index, &start, &end);
+
+      req = reqs[edge_index];
+      while (end < line)
+        {
+          int sp = 0;
+          if (line < n_lines)
+            sp = spacing;
+          update_max (&dpb[line - 1], dpb[line] + sp);
+          line--;
+        }
+      spacing_after = end < n_lines ? spacing : 0;
+      update_max (&dpb[start], req + spacing_after + dpb[end]);
+    }
+
+  while (line > 0)
+    {
+      int sp = 0;
+      if (line < n_lines) /* can this even not hold? */
+        sp = spacing;
+      update_max (&dpb[line - 1], dpb[line] + sp);
+      line--;
+    }
+}
+
+/**
+ * grid_grow_requirements:
+ * @n_edges: number of edges, either n_children or n_children + n_lines
+ * @reqs: (inout) (array length=n_edges): per-edge size requirements
+ * @targets: (in) (array length=n_edges): per-edge target sizes
+ * @space: overall available space
+ * @spacing: spacing between lines
+ * @stop_at_bottleneck: if set, don't grow after the first bottleneck
+ *
+ * Grow the given per-edge size *requirements* in-place towards their @targets,
+ * while their combination is feasible (fits into the provided @space). This is
+ * the heart of the grid layout algorithm.
+ *
+ * Edges can represent child widgets or synthetic line egdes. A combination of
+ * size requirements can be collectively feasible -- when there exists a size
+ * allocation that satisfies all the requirements and fits into @space -- or
+ * collectively infeasible. We evaluate whether the proposed requirements are
+ * collectively feasible by doing a DP run on them, which outputs the minimum
+ * size required to satisfy them at the same time, and seeing whether that
+ * exceeds @space.
+ *
+ * We grow all "active" requirements at the same rate. An edge becomes inactive
+ * either when its requirement reaches its tagret size, or when we determine
+ * that the edge lies on a *critical chain* and its requirement cannot grow
+ * anymore without making the combination of requirements collectively
+ * infeasible (we call this a bottleneck). In other words, an edge becomes
+ * inactive when its requirement either doesn't want to, or cannot, keep
+ * growing. We stop once all the edges become inactive.
+ *
+ * After we hit the first bottleneck and deactivate edges that lie on the
+ * critical chain(s), we can continue growing requirements of other edges that
+ * remain active -- so long as the requirements remain collectively feasible. We
+ * call this secondary growth, as opposed to the primary growth (which is what
+ * happens before the first bottleneck).
+ *
+ * Note that this works on size requirements and not on any allocated sizes.
+ * Allocated sizes may be larger than the requirements (but can not be smaller),
+ * and there may be multiple valid allocations that satisfy a combination of
+ * requirements. Moreover, several requirements taken collectively may imply a
+ * stronger requirement for an edge compared to the edge's own requirement (see
+ * 'grid_compute_closure').
+ *
+ * Returns: the used space, which could be less than @space if all edges reached
+ * their targets without running into a bottleneck.
  */
 static int
-compute_allocation_for_child (GridRequest        *request,
-                              GtkGridLayoutChild *child,
-                              GtkOrientation      orientation)
+grid_grow_requirements (GridContext    *context,
+                        GtkOrientation  orientation,
+                        gsize           n_edges,
+                        int            *reqs,
+                        const int      *targets,
+                        int             space,
+                        int             spacing,
+                        gboolean        stop_at_bottleneck)
 {
-  GridLines *lines;
-  GridLine *line;
-  GridChildAttach *attach;
-  int size;
-  int i;
+  guint8 *active;
+  gsize i, j, rank, n_active, n_deactivated, edge_index;
+  int n_lines = context->lines[orientation].num;
+  int *dp, *dpb;
 
-  lines = &request->lines[orientation];
-  attach = &child->attach[orientation];
+  /* Used by the evaluation DP below */
+  dp = g_newa (int, n_lines + 1);
+  dpb = g_newa (int, n_lines + 1);
 
-  size = (attach->span - 1) * get_spacing (request->layout, request->widget, orientation);
-  for (i = 0; i < attach->span; i++)
+  /* Initially, all edges are active */
+  active = g_newa (guint8, n_edges);
+  n_active = 0;
+  for (i = 0; i < n_edges; i++)
     {
-      line = &lines->lines[attach->pos - lines->min + i];
-      size += line->allocation;
+      active[i] = reqs[i] < targets[i];
+      if (active[i])
+        n_active++;
     }
 
-  return size;
-}
-
-static void
-compute_request_for_child (GridRequest        *request,
-                           GtkWidget          *child,
-                           GtkGridLayoutChild *grid_child,
-                           GtkOrientation      orientation,
-                           gboolean            contextual,
-                           int                *minimum,
-                           int                *natural,
-                           int                *minimum_baseline,
-                           int                *natural_baseline)
-{
-  if (minimum_baseline != NULL)
-    *minimum_baseline = -1;
-  if (natural_baseline != NULL)
-    *natural_baseline = -1;
-
-  if (contextual)
+  while (n_active > 0)
     {
-      int size;
+      guint min_diff;
+      guint low, high, mid, max_slope;  /* binary search */
+      guint whole, extra;  /* req increments */
 
-      size = compute_allocation_for_child (request, grid_child, 1 - orientation);
-
-      gtk_widget_measure (child,
-                          orientation,
-                          size,
-                          minimum, natural,
-                          minimum_baseline, natural_baseline);
-    }
-  else
-    {
-      gtk_widget_measure (child,
-                          orientation,
-                          -1,
-                          minimum, natural,
-                          minimum_baseline, natural_baseline);
-    }
-}
-
-/* Sets requisition to max. of non-spanning children.
- * If contextual is TRUE, requires allocations of
- * lines in the opposite orientation to be set.
- */
-static void
-grid_request_non_spanning (GridRequest    *request,
-                           GtkOrientation  orientation,
-                             gboolean        contextual)
-{
-  GtkWidget *child;
-  GridLines *lines;
-  GridLine *line;
-  int i;
-  GtkBaselinePosition baseline_pos;
-  int minimum, minimum_baseline;
-  int natural, natural_baseline;
-
-  lines = &request->lines[orientation];
-
-  for (child = _gtk_widget_get_first_child (request->widget);
-       child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
-    {
-      GtkGridLayoutChild *grid_child = get_grid_child (request->layout, child);
-      GridChildAttach *attach;
-
-      if (!gtk_widget_should_layout (child))
-        continue;
-
-      attach = &grid_child->attach[orientation];
-      if (attach->span != 1)
-        continue;
-
-      compute_request_for_child (request, child, grid_child, orientation, contextual, &minimum, &natural, &minimum_baseline, &natural_baseline);
-
-      line = &lines->lines[attach->pos - lines->min];
-
-      if (minimum_baseline != -1)
+      /* Smallest distance from an active child's requirement to its target */
+      min_diff = G_MAXUINT;
+      for (i = 0; i < n_edges; i++)
         {
-          line->minimum_above = MAX (line->minimum_above, minimum_baseline);
-          line->minimum_below = MAX (line->minimum_below, minimum - minimum_baseline);
-          line->natural_above = MAX (line->natural_above, natural_baseline);
-          line->natural_below = MAX (line->natural_below, natural - natural_baseline);
+          if (!active[i])
+            continue;
+          min_diff = MIN (min_diff, targets[i] - reqs[i]);
         }
-      else
-        {
-          line->minimum = MAX (line->minimum, minimum);
-          line->natural = MAX (line->natural, natural);
-        }
-    }
 
-  for (i = 0; i < lines->max - lines->min; i++)
-    {
-      line = &lines->lines[i];
-
-      if (line->minimum_above != -1)
-        {
-          line->minimum = MAX (line->minimum, line->minimum_above + line->minimum_below);
-          line->natural = MAX (line->natural, line->natural_above + line->natural_below);
-
-          baseline_pos = gtk_grid_layout_get_row_baseline_position (request->layout, i + lines->min);
-
-          switch (baseline_pos)
-            {
-            case GTK_BASELINE_POSITION_TOP:
-              line->minimum_above += 0;
-              line->minimum_below += line->minimum - (line->minimum_above + line->minimum_below);
-              line->natural_above += 0;
-              line->natural_below += line->natural - (line->natural_above + line->natural_below);
-              break;
-
-            case GTK_BASELINE_POSITION_CENTER:
-              line->minimum_above += (line->minimum - (line->minimum_above + line->minimum_below))/2;
-              line->minimum_below += (line->minimum - (line->minimum_above + line->minimum_below))/2;
-              line->natural_above += (line->natural - (line->natural_above + line->natural_below))/2;
-              line->natural_below += (line->natural - (line->natural_above + line->natural_below))/2;
-              break;
-
-            case GTK_BASELINE_POSITION_BOTTOM:
-              line->minimum_above += line->minimum - (line->minimum_above + line->minimum_below);
-              line->minimum_below += 0;
-              line->natural_above += line->natural - (line->natural_above + line->natural_below);
-              line->natural_below += 0;
-              break;
-
-            default:
-              break;
-            }
-        }
-    }
-}
-
-/* Enforce homogeneous sizes */
-static void
-grid_request_homogeneous (GridRequest    *request,
-                          GtkOrientation  orientation)
-{
-  GtkGridLayout *self = request->layout;
-  GridLineData *linedata;
-  GridLines *lines;
-  int minimum, natural;
-  int i;
-
-  linedata = &self->linedata[orientation];
-  lines = &request->lines[orientation];
-
-  if (!linedata->homogeneous)
-    return;
-
-  minimum = 0;
-  natural = 0;
-
-  for (i = 0; i < lines->max - lines->min; i++)
-    {
-      minimum = MAX (minimum, lines->lines[i].minimum);
-      natural = MAX (natural, lines->lines[i].natural);
-    }
-
-  for (i = 0; i < lines->max - lines->min; i++)
-    {
-      lines->lines[i].minimum = minimum;
-      lines->lines[i].natural = natural;
-
-      /* TODO: Do we want to adjust the baseline here too?
-       * And if so, also in the homogeneous resize.
+      /* Binary search for the largest common value we could simultaneously
+       * increment the requirements of all active edges by.  Alternative
+       * implementations of the same idea here could use a simple linear search
+       * (slower but simpler), or (potentially faster, but more complex) a
+       * 2-dimensional DP, where dp[i][k] is the smallest size required for the
+       * first 'i' lines, among the chains with exactly 'k' active edges.
        */
-    }
-}
 
-/* Deals with spanning children.
- * Requires expand fields of lines to be set for
- * non-spanning children.
- */
-static void
-grid_request_spanning (GridRequest    *request,
-                       GtkOrientation  orientation,
-                       gboolean        contextual)
-{
-  GtkGridLayout *self = request->layout;
-  GtkWidget *child;
-  GridChildAttach *attach;
-  GridLineData *linedata;
-  GridLines *lines;
-  GridLine *line;
-  int minimum, natural;
-  int span_minimum, span_natural;
-  int span_expand;
-  gboolean force_expand;
-  int spacing;
-  int extra;
-  int expand;
-  int line_extra;
-  int i;
+      /* low is always feasible, high is always infeasible */
+      low = 0;
+      if (G_UNLIKELY (!g_uint_checked_add (&high, MIN (space, min_diff), 1)))
+        high = G_MAXUINT;
 
-  linedata = &self->linedata[orientation];
-  lines = &request->lines[orientation];
-  spacing = get_spacing (request->layout, request->widget, orientation);
+      /* Incrementing the value we binary-search for by 1 can increase the
+       * result by at most 'max_slope' pixels.  Conversely, decrementing it by 1
+       * can decrease the result by at most 'max_slope' pixels.  We use this to
+       * further cull the binary search interval.
+       */
+      max_slope = MIN (n_active, n_lines);
+      g_assert (max_slope > 0);
 
-  for (child = _gtk_widget_get_first_child (request->widget);
-       child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
-    {
-      GtkGridLayoutChild *grid_child = get_grid_child (request->layout, child);
-
-      if (!gtk_widget_should_layout (child))
-        continue;
-
-      attach = &grid_child->attach[orientation];
-      if (attach->span == 1)
-        continue;
-
-      /* We ignore baselines for spanning children */
-      compute_request_for_child (request, child, grid_child, orientation, contextual, &minimum, &natural, NULL, NULL);
-
-      span_minimum = (attach->span - 1) * spacing;
-      span_natural = (attach->span - 1) * spacing;
-      span_expand = 0;
-      force_expand = FALSE;
-      for (i = 0; i < attach->span; i++)
+      while (low + 1 < high)
         {
-          line = &lines->lines[attach->pos - lines->min + i];
-          span_minimum += line->minimum;
-          span_natural += line->natural;
-          if (line->expand)
-            span_expand += 1;
-        }
-      if (span_expand == 0)
-        {
-          span_expand = attach->span;
-          force_expand = TRUE;
+          mid = low + (high - low) / 2;
+          forward_dp (context, orientation, spacing, n_edges,
+                      reqs, active, mid, 0, dp);
+          if (dp[n_lines] <= space)
+            {
+              /* feasible */
+              int slack = space - dp[n_lines];
+              low = MIN (mid + slack / max_slope, high - 1);
+            }
+          else
+            {
+              /* infeasible */
+              int excess = dp[n_lines] - space;
+              high = mid - (excess - 1) / max_slope;
+            }
+          g_assert (low < high);
         }
 
-      /* If we need to request more space for this child to fill
-       * its requisition, then divide up the needed space amongst the
-       * lines it spans, favoring expandable lines if any.
+      whole = low;
+      /* We've established that we can simultaneously increase all active edges'
+       * requirements by 'whole' (which may be 0).  Now run a "partial round":
+       * even though we can no longer give *every* active child one more pixel,
+       * we should still distribute the remaining few pixels between active
+       * children, giving *some* of them one more pixel.
        *
-       * When doing homogeneous allocation though, try to keep the
-       * line allocations even, since we're going to force them to
-       * be the same anyway, and we don't want to introduce unnecessary
-       * extra space.
+       * For example, given a chain of 10 identical edges and 32 pixels of
+       * space, we might set 'whole=3' and 'extra=2'; in other words, give 3
+       * pixels to everyone equally, and one more pixel to some lucky two edges.
+       *
+       * An important consideration here is doing this in a way that preserves
+       * monotonicity: when run with a larger value of 'space', we shouldn't
+       * produce smaller results for any individual edge (at least not until we
+       * hit the first bottleneck).  This applies both to distributing more
+       * pixels in a partial round, as well as to "rolling over" from a partial
+       * round into a previous complete round.  For the above example, both when
+       * expanding the available space 32 -> 39 and 39 -> 40, these rounds
+       * should behave monotonically.
+       *
+       * We achieve this monotonicity by considering partial increments in a
+       * fixed order that doesn't depend on 'space', and always giving
+       * increments to edges in this order without skipping any, even when
+       * giving an increment to a later child would still be feasible.
        */
-      if (span_minimum < minimum)
+      low = 0;
+      if (whole != min_diff) /* XXX comment why */
         {
-          if (linedata->homogeneous)
+          high = n_active;
+          while (low + 1 < high)
             {
-              int total, m;
-
-              total = minimum - (attach->span - 1) * spacing;
-              m = total / attach->span + (total % attach->span ? 1 : 0);
-              for (i = 0; i < attach->span; i++)
+              mid = low + (high - low) / 2;
+              forward_dp (context, orientation, spacing, n_edges,
+                          reqs, active, whole, mid, dp);
+              if (dp[n_lines] <= space)
                 {
-                  line = &lines->lines[attach->pos - lines->min + i];
-                  line->minimum = MAX (line->minimum, m);
+                  /* feasible */
+                  int slack = space - dp[n_lines];
+                  low = MIN (mid + slack, high - 1);
                 }
-            }
-          else
-            {
-              extra = minimum - span_minimum;
-              expand = span_expand;
-              for (i = 0; i < attach->span; i++)
+              else
                 {
-                  line = &lines->lines[attach->pos - lines->min + i];
-                  if (force_expand || line->expand)
-                    {
-                      line_extra = extra / expand;
-                      line->minimum += line_extra;
-                      extra -= line_extra;
-                      expand -= 1;
-                    }
+                  /* infeasible */
+                  int excess = dp[n_lines] - space;
+                  high = mid - (excess - 1);
                 }
+              g_assert (low < high);
             }
         }
 
-      if (span_natural < natural)
+      /* Commit the increments, and see if any edge has reached its target */
+      n_deactivated = 0;
+      extra = low;
+      for (i = j = 0, rank = 0; i < n_edges; j++)
         {
-          if (linedata->homogeneous)
-            {
-              int total, n;
-
-              total = natural - (attach->span - 1) * spacing;
-              n = total / attach->span + (total % attach->span ? 1 : 0);
-              for (i = 0; i < attach->span; i++)
-                {
-                  line = &lines->lines[attach->pos - lines->min + i];
-                  line->natural = MAX (line->natural, n);
-                }
-            }
+          edge_index = context->lines[orientation].edge_order[j];
+          if (edge_index < n_edges)
+            i++;
           else
-            {
-              extra = natural - span_natural;
-              expand = span_expand;
-              for (i = 0; i < attach->span; i++)
-                {
-                  line = &lines->lines[attach->pos - lines->min + i];
-                  if (force_expand || line->expand)
-                    {
-                      line_extra = extra / expand;
-                      line->natural += line_extra;
-                      extra -= line_extra;
-                      expand -= 1;
-                    }
-                }
-            }
-        }
-    }
-}
-
-/* Marks empty and expanding lines and counts them */
-static void
-grid_request_compute_expand (GridRequest    *request,
-                             GtkOrientation  orientation,
-                             int             min,
-                             int             max,
-                             int            *nonempty_lines,
-                             int            *expand_lines)
-{
-  GtkWidget *child;
-  GridChildAttach *attach;
-  int i;
-  GridLines *lines;
-  GridLine *line;
-  gboolean has_expand;
-  int expand;
-  int empty;
-
-  lines = &request->lines[orientation];
-
-  min = MAX (min, lines->min);
-  max = MIN (max, lines->max);
-
-  for (i = min - lines->min; i < max - lines->min; i++)
-    {
-      lines->lines[i].need_expand = FALSE;
-      lines->lines[i].expand = FALSE;
-      lines->lines[i].empty = TRUE;
-    }
-
-  for (child = _gtk_widget_get_first_child (request->widget);
-       child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
-    {
-      GtkGridLayoutChild *grid_child = get_grid_child (request->layout, child);
-
-      if (!gtk_widget_should_layout (child))
-        continue;
-
-      attach = &grid_child->attach[orientation];
-      if (attach->span != 1)
-        continue;
-
-      if (attach->pos >= max || attach->pos < min)
-        continue;
-
-      line = &lines->lines[attach->pos - lines->min];
-      line->empty = FALSE;
-      if (gtk_widget_compute_expand (child, orientation))
-        line->expand = TRUE;
-    }
-
-  for (child = _gtk_widget_get_first_child (request->widget);
-       child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
-    {
-      GtkGridLayoutChild *grid_child = get_grid_child (request->layout, child);
-
-      if (!gtk_widget_should_layout (child))
-        continue;
-
-      attach = &grid_child->attach[orientation];
-      if (attach->span == 1)
-        continue;
-
-      has_expand = FALSE;
-      for (i = 0; i < attach->span; i++)
-        {
-          line = &lines->lines[attach->pos - lines->min + i];
-
-          if (line->expand)
-            has_expand = TRUE;
-
-          if (attach->pos + i >= max || attach->pos + 1 < min)
             continue;
-
-          line->empty = FALSE;
-        }
-
-      if (!has_expand && gtk_widget_compute_expand (child, orientation))
-        {
-          for (i = 0; i < attach->span; i++)
+          /* Skip inactive edges */
+          if (!active[edge_index])
+            continue;
+          reqs[edge_index] += whole + (rank++ < extra);
+          /* This should never cause us to overallocate targets */
+          g_assert (reqs[edge_index] <= targets[edge_index]);
+          if (reqs[edge_index] == targets[edge_index])
             {
-              if (attach->pos + i >= max || attach->pos + 1 < min)
-                continue;
-
-              line = &lines->lines[attach->pos - lines->min + i];
-              line->need_expand = TRUE;
+              active[edge_index] = FALSE;
+              n_deactivated++;
             }
         }
-    }
+      g_assert (rank == n_active);
+      n_active -= n_deactivated;
 
-  empty = 0;
-  expand = 0;
-  for (i = min - lines->min; i < max - lines->min; i++)
-    {
-      line = &lines->lines[i];
+      /*
+       * It would be invalid to:
+       *
+       * if (n_deactivated)
+       *   continue;
+       *
+       * here -- it could be that some edges have reached their targets *and*
+       * some chains became tight at the same time.  For stop-at-bottleneck, we
+       * would still need to stop then.
+       */
 
-      if (line->need_expand)
-        line->expand = TRUE;
+      if (n_active == 0)
+        /* Every edge is now satisfied, nothing can be blocked */
+        break;
 
-      if (line->empty)
-        empty += 1;
-
-      if (line->expand)
-        expand += 1;
-    }
-
-  if (nonempty_lines)
-    *nonempty_lines = max - min - empty;
-
-  if (expand_lines)
-    *expand_lines = expand;
-}
-
-/* Sums the minimum and natural fields of lines and their spacing */
-static void
-grid_request_sum (GridRequest    *request,
-                  GtkOrientation  orientation,
-                  int            *minimum,
-                  int            *natural,
-                  int            *minimum_baseline,
-                  int            *natural_baseline)
-{
-  GtkGridLayout *self = request->layout;
-  GridLines *lines;
-  int i;
-  int min, nat;
-  int nonempty;
-  int spacing;
-
-  grid_request_compute_expand (request, orientation, G_MININT, G_MAXINT, &nonempty, NULL);
-
-  lines = &request->lines[orientation];
-  spacing = get_spacing (request->layout, request->widget, orientation);
-
-  min = 0;
-  nat = 0;
-  for (i = 0; i < lines->max - lines->min; i++)
-    {
-      if (orientation == GTK_ORIENTATION_VERTICAL &&
-          lines->min + i == self->baseline_row &&
-          lines->lines[i].minimum_above != -1)
+      /* See which edges are blocked, and deactivate them */
+      forward_dp (context, orientation, spacing,
+                  n_edges, reqs, active, 0, 0, dp);
+      g_assert (dp[n_lines] <= space);
+      if (dp[n_lines] < space)
         {
-          if (minimum_baseline)
-            *minimum_baseline = min + lines->lines[i].minimum_above;
-          if (natural_baseline)
-            *natural_baseline = nat + lines->lines[i].natural_above;
+          /* If there's slack, no edge can be blocked.  This can only happen if
+           * we skipped running the partial round above.
+           */
+          g_assert (whole == min_diff);
+          continue;
         }
 
-      min += lines->lines[i].minimum;
-      nat += lines->lines[i].natural;
+      backward_dp (context, orientation, spacing,
+                   n_edges, reqs, dpb);
+      g_assert (dpb[0] == space);
 
-      if (!lines->lines[i].empty)
+      n_deactivated = 0;
+      for (edge_index = 0; edge_index < n_edges; edge_index++)
         {
-          min += spacing;
-          nat += spacing;
+          int spacing_before, spacing_after, full_req;
+          gsize start, end;
+
+          if (!active[edge_index])
+            continue;
+          get_edge (context, orientation, edge_index, &start, &end);
+          /* See if this edge is blocked, i.e. lies on a critical chain */
+          spacing_before = start > 0 ? spacing : 0;
+          spacing_after = end < n_lines ? spacing : 0;
+          full_req = dp[start] + spacing_before
+            + reqs[edge_index] + spacing_after + dpb[end];
+          g_assert (full_req <= space);
+          if (full_req == space)
+            {
+              active[edge_index] = FALSE;
+              n_deactivated++;
+            }
         }
+      if (n_deactivated == 0)
+        {
+          /* Same as above: nothing blocked, can only happen if we skipped the
+           * partial round.
+           */
+          g_assert (whole == min_diff);
+          continue;
+        }
+
+      n_active -= n_deactivated;
+
+      if ((n_deactivated && stop_at_bottleneck) || !n_active)
+        return space;
     }
 
-  /* Remove last spacing, if any was applied */
-  if (nonempty > 0)
-    {
-      min -= spacing;
-      nat -= spacing;
-    }
-
-  *minimum = min;
-  *natural = nat;
+  /* Done growing -- evaluate how much space we're using, and return */
+  forward_dp (context, orientation, spacing,
+              n_edges, reqs, active, 0, 0, dp);
+  return dp[n_lines];
 }
 
-/* Computes minimum and natural fields of lines.
- * When contextual is TRUE, requires allocation of
- * lines in the opposite orientation to be set.
+/**
+ * grid_compute_closure:
+ * @spacing: spacing between lines
+ * @reqs: (array) (in): per-child size requirements
+ * @closure: (array) (out caller-allocates): per-child guaranteed sizes
+ *
+ * Compute a closure of the given size requirements. This finds any potentially
+ * stronger requirements / guarantees that the original requirements
+ * collectively imply. In other words, *every* way to distribute space must
+ * necessarily satisfy the stronger requirements if it satisfies the original
+ * ones.
+ *
+ * For example, given
+ *
+ *          20
+ *   |<------------>|
+ *   |<---->|<----->|
+ *      15      10
+ *
+ * the guaranteed size for the upper child is 25, even though its own direct
+ * requirement is 20.
  */
 static void
-grid_request_run (GridRequest    *request,
-                  GtkOrientation  orientation,
-                  gboolean        contextual)
+grid_compute_closure (GridContext    *context,
+                      GtkOrientation  orientation,
+                      int             spacing,
+                      const int      *reqs,
+                      int            *closure)
 {
-  grid_request_init (request, orientation);
-  grid_request_non_spanning (request, orientation, contextual);
-  grid_request_homogeneous (request, orientation);
-  grid_request_spanning (request, orientation, contextual);
-  grid_request_homogeneous (request, orientation);
-}
+  int i, j, spacing_before, *dp;
+  gsize start, end, start2, end2, column;
 
-static void
-grid_distribute_non_homogeneous (GridLines *lines,
-                                 int        nonempty,
-                                 int        expand,
-                                 int        size,
-                                 int        min,
-                                 int        max)
-{
-  GtkRequestedSize *sizes;
-  GridLine *line;
-  int extra;
-  int rest;
-  int i, j;
-
-  if (nonempty == 0)
-    return;
-
-  sizes = g_newa (GtkRequestedSize, nonempty);
-
-  j = 0;
-  for (i = min - lines->min; i < max - lines->min; i++)
+  dp = g_newa (int, context->lines[orientation].num + 1);
+  for (i = 0; i < context->n_children; i++)
     {
-      line = &lines->lines[i];
-      if (line->empty)
-        continue;
+      get_edge (context, orientation, i, &start, &end);
+      /* Run a separate DP round for every child.  We start with 0 at the
+       * child's start line, rather than the first line as usual.
+       */
+      column = start;
+      dp[start] = 0;
 
-      size -= line->minimum;
-
-      sizes[j].minimum_size = line->minimum;
-      sizes[j].natural_size = line->natural;
-      sizes[j].data = line;
-      j++;
-    }
-
-  size = gtk_distribute_natural_allocation (MAX (0, size), nonempty, sizes);
-
-  if (expand > 0)
-    {
-      extra = size / expand;
-      rest = size % expand;
-    }
-  else
-    {
-      extra = 0;
-      rest = 0;
-    }
-
-  j = 0;
-  for (i = min - lines->min; i < max - lines->min; i++)
-    {
-      line = &lines->lines[i];
-      if (line->empty)
-        continue;
-
-      g_assert (line == sizes[j].data);
-
-      line->allocation = sizes[j].minimum_size;
-      if (line->expand)
+      for (j = 0; j < context->n_children; j++)
         {
-          line->allocation += extra;
-          if (rest > 0)
+          get_edge (context, orientation, j, &start2, &end2);
+          /* Skip edges that are not fully contained in the child's span */
+          if (start2 < start || end2 > end)
+            continue;
+          while (end2 > column)
             {
-              line->allocation += 1;
-              rest -= 1;
+              dp[column + 1] = dp[column];
+              if (column > start)
+                dp[column + 1] += spacing;
+              column++;
             }
+          spacing_before = start2 > start ? spacing : 0;
+          update_max (&dp[end2], dp[start2] + spacing_before + reqs[j]);
         }
 
-      j++;
+      /* We must have seen at least this edge itself */
+      g_assert (column == end);
+      closure[i] = dp[end];
+      g_assert (closure[i] >= reqs[i]);
     }
 }
 
-/* Requires that the minimum and natural fields of lines
- * have been set, computes the allocation field of lines
- * by distributing total_size among lines.
+/**
+ * grid_context_distribute:
+ * @orientation: the orientation to distribute @space along
+ * @space: available space along @orientation
+ * @for_size: (nullable) (array) (in): child sizes in the opposite orientation
+ * @sizes: (out caller-allocates) (array) (optional): allocated child sizes
+ * @monotonic_sizes: (out caller-allocates) (array) (optional): size guarantees
+ *     that do not decrease with @space growth
+ * @line_sizes: (out caller-allocates) (array) (optional): allocated line sizes
+ *
+ * Distribute the available @space along @orientation, allocating sizes to lines
+ * and to children.
+ *
+ * If the @for_size array is provided, we obtain the child widgets' contextual
+ * size requests, otherwise this will act on the child widgets' overall size
+ * requests.
+ *
+ * Note that the sizes allocated to child widgets (nor to lines) are not
+ * strictly monotonic: it is possible that this gives *less* space to a child
+ * widget when run for a larger @space. This makes the @sizes output of this
+ * function unsuitable to be used in widget measurements, in particular, as
+ * for-sizes of child widgets when measuring the grid in the opposite
+ * orientation. As a replacement, this function also outputs @monotonic_sizes;
+ * those are potentially smaller than the corresponding @sizes, however they
+ * *do* behave monotonically: they will not decrease as the @space increases.
  */
 static void
-grid_request_allocate (GridRequest    *request,
-                       GtkOrientation  orientation,
-                       int             total_size)
+grid_context_distribute (GridContext    *context,
+                         GtkOrientation  orientation,
+                         int             space,
+                         const int      *for_size,
+                         int            *sizes,
+                         int            *monotonic_sizes,
+                         int            *line_sizes)
 {
-  GtkGridLayout *self = request->layout;
-  GridLineData *linedata;
-  GridLines *lines;
-  GridLine *line;
-  int nonempty1, nonempty2;
-  int expand1, expand2;
+  int *reqs, *targets;
   int i;
-  GtkBaselinePosition baseline_pos;
-  int baseline;
-  int extra, extra2;
-  int rest;
-  int size1, size2;
-  int split, split_pos;
-  int spacing;
+  int n_lines = context->lines[orientation].num;
+  int spacing = get_spacing (context->layout, context->widget, orientation);
+  int content_space;
 
-  linedata = &self->linedata[orientation];
-  lines = &request->lines[orientation];
-  spacing = get_spacing (request->layout, request->widget, orientation);
-
-  baseline = gtk_widget_get_baseline (request->widget);
-
-  if (orientation == GTK_ORIENTATION_VERTICAL && baseline != -1 &&
-      self->baseline_row >= lines->min && self->baseline_row < lines->max &&
-      lines->lines[self->baseline_row - lines->min].minimum_above != -1)
+  if (n_lines == 0)
     {
-      split = self->baseline_row;
-      split_pos = baseline - lines->lines[self->baseline_row - lines->min].minimum_above;
-      grid_request_compute_expand (request, orientation, lines->min, split, &nonempty1, &expand1);
-      grid_request_compute_expand (request, orientation, split, lines->max, &nonempty2, &expand2);
-
-      if (nonempty2 > 0)
-        {
-          size1 = split_pos - (nonempty1) * spacing;
-          size2 = (total_size - split_pos) - (nonempty2 - 1) * spacing;
-        }
-      else
-        {
-          size1 = total_size - (nonempty1 - 1) * spacing;
-          size2 = 0;
-        }
-    }
-  else
-    {
-      grid_request_compute_expand (request, orientation, lines->min, lines->max, &nonempty1, &expand1);
-      nonempty2 = expand2 = 0;
-      split = lines->max;
-
-      size1 = total_size - (nonempty1 - 1) * spacing;
-      size2 = 0;
+      g_assert (context->n_children == 0);
+      return;
     }
 
-  if (nonempty1 == 0 && nonempty2 == 0)
+  if (context->layout->linedata[orientation].homogeneous)
+    {
+      int line_size, extra;
+
+      /* This is easy: spread the space evenly among lines.  The first 'extra'
+       * lines get one additional pixel each.
+       */
+      g_assert (space >= spacing * (n_lines - 1));
+      line_size = (space - spacing * (n_lines - 1)) / n_lines;
+      extra = (space - spacing * (n_lines - 1)) % n_lines;
+
+      if (line_sizes)
+        for (i = 0; i < n_lines; i++)
+          line_sizes[i] = line_size + (i < extra);
+
+      if (sizes || monotonic_sizes)
+        for (i = 0; i < context->n_children; i++)
+          {
+            gsize start, end, d, size;
+
+            get_edge (context, orientation, i, &start, &end);
+            d = end - start;
+            size = d * line_size + (d - 1) * spacing;
+            if (start < extra)
+              size += MIN (end, extra) - start;
+
+            if (sizes)
+              sizes[i] = size;
+            if (monotonic_sizes)
+              monotonic_sizes[i] = size;
+          }
+
+      return;
+    }
+
+  reqs = g_newa (int, context->n_children + n_lines);
+  targets = g_newa (int, context->n_children + n_lines);
+  /* Grow up from minimum to natural sizes */
+  for (i = 0; i < context->n_children; i++)
+    gtk_widget_measure (context->children[i], orientation,
+                        for_size ? for_size[i] : -1,
+                        &reqs[i], &targets[i], NULL, NULL);
+
+  if (monotonic_sizes)
+    {
+      /* Run only the primary growth, stopping at the first bottleneck */
+      grid_grow_requirements (context, orientation, context->n_children,
+                              reqs, targets, space, spacing, TRUE);
+      /* Try to provide stronger guarantees implied by those requirements */
+      grid_compute_closure (context, orientation, spacing,
+                            reqs, monotonic_sizes);
+    }
+  if (!sizes && !line_sizes)
     return;
 
-  if (linedata->homogeneous)
+  grid_grow_requirements (context, orientation, context->n_children,
+                          reqs, targets, space, spacing, FALSE);
+
+  /* Grow expand children unboundedly */
+  for (i = 0; i < context->n_children; i++)
     {
-      if (nonempty1 > 0)
-        {
-          extra = size1 / nonempty1;
-          rest = size1 % nonempty1;
-        }
+      if (gtk_widget_compute_expand (context->children[i], orientation))
+        targets[i] = G_MAXINT;
       else
-        {
-          extra = 0;
-          rest = 0;
-        }
-      if (nonempty2 > 0)
-        {
-          extra2 = size2 / nonempty2;
-          if (extra2 < extra || nonempty1 == 0)
-            {
-              extra = extra2;
-              rest = size2 % nonempty2;
-            }
-        }
-
-      for (i = 0; i < lines->max - lines->min; i++)
-        {
-          line = &lines->lines[i];
-          if (line->empty)
-            continue;
-
-          line->allocation = extra;
-          if (rest > 0)
-            {
-              line->allocation += 1;
-              rest -= 1;
-            }
-        }
+        /* This should not be strictly required, since the previous rounds have
+         * already applied any growth there was room for.  Still, it should make
+         * it a little easier for the algorithm to see that these edges are
+         * immediately inactive.
+         */
+        targets[i] = reqs[i];
     }
-  else
+  content_space = grid_grow_requirements (context, orientation,
+                                          context->n_children,
+                                          reqs, targets, space,
+                                          spacing, FALSE);
+  g_assert (content_space <= space);
+
+  /* Fix child edges, and now grow line edges from 0 to infinity.  Clamp the
+   * space available for line growth by what the children widgets actually use.
+   *
+   * This is how we actually allocate sizes to lines: it lets us both respect
+   * the per-edge requirements established above, as well as provide nice
+   * evenness where there's an ambiguity.
+   */
+  for (i = 0; i < context->n_children; i++)
+    targets[i] = reqs[i];
+  for (; i < context->n_children + n_lines; i++)
     {
-      grid_distribute_non_homogeneous (lines,
-                                       nonempty1,
-                                       expand1,
-                                       size1,
-                                       lines->min,
-                                       split);
-      grid_distribute_non_homogeneous (lines,
-                                       nonempty2,
-                                       expand2,
-                                       size2,
-                                       split,
-                                       lines->max);
+      reqs[i] = 0;
+      targets[i] = G_MAXINT;
     }
+  grid_grow_requirements (context, orientation,
+                          context->n_children + n_lines,
+                          reqs, targets, content_space,
+                          spacing, FALSE);
+  /* Done growing, now produce outputs */
+  if (line_sizes)
+    memcpy (line_sizes, reqs + context->n_children,
+            sizeof (int) * n_lines);
 
-  for (i = 0; i < lines->max - lines->min; i++)
-    {
-      line = &lines->lines[i];
+  if (sizes)
+    for (i = 0; i < context->n_children; i++)
+      {
+        gsize start, end, c;
 
-      if (line->empty)
-        continue;
-
-      if (line->minimum_above != -1)
-        {
-          /* Note: This is overridden in grid_request_position for the allocated baseline */
-          baseline_pos = gtk_grid_layout_get_row_baseline_position (request->layout, i + lines->min);
-
-          switch (baseline_pos)
-            {
-            case GTK_BASELINE_POSITION_TOP:
-              line->allocated_baseline = line->minimum_above;
-              break;
-            case GTK_BASELINE_POSITION_CENTER:
-              line->allocated_baseline = line->minimum_above +
-                                         (line->allocation - (line->minimum_above + line->minimum_below)) / 2;
-              break;
-            case GTK_BASELINE_POSITION_BOTTOM:
-              line->allocated_baseline = line->allocation - line->minimum_below;
-              break;
-            default:
-              break;
-            }
-        }
-      else
-        line->allocated_baseline = -1;
-    }
-}
-
-/* Computes the position fields from allocation and spacing */
-static void
-grid_request_position (GridRequest    *request,
-                       GtkOrientation  orientation)
-{
-  GtkGridLayout *self = request->layout;
-  GridLines *lines;
-  GridLine *line;
-  int position, old_position;
-  int allocated_baseline;
-  int spacing;
-  int i, j;
-
-  lines = &request->lines[orientation];
-  spacing = get_spacing (request->layout, request->widget, orientation);
-
-  allocated_baseline = gtk_widget_get_baseline (request->widget);
-
-  position = 0;
-  for (i = 0; i < lines->max - lines->min; i++)
-    {
-      line = &lines->lines[i];
-
-      if (orientation == GTK_ORIENTATION_VERTICAL &&
-          i + lines->min == self->baseline_row &&
-          allocated_baseline != -1 &&
-          lines->lines[i].minimum_above != -1)
-        {
-          old_position = position;
-          position = allocated_baseline - line->minimum_above;
-
-          /* Back-patch previous rows */
-          for (j = 0; j < i; j++)
-            {
-              if (!lines->lines[j].empty)
-                lines->lines[j].position += position - old_position;
-            }
-        }
-
-      if (!line->empty)
-        {
-          line->position = position;
-          position += line->allocation + spacing;
-
-          if (orientation == GTK_ORIENTATION_VERTICAL &&
-              i + lines->min == self->baseline_row &&
-              allocated_baseline != -1 &&
-              lines->lines[i].minimum_above != -1)
-            line->allocated_baseline = allocated_baseline - line->position;
-        }
-    }
-}
-
-static void
-gtk_grid_layout_get_size (GtkGridLayout  *self,
-                          GtkWidget      *widget,
-                          GtkOrientation  orientation,
-                          int            *minimum,
-                          int            *natural,
-                          int            *minimum_baseline,
-                          int            *natural_baseline)
-{
-  GridRequest request;
-  GridLines *lines;
-
-  *minimum = 0;
-  *natural = 0;
-
-  if (minimum_baseline)
-    *minimum_baseline = -1;
-
-  if (natural_baseline)
-    *natural_baseline = -1;
-
-  if (_gtk_widget_get_first_child (widget) == NULL)
-    return;
-
-  request.layout = self;
-  request.widget = widget;
-  grid_request_count_lines (&request);
-
-  lines = &request.lines[orientation];
-  lines->lines = g_newa (GridLine, lines->max - lines->min);
-  memset (lines->lines, 0, (lines->max - lines->min) * sizeof (GridLine));
-
-  grid_request_run (&request, orientation, FALSE);
-  grid_request_sum (&request, orientation,
-                    minimum, natural,
-                    minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_grid_layout_get_size_for_size (GtkGridLayout  *self,
-                                   GtkWidget      *widget,
-                                   GtkOrientation  orientation,
-                                   int             size,
-                                   int            *minimum,
-                                   int            *natural,
-                                   int            *minimum_baseline,
-                                   int            *natural_baseline)
-{
-  GridRequest request;
-  GridLines *lines;
-  int min_size, nat_size;
-
-  *minimum = 0;
-  *natural = 0;
-
-  if (minimum_baseline)
-    *minimum_baseline = -1;
-
-  if (natural_baseline)
-    *natural_baseline = -1;
-
-  if (_gtk_widget_get_first_child (widget) == NULL)
-    return;
-
-  request.layout = self;
-  request.widget = widget;
-  grid_request_count_lines (&request);
-
-  lines = &request.lines[0];
-  lines->lines = g_newa (GridLine, lines->max - lines->min);
-  memset (lines->lines, 0, (lines->max - lines->min) * sizeof (GridLine));
-  lines = &request.lines[1];
-  lines->lines = g_newa (GridLine, lines->max - lines->min);
-  memset (lines->lines, 0, (lines->max - lines->min) * sizeof (GridLine));
-
-  grid_request_run (&request, 1 - orientation, FALSE);
-  grid_request_sum (&request, 1 - orientation, &min_size, &nat_size, NULL, NULL);
-  grid_request_allocate (&request, 1 - orientation, MAX (size, min_size));
-
-  grid_request_run (&request, orientation, TRUE);
-  grid_request_sum (&request, orientation,
-                    minimum, natural,
-                    minimum_baseline, natural_baseline);
+        get_edge (context, orientation, i, &start, &end);
+        sizes[i] = spacing * (end - start - 1);
+        for (c = start; c < end; c++)
+          sizes[i] += reqs[context->n_children + c];
+      }
 }
 
 static void
@@ -1430,86 +1389,87 @@ gtk_grid_layout_measure (GtkLayoutManager *manager,
                          int              *natural_baseline)
 {
   GtkGridLayout *self = GTK_GRID_LAYOUT (manager);
+  GridContext context;
+  int *min_sizes = NULL, *nat_sizes = NULL;
 
-  if ((orientation == GTK_ORIENTATION_HORIZONTAL &&
-       gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT) ||
-      (orientation == GTK_ORIENTATION_VERTICAL &&
-       gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH))
-    gtk_grid_layout_get_size_for_size (self, widget, orientation, for_size,
-                                       minimum, natural,
-                                       minimum_baseline, natural_baseline);
-  else
-    gtk_grid_layout_get_size (self, widget, orientation,
-                              minimum, natural,
-                              minimum_baseline, natural_baseline);
-}
+  context.layout = self;
+  context.widget = widget;
+  grid_context_init (&context);
 
-static void
-allocate_child (GridRequest        *request,
-                GtkOrientation      orientation,
-                GtkWidget          *child,
-                GtkGridLayoutChild *grid_child,
-                int                *position,
-                int                *size,
-                int                *baseline)
-{
-  GridLines *lines;
-  GridLine *line;
-  GridChildAttach *attach;
-  int i;
-
-  lines = &request->lines[orientation];
-  attach = &grid_child->attach[orientation];
-
-  *position = lines->lines[attach->pos - lines->min].position;
-  if (attach->span == 1 &&
-      (gtk_widget_get_valign (child) == GTK_ALIGN_BASELINE_CENTER ||
-       gtk_widget_get_valign (child) == GTK_ALIGN_BASELINE_FILL))
-    *baseline = lines->lines[attach->pos - lines->min].allocated_baseline;
-  else
-    *baseline = -1;
-
-  *size = (attach->span - 1) * get_spacing (request->layout, request->widget, orientation);
-  for (i = 0; i < attach->span; i++)
+  if (for_size != -1 && (orientation != grid_primary_orientation (manager) ||
+                         self->linedata[orientation].homogeneous))
     {
-      line = &lines->lines[attach->pos - lines->min + i];
-      *size += line->allocation;
+      /* When measuring height for a specific width, we have to distribute that
+       * available width first.  We have to use the conservative monotonic
+       * widths for subsequently measuring the minimum heights of the children,
+       * but we can use the more accurate non-monotonic widths for the natural
+       * height calculation.
+       */
+      min_sizes = g_newa (int, context.n_children);
+      nat_sizes = g_newa (int, context.n_children);
+      grid_context_distribute (&context, OPPOSITE_ORIENTATION (orientation),
+                               for_size, NULL, nat_sizes, min_sizes, NULL);
     }
-}
-
-static void
-grid_request_allocate_children (GridRequest *request,
-                                int          grid_width,
-                                int          grid_height)
-{
-  GtkWidget *child;
-  GtkAllocation child_allocation;
-  int x, y, width, height, baseline, ignore;
-
-
-  for (child = _gtk_widget_get_first_child (request->widget);
-       child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
+  else if (for_size != -1)
     {
-      GtkGridLayoutChild *grid_child = get_grid_child (request->layout, child);
+      /* When measuring width for a specific height, we need to binary search.
+       * This is not going to be fast by any measure.
+       */
+      int low, high, mid;
+      int opposite_min, opposite_nat;
 
-      if (!gtk_widget_should_layout (child))
-        continue;
+      min_sizes = g_newa (int, context.n_children);
+      nat_sizes = g_newa (int, context.n_children);
 
-      allocate_child (request, GTK_ORIENTATION_HORIZONTAL, child, grid_child, &x, &width, &ignore);
-      allocate_child (request, GTK_ORIENTATION_VERTICAL, child, grid_child, &y, &height, &baseline);
+      grid_context_measure (&context, orientation,
+                            NULL, NULL,
+                            &opposite_min, &opposite_nat);
 
-      child_allocation.x = x;
-      child_allocation.y = y;
-      child_allocation.width = width;
-      child_allocation.height = height;
+      /* Anything below 'low' is known not to fit, but 'low' itself might.
+       * 'high' or larger is known to fit.
+       */
+      low = opposite_min;
+      high = G_MAXINT;
+      while (low < high)
+        {
+          if (high == G_MAXINT)
+            mid = MAX (low, 16) * 2;
+          else
+            mid = low + (high - low) / 2;
 
-      if (_gtk_widget_get_direction (request->widget) == GTK_TEXT_DIR_RTL)
-        child_allocation.x = grid_width - child_allocation.x - child_allocation.width;
+          grid_context_distribute (&context, orientation, mid,
+                                   NULL, NULL, min_sizes, NULL);
+          grid_context_measure (&context, OPPOSITE_ORIENTATION (orientation),
+                                min_sizes, NULL, &opposite_min, &opposite_nat);
 
-      gtk_widget_size_allocate (child, &child_allocation, baseline);
+          if (opposite_min > for_size)
+            /* does not fit */
+            low = mid + 1;
+          else
+            /* fits */
+            high = mid;
+        }
+      *minimum = high;
+
+      /* This is questionable */
+      grid_context_distribute (&context, OPPOSITE_ORIENTATION (orientation),
+                               for_size, NULL, nat_sizes, NULL, NULL);
+      grid_context_measure (&context, orientation, NULL, nat_sizes,
+                            &opposite_min, &opposite_nat);
+      *natural = MAX (*minimum, opposite_nat);
+
+      *minimum_baseline = *natural_baseline = -1;
+      grid_context_clear (&context);
+      return;
     }
+
+  grid_context_measure (&context, orientation,
+                        min_sizes, nat_sizes,
+                        minimum, natural);
+  grid_context_clear (&context);
+  *minimum_baseline = *natural_baseline = -1;
 }
+
 
 #define GET_SIZE(width, height, orientation) (orientation == GTK_ORIENTATION_HORIZONTAL ? width : height)
 
@@ -1518,42 +1478,61 @@ gtk_grid_layout_allocate (GtkLayoutManager *manager,
                           GtkWidget        *widget,
                           int               width,
                           int               height,
-                          int              baseline)
+                          int               baseline)
 {
   GtkGridLayout *self = GTK_GRID_LAYOUT (manager);
-  GridRequest request;
-  GridLines *lines;
-  GtkOrientation orientation;
+  GridContext context;
+  int *child_widths, *child_heights;
+  int *column_widths, *row_heights;
+  GtkOrientation orientation = grid_primary_orientation (manager);
+  int column_spacing, row_spacing;
+  int i;
 
-  if (_gtk_widget_get_first_child (widget) == NULL)
-    return;
+  context.layout = self;
+  context.widget = widget;
+  grid_context_init (&context);
 
-  request.layout = self;
-  request.widget = widget;
+  child_widths = g_newa (int, context.n_children);
+  child_heights = g_newa (int, context.n_children);
+  column_widths = g_newa (int, context.lines[GTK_ORIENTATION_HORIZONTAL].num);
+  row_heights = g_newa (int, context.lines[GTK_ORIENTATION_VERTICAL].num);
 
-  grid_request_count_lines (&request);
-  lines = &request.lines[0];
-  lines->lines = g_newa (GridLine, lines->max - lines->min);
-  memset (lines->lines, 0, (lines->max - lines->min) * sizeof (GridLine));
-  lines = &request.lines[1];
-  lines->lines = g_newa (GridLine, lines->max - lines->min);
-  memset (lines->lines, 0, (lines->max - lines->min) * sizeof (GridLine));
+  grid_context_distribute (&context, orientation,
+                           GET_SIZE (width, height, orientation), NULL,
+                           GET_SIZE (child_widths, child_heights, orientation),
+                           NULL,
+                           GET_SIZE (column_widths, row_heights, orientation));
+  grid_context_distribute (&context, OPPOSITE_ORIENTATION (orientation),
+                           GET_SIZE (height, width, orientation),
+                           GET_SIZE (child_widths, child_heights, orientation),
+                           GET_SIZE (child_heights, child_widths, orientation),
+                           NULL,
+                           GET_SIZE (row_heights, column_widths, orientation));
 
-  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
-    orientation = GTK_ORIENTATION_HORIZONTAL;
-  else
-    orientation = GTK_ORIENTATION_VERTICAL;
+  column_spacing = get_spacing (self, widget, GTK_ORIENTATION_HORIZONTAL);
+  row_spacing = get_spacing (self, widget, GTK_ORIENTATION_VERTICAL);
 
-  grid_request_run (&request, OPPOSITE_ORIENTATION (orientation), FALSE);
-  grid_request_allocate (&request, OPPOSITE_ORIENTATION (orientation),
-                         GET_SIZE (width, height, OPPOSITE_ORIENTATION (orientation)));
+  for (i = 0; i < context.n_children; i++)
+    {
+      gsize start, end, j;
+      GtkWidget *child;
+      GtkAllocation allocation;
 
-  grid_request_run (&request, orientation, TRUE);
-  grid_request_allocate (&request, orientation, GET_SIZE (width, height, orientation));
+      get_edge (&context, GTK_ORIENTATION_HORIZONTAL, i, &start, &end);
+      allocation.x = MAX (0, start) * column_spacing;
+      for (j = 0; j < start; j++)
+        allocation.x += column_widths[j];
+      child = get_edge (&context, GTK_ORIENTATION_VERTICAL, i, &start, &end);
+      allocation.y = MAX (0, start) * row_spacing;
+      for (j = 0; j < start; j++)
+        allocation.y += row_heights[j];
 
-  grid_request_position (&request, 0);
-  grid_request_position (&request, 1);
-  grid_request_allocate_children (&request, width, height);
+      allocation.width = child_widths[i];
+      allocation.height = child_heights[i];
+      gtk_widget_size_allocate (child, &allocation, -1);
+    }
+
+  grid_context_clear (&context);
 }
 
 static void
@@ -2027,7 +2006,7 @@ gtk_grid_layout_set_baseline_row (GtkGridLayout *grid,
 int
 gtk_grid_layout_get_baseline_row (GtkGridLayout *grid)
 {
-  g_return_val_if_fail (GTK_IS_GRID_LAYOUT (grid), GTK_BASELINE_POSITION_CENTER);
+  g_return_val_if_fail (GTK_IS_GRID_LAYOUT (grid), 0);
 
   return grid->baseline_row;
 }

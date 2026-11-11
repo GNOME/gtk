@@ -366,7 +366,6 @@ gtk_grid_compute_expand (GtkWidget *widget,
   *vexpand_p = vexpand;
 }
 
-
 static void
 gtk_grid_dispose (GObject *object)
 {
