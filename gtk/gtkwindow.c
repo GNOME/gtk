@@ -4436,11 +4436,53 @@ toplevel_compute_size (GdkToplevel     *toplevel,
   GtkBorder shadow;
   int bounds_width, bounds_height;
   int min_width, min_height;
+  int proposed_width, proposed_height;
+  int current_width, current_height;
+  gboolean has_proposal;
+
+  if (priv->use_client_shadow)
+    {
+      get_shadow_width (window, &shadow);
+      gdk_toplevel_size_set_shadow_width (size,
+                                          shadow.left, shadow.right,
+                                          shadow.top, shadow.bottom);
+    }
 
   gdk_toplevel_size_get_bounds (size, &bounds_width, &bounds_height);
+  has_proposal = gdk_toplevel_size_get_proposed_size (size,
+                                                      &proposed_width,
+                                                      &proposed_height);
+
+  current_width = priv->default_width;
+  current_height = priv->default_height;
+
+  if (has_proposal)
+    {
+      if (proposed_width == 0)
+        proposed_width = -1;
+
+      if (proposed_height == 0)
+        proposed_height = -1;
+
+      gtk_window_update_csd_size (window,
+                                  &proposed_width, &proposed_height,
+                                  EXCLUDE_CSD_SIZE);
+
+      if (proposed_width > 0)
+        {
+          current_width = proposed_width;
+          bounds_width = MAX (bounds_width, proposed_width);
+        }
+
+      if (proposed_height > 0)
+        {
+          current_height = proposed_height;
+          bounds_height = MAX (bounds_height, proposed_height);
+        }
+    }
 
   gtk_window_compute_default_size (window,
-                                   priv->default_width, priv->default_height,
+                                   current_width, current_height,
                                    bounds_width, bounds_height,
                                    &min_width, &min_height,
                                    &width, &height);
@@ -4450,7 +4492,7 @@ toplevel_compute_size (GdkToplevel     *toplevel,
   if (height < min_height)
     height = min_height;
 
-  if (should_remember_size (window))
+  if (!has_proposal && should_remember_size (window))
     gtk_window_set_default_size_internal (window, TRUE, width, TRUE, height);
 
   gtk_window_update_csd_size (window,
@@ -4463,14 +4505,6 @@ toplevel_compute_size (GdkToplevel     *toplevel,
   gdk_toplevel_size_set_min_size (size, min_width, min_height);
 
   gdk_toplevel_size_set_size (size, width, height);
-
-  if (priv->use_client_shadow)
-    {
-      get_shadow_width (window, &shadow);
-      gdk_toplevel_size_set_shadow_width (size,
-                                          shadow.left, shadow.right,
-                                          shadow.top, shadow.bottom);
-    }
 
   gtk_widget_clear_resize_queued (widget);
 }
