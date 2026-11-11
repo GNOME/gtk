@@ -39,6 +39,26 @@ void                    gdk_toplevel_size_get_bounds    (GdkToplevelSize       *
                                                          int                   *bounds_width,
                                                          int                   *bounds_height);
 
+GDK_AVAILABLE_IN_4_26
+gboolean                gdk_toplevel_size_get_proposed_size (GdkToplevelSize    *size,
+                                                             int                *width,
+                                                             int                *height);
+
+GDK_AVAILABLE_IN_4_26
+void                    gdk_toplevel_size_get_size      (GdkToplevelSize       *size,
+                                                         int                   *width,
+                                                         int                   *height);
+
+GDK_AVAILABLE_IN_4_26
+void                    gdk_toplevel_size_get_min_size  (GdkToplevelSize       *size,
+                                                         int                   *min_width,
+                                                         int                   *min_height);
+
+GDK_AVAILABLE_IN_4_26
+void                    gdk_toplevel_size_set_size_for_proposal (GdkToplevelSize *size,
+                                                                 int              width,
+                                                                 int              height);
+
 GDK_AVAILABLE_IN_ALL
 void                    gdk_toplevel_size_set_size      (GdkToplevelSize       *size,
                                                          int                    width,

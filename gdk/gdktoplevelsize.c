@@ -82,6 +82,147 @@ gdk_toplevel_size_get_bounds (GdkToplevelSize *size,
 }
 
 /**
+ * gdk_toplevel_size_get_proposed_size:
+ * @size: a `GdkToplevelSize`
+ * @width: (out) (optional): proposed width, or 0 if the client may choose
+ * @height: (out) (optional): proposed height, or 0 if the client may choose
+ *
+ * Gets a size proposed by the windowing system.
+ *
+ * A proposal allows the client to choose a smaller size, for example to
+ * preserve an aspect ratio or fit a content grid. A zero dimension leaves
+ * that dimension up to the client. Each nonzero dimension is an upper
+ * limit for the response.
+ *
+ * Dimensions are in surface coordinates and include the shadows set with
+ * [method@Gdk.ToplevelSize.set_shadow_width]. Set the shadow widths before
+ * reading the proposal if they have changed.
+ *
+ * Use [method@Gdk.ToplevelSize.set_size_for_proposal] to respond. Merely
+ * reading a proposal does not change how GDK handles it.
+ *
+ * A proposal is not provided when the backend cannot negotiate the size,
+ * or when the toplevel must fill its configured area, such as a maximized,
+ * fullscreen or tiled toplevel. Backends that do not support proposals
+ * return false. Currently, proposals are supported by the Wayland backend.
+ *
+ * Returns: true if at least one dimension is proposed
+ *
+ * Since: 4.26
+ */
+gboolean
+gdk_toplevel_size_get_proposed_size (GdkToplevelSize *size,
+                                     int             *width,
+                                     int             *height)
+{
+  g_return_val_if_fail (size != NULL, FALSE);
+
+  if (width)
+    *width = size->proposed_width > 0
+           ? MIN ((gint64) size->proposed_width + size->shadow.left + size->shadow.right, G_MAXINT)
+           : 0;
+
+  if (height)
+    *height = size->proposed_height > 0
+            ? MIN ((gint64) size->proposed_height + size->shadow.top + size->shadow.bottom, G_MAXINT)
+            : 0;
+
+  return size->proposed_width > 0 || size->proposed_height > 0;
+}
+
+/**
+ * gdk_toplevel_size_get_size:
+ * @size: a `GdkToplevelSize`
+ * @width: (out) (optional): preferred width
+ * @height: (out) (optional): preferred height
+ *
+ * Gets the preferred size set by a handler of
+ * [signal@Gdk.Toplevel::compute-size].
+ *
+ * This can be used by a later handler to adjust a size computed by the
+ * toolkit. The dimensions include shadows and are in surface coordinates.
+ *
+ * Since: 4.26
+ */
+void
+gdk_toplevel_size_get_size (GdkToplevelSize *size,
+                            int             *width,
+                            int             *height)
+{
+  g_return_if_fail (size != NULL);
+
+  if (width)
+    *width = size->width;
+  if (height)
+    *height = size->height;
+}
+
+/**
+ * gdk_toplevel_size_get_min_size:
+ * @size: a `GdkToplevelSize`
+ * @min_width: (out) (optional): minimum width
+ * @min_height: (out) (optional): minimum height
+ *
+ * Gets the minimum size set with [method@Gdk.ToplevelSize.set_min_size].
+ *
+ * The dimensions include shadows and are in surface coordinates. A later
+ * [signal@Gdk.Toplevel::compute-size] handler can use them when adjusting
+ * the preferred size. A dimension is zero if no minimum has been set.
+ *
+ * Since: 4.26
+ */
+void
+gdk_toplevel_size_get_min_size (GdkToplevelSize *size,
+                                int             *min_width,
+                                int             *min_height)
+{
+  g_return_if_fail (size != NULL);
+
+  if (min_width)
+    *min_width = size->min_width;
+  if (min_height)
+    *min_height = size->min_height;
+}
+
+/**
+ * gdk_toplevel_size_set_size_for_proposal:
+ * @size: a `GdkToplevelSize`
+ * @width: preferred surface width
+ * @height: preferred surface height
+ *
+ * Sets the preferred size in response to a windowing system proposal.
+ *
+ * Call this only when [method@Gdk.ToplevelSize.get_proposed_size] returns
+ * true. Dimensions must be positive and include shadows. The response
+ * should fit within each nonzero proposed dimension and respect the
+ * minimum size. If these constraints conflict, the proposed upper limit
+ * takes precedence.
+ *
+ * Unlike [method@Gdk.ToplevelSize.set_size], this explicitly requests that
+ * GDK use the preferred size to answer the current proposal. The backend
+ * enforces the proposed upper limits. Handlers that do not call this
+ * method retain the backend's default configure handling.
+ *
+ * Subsequent calls to [method@Gdk.ToplevelSize.set_size] may further adjust
+ * the response during the same [signal@Gdk.Toplevel::compute-size] emission.
+ *
+ * Since: 4.26
+ */
+void
+gdk_toplevel_size_set_size_for_proposal (GdkToplevelSize *size,
+                                         int              width,
+                                         int              height)
+{
+  g_return_if_fail (size != NULL);
+  g_return_if_fail (size->proposed_width > 0 || size->proposed_height > 0);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
+
+  gdk_toplevel_size_set_size (size, width, height);
+  size->reply_to_proposal = TRUE;
+}
+
+/**
  * gdk_toplevel_size_set_size:
  * @size: a `GdkToplevelSize`
  * @width: the width

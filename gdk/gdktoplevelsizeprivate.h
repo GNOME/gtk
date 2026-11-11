@@ -30,6 +30,10 @@ struct _GdkToplevelSize
   int min_width;
   int min_height;
 
+  int proposed_width;
+  int proposed_height;
+  gboolean reply_to_proposal;
+
   struct {
     gboolean is_valid;
     int left;

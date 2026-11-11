@@ -313,6 +313,14 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
    * and compute the desired size of the toplevel, given the information
    * passed via the [struct@Gdk.ToplevelSize] object. Failing to do so
    * will result in an arbitrary size being used as a result.
+   *
+   * The backend may provide a proposed size through
+   * [method@Gdk.ToplevelSize.get_proposed_size]. A handler can explicitly
+   * respond with [method@Gdk.ToplevelSize.set_size_for_proposal] to choose
+   * a size within that proposal. For a `GtkWindow`, an after-handler can
+   * adjust the preferred and minimum sizes computed by the window's own
+   * handler, using [method@Gdk.ToplevelSize.get_size] and
+   * [method@Gdk.ToplevelSize.get_min_size].
    */
   signals[COMPUTE_SIZE] =
     g_signal_new (I_("compute-size"),

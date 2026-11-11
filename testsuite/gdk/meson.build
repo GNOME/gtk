@@ -75,6 +75,7 @@ endforeach
 
 internal_tests = [
   { 'name': 'colorstate-internal' },
+  { 'name': 'toplevelsize' },
   { 'name': 'dihedral' },
   { 'name': 'image' },
   { 'name': 'memorytexture', 'sources': [ 'gdktestutils.c' ] },
