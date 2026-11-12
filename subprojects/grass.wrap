@@ -1,0 +1,9 @@
+[wrap-git]
+directory = grass
+url = https://github.com/connorskees/grass.git
+revision = master
+depth = 1
+patch_directory = grass
+
+[provide]
+program_names = grass

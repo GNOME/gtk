@@ -75,7 +75,7 @@ default:
 
 .container.fedora:
   variables:
-    BASE_TAG: '2026-08-09.0'
+    BASE_TAG: '2026-11-11.0'
     FDO_DISTRIBUTION_VERSION: 45
     FDO_DISTRIBUTION_TAG: "x86_64-${BASE_TAG}"
     FDO_DISTRIBUTION_PACKAGES:
@@ -91,6 +91,7 @@ default:
       git
       glibc-langpack-en
       graphviz
+      grass-compiler
       libasan
       libcloudproviders-devel
       libubsan
@@ -114,7 +115,6 @@ default:
       python3-pip
       python3-pygments
       python3-typogrify
-      sassc
       tinysparql-devel
       vulkan-validation-layers
       weston
@@ -250,6 +250,9 @@ gnomeos-x86_64:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
   script:
     - .gitlab-ci/show-info-linux.sh
+    - |
+      curl --proto '=https' --tlsv1.2 --silent --fail --show-error https://sh.rustup.rs | sh -s -- -y
+      source "$HOME/.cargo/env"
     - export PATH="$HOME/.local/bin:$PATH"
     - meson setup
             --prefix=/usr

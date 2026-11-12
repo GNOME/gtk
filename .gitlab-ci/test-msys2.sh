@@ -29,7 +29,7 @@ pacman --noconfirm -S --needed \
     ${MINGW_PACKAGE_PREFIX}-shaderc \
     ${MINGW_PACKAGE_PREFIX}-vulkan \
     ${MINGW_PACKAGE_PREFIX}-vulkan-headers \
-    ${MINGW_PACKAGE_PREFIX}-sassc
+    ${MINGW_PACKAGE_PREFIX}-rust
 
 mkdir -p _ccache
 export CCACHE_BASEDIR="$(pwd)"

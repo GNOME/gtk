@@ -401,6 +401,10 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     test_cflags += ['-Wcast-align'] # This warns too much on clang
   endif
 
+  if cc.get_id() == 'clang'
+    test_cflags += ['-Wno-error=unused-but-set-global']
+  endif
+
   if not gtk_debug_cflags.contains('-DG_DISABLE_ASSERT')
     test_cflags += ['-Wnull-dereference'] # Too noisy when assertions are disabled
   endif
