@@ -4391,7 +4391,7 @@ gtk_widget_allocate (GtkWidget    *widget,
   details.baseline = baseline;
   details.transform = g_steal_pointer (&transform);
 
-  gtk_widget_allocate_detailed (widget, 0, 0, width, height, &details);
+  gtk_widget_allocate_internal (widget, 0, 0, width, height, &details);
 
   gtk_allocation_details_clear (&details);
 }
