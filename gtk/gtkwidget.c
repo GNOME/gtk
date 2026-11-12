@@ -4254,13 +4254,14 @@ gtk_widget_allocate_internal (GtkWidget                  *widget,
   get_box_border (style, &border);
   get_box_padding (style, &padding);
 
-  /* Apply CSS transformation */
   adjusted.x += margin.left;
   adjusted.y += margin.top;
   adjusted.width -= margin.left + margin.right;
   adjusted.height -= margin.top + margin.bottom;
-  css_transform = gtk_css_transform_value_get_transform (style->other->transform);
 
+  transform = gsk_transform_ref (details->transform);
+
+  css_transform = gtk_css_transform_value_get_transform (style->other->transform);
   if (css_transform)
     {
       double origin_x, origin_y;
@@ -4268,7 +4269,7 @@ gtk_widget_allocate_internal (GtkWidget                  *widget,
       origin_x = _gtk_css_position_value_get_x (style->other->transform_origin, adjusted.width);
       origin_y = _gtk_css_position_value_get_y (style->other->transform_origin, adjusted.height);
 
-      transform = gsk_transform_translate (details->transform, &GRAPHENE_POINT_INIT (adjusted.x, adjusted.y));
+      transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (adjusted.x, adjusted.y));
       adjusted.x = adjusted.y = 0;
 
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (origin_x, origin_y));
@@ -4276,10 +4277,6 @@ gtk_widget_allocate_internal (GtkWidget                  *widget,
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (- origin_x, - origin_y));
 
       gsk_transform_unref (css_transform);
-    }
-  else
-    {
-      transform = gsk_transform_ref (details->transform);
     }
 
   adjusted.x += border.left + padding.left;
