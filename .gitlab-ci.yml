@@ -250,6 +250,9 @@ gnomeos-x86_64:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
   script:
     - .gitlab-ci/show-info-linux.sh
+    - |
+      curl --proto '=https' --tlsv1.2 --silent --fail --show-error https://sh.rustup.rs | sh -s -- -y
+      source "$HOME/.cargo/env"
     - export PATH="$HOME/.local/bin:$PATH"
     - meson setup
             --prefix=/usr
