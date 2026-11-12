@@ -1,0 +1,7 @@
+a {
+  animation-iteration-count: infinite;
+}
+
+b {
+  animation-iteration-count: 0;
+}
