@@ -90,7 +90,6 @@ gdk_macos_vulkan_context_surface_attach (GdkDrawContext  *context,
 {
   GdkSurface *surface = gdk_draw_context_get_surface (context);
   NSView *view = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (surface));
-  NSWindow *window;
   double scale = gdk_surface_get_scale_factor (surface);
 
   CAMetalLayer *layer = [CAMetalLayer layer];
@@ -98,14 +97,20 @@ gdk_macos_vulkan_context_surface_attach (GdkDrawContext  *context,
   [layer setContentsScale: scale];
   [view setLayer:layer];
 
-  /* This is a workaround to make sure a window is visible when
-   * gtk_widget_set_visible() is called on a window.
-   * Windows are presented normally with gtk_window_present().
-   */
-  if ((window = GDK_MACOS_SURFACE (surface)->window))
-    [window orderFront:window];
-
   return GDK_DRAW_CONTEXT_CLASS (gdk_macos_vulkan_context_parent_class)->surface_attach(context, error);
+}
+
+static void
+gdk_macos_vulkan_context_end_frame (GdkDrawContext      *context,
+                                    GdkDrawContextFrame *frame,
+                                    gpointer             context_data)
+{
+  GdkMacosSurface *surface = GDK_MACOS_SURFACE (gdk_draw_context_get_surface (context));
+
+  GDK_DRAW_CONTEXT_CLASS (gdk_macos_vulkan_context_parent_class)->end_frame (context, frame, context_data);
+
+  if (surface->show_on_next_swap)
+    _gdk_macos_surface_do_delayed_show (surface);
 }
 
 static void
@@ -118,6 +123,7 @@ gdk_macos_vulkan_context_class_init (GdkMacosVulkanContextClass *klass)
 
   draw_context_class->surface_resized = gdk_macos_vulkan_context_surface_resized;
   draw_context_class->surface_attach = gdk_macos_vulkan_context_surface_attach;
+  draw_context_class->end_frame = gdk_macos_vulkan_context_end_frame;
 }
 
 static void

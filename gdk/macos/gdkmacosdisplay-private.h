@@ -91,6 +91,8 @@ struct _GdkMacosDisplay
    * such as a NSPanel used for native dialogs.
    */
   guint key_window_is_foreign : 1;
+
+  guint activate_nsapp_on_first_show : 1;
 };
 
 struct _GdkMacosDisplayClass
