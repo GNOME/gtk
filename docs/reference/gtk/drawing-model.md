@@ -53,31 +53,27 @@ All GTK applications are mainloop-driven, which means that most
 of the time the app is idle inside a loop that just waits for
 something to happen and then calls out to the right place when
 it does. On top of this GTK has a frame clock that gives a
-“pulse” to the application. This clock beats at a steady rate,
-which is tied to the framerate of the output (this is synced to
-the monitor via the window manager/compositor). A typical
-refresh rate is 60 frames per second, so a new “pulse” happens
-roughly every 16 milliseconds.
+“pulse” to the application when needed. The clock is tied to
+the framerate of the output (this is synced to the monitor via
+the window manager/compositor). A typical refresh rate is 60
+frames per second, so pulses during an animation happen roughly
+every 16 milliseconds.
 
 The clock has several phases:
 
-- Events
 - Update
 - Layout
 - Paint
 
-The phases happen in this order and all phases will always run
-through before going back to the start.
+Between redraws, most input events
+are delivered as they arrive, independently of the frame clock.
+Motion and smooth scroll events can be compressed and request a
+clock flush to ensure delivery. The clock flushes pending events
+before drawing, or without drawing if no frame is needed.
 
-The Events phase is a stretch of time between each redraw where
-GTK processes input events from the user and other events
-(like e.g. network I/O). Some events, like mouse motion are
-compressed so that only a single mouse motion event per clock
-cycle needs to be handled.
-
-Once the Events phase is over, external events are paused and
-the redraw loop is run. First is the Update phase, where all
-animations are run to calculate the new state based on the
+When a redraw is needed, input delivery is paused and the redraw
+loop is run. First is the Update phase, where all animations are
+run to calculate the new state based on the
 estimated time the next frame will be visible (available via
 the frame clock). This often involves geometry changes which
 drive the next phase, Layout. If there are any changes in
@@ -86,11 +82,10 @@ widget hierarchy (i.e. sizes and positions for all widgets are
 determined). Then comes the Paint phase, where we redraw the
 regions of the window that need redrawing.
 
-If nothing requires the Update/Layout/Paint phases we will
-stay in the Events phase forever, as we don’t want to redraw
-if nothing changes. Each phase can request further processing
-in the following phases (e.g. the Update phase will cause there
-to be layout work, and layout changes cause repaints).
+If nothing requires the Update/Layout/Paint phases we will not
+redraw. Each phase can request further processing in the following
+phases (e.g. the Update phase will cause there to be layout work,
+and layout changes cause repaints).
 
 There are multiple ways to drive the clock, at the lowest level you
 can request a particular phase with gdk_frame_clock_request_phase()

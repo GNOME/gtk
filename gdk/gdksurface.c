@@ -2126,11 +2126,16 @@ _gdk_windowing_got_event (GdkDisplay *display,
   GdkDevice *device;
   GdkEventType type;
   guint32 timestamp;
+  gboolean needs_frame_flush;
 
   _gdk_display_update_last_event (display, event);
 
   device = gdk_event_get_device (event);
   timestamp = gdk_event_get_time (event);
+  type = gdk_event_get_event_type (event);
+  needs_frame_flush = type == GDK_MOTION_NOTIFY ||
+                      (type == GDK_SCROLL &&
+                       gdk_scroll_event_get_direction (event) == GDK_SCROLL_SMOOTH);
 
   if (device)
     {
@@ -2149,7 +2154,6 @@ _gdk_windowing_got_event (GdkDisplay *display,
   if (!event_surface)
     goto out;
 
-  type = gdk_event_get_event_type (event);
   if (type == GDK_ENTER_NOTIFY)
     _gdk_display_set_surface_under_pointer (display, device, event_surface);
   else if (type == GDK_LEAVE_NOTIFY)
@@ -2163,21 +2167,16 @@ _gdk_windowing_got_event (GdkDisplay *display,
       gdk_event_unref (event);
     }
 
-  /* This does two things - first it sees if there are motions at the
-   * end of the queue that can be compressed. Second, if there is just
-   * a single motion that won't be dispatched because it is a compression
-   * candidate it queues up flushing the event queue.
-   */
-  _gdk_event_queue_handle_motion_compression (display);
-  gdk_event_queue_handle_scroll_compression (display);
-
-  if (event_surface)
+  if (!unlink_event && event_surface && needs_frame_flush)
     {
       GdkFrameClock *clock = gdk_surface_get_frame_clock (event_surface);
 
-      if (clock) /* might be NULL if surface was destroyed */
+      if (clock)
         gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS);
     }
+
+  _gdk_event_queue_handle_motion_compression (display);
+  gdk_event_queue_handle_scroll_compression (display);
 }
 
 /**

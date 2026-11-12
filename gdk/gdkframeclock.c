@@ -1231,14 +1231,11 @@ gdk_frame_clock_run_flush_events (GdkFrameClock *self)
 {
   GdkFrameClockPrivate *priv = gdk_frame_clock_get_instance_private (self);
 
-  if (priv->requested & GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS)
-    {
-      priv->requested &= ~GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS;
+  priv->requested &= ~GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS;
 
-      gdk_frame_clock_doing_work (self);
+  gdk_frame_clock_doing_work (self);
 
-      g_signal_emit (self, signals[FLUSH_EVENTS], 0);
-    }
+  g_signal_emit (self, signals[FLUSH_EVENTS], 0);
 }
 
 static gboolean
