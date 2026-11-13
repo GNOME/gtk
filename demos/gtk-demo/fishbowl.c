@@ -200,13 +200,27 @@ static GtkWidget *
 create_blurred_image (void)
 {
   GdkPaintable *paintable;
+  GtkWidget *w;
 
   paintable = g_object_new (gtk_filter_paintable_get_type (),
                             "blur", (float) g_random_double_range (30, 50),
                             NULL);
-  GtkWidget *w = gtk_image_new_from_paintable (paintable);
+  w = gtk_image_new_from_paintable (paintable);
   gtk_image_set_pixel_size (GTK_IMAGE (w), 400);
+  g_object_unref (paintable);
 
+  return w;
+}
+
+static GtkWidget *
+create_shadowed_icon (void)
+{
+  GdkPaintable *paintable;
+  GtkWidget *w;
+
+  paintable = GDK_PAINTABLE (gtk_svg_new_from_resource ("/fishbowl/cluster.svg"));
+  w = gtk_image_new_from_paintable (paintable);
+  gtk_image_set_pixel_size (GTK_IMAGE (w), 200);
   g_object_unref (paintable);
 
   return w;
@@ -221,6 +235,7 @@ static const struct {
   { "Button",           create_button,         NULL },
   { "Blurred Button",   create_blurred_button, NULL },
   { "Blurred image",    create_blurred_image,  NULL },
+  { "Shadowed icon",    create_shadowed_icon,  NULL },
   { "Font Button",      create_font_button,    NULL },
   { "Levelbar",         create_level_bar,      NULL },
   { "Label",            create_label,          NULL },
