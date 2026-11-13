@@ -74,8 +74,6 @@ struct _GdkSurface
   guint has_pointer : 1;
   guint is_srgb : 1;
 
-  guint request_motion_id;
-
   struct {
     GdkGravity surface_anchor;
     GdkGravity rect_anchor;
