@@ -57,7 +57,7 @@ clip {
 
 /* This should not */
 clip {
-  clip:  0 55 50 5;
+  clip:  0 56 50 5;
   child: "larry";
 }
 
