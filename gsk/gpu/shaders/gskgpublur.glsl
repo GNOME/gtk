@@ -42,7 +42,7 @@ run (out vec2 pos)
   float sigma = length (GSK_GLOBAL_SCALE * in_blur_direction);
   _tex_blur_step = GSK_GLOBAL_SCALE * in_blur_direction / sigma / rect_size (tex_rect);
   _samples_per_side = uint (3.0 * ceil (sigma));
-  _initial_gaussian.x = 1.0 / (sqrt (2.0 * PI) * sigma);
+  _initial_gaussian.x = 1.0;
   _initial_gaussian.y = exp (-0.5 / (sigma * sigma));
   _initial_gaussian.z = _initial_gaussian.y * _initial_gaussian.y;
   _opacity = in_opacity;
@@ -59,8 +59,8 @@ run (out vec4 color,
      out vec2 position)
 {
   vec3 incremental_gaussian = _initial_gaussian;
-  vec4 sum = texture (GSK_TEXTURE0, _tex_coord) * incremental_gaussian.x;
-  float coefficient_sum = incremental_gaussian.x;
+  vec4 sum = texture (GSK_TEXTURE0, _tex_coord);
+  float coefficient_sum = 1.0;
   incremental_gaussian.xy *= incremental_gaussian.yz;
   vec2 p = _tex_blur_step;
 
