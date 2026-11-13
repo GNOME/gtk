@@ -1,0 +1,68 @@
+color {
+  bounds: 16 56 80 80;
+  color: rgb(255,0,0);
+}
+clip {
+  clip: 16.8 56.8 78.4 78.4;
+  child: color {
+    bounds: 16.8 56.8 78.4 78.4;
+    color: rgb(0,0,255);
+  }
+}
+transform {
+  transform: translate(0, 40) scale(0.8) translate(120, 0);
+  child: clip {
+    clip: 10 10 120 120;
+    child: blur {
+      radius: 10 0;
+      child: container {
+        color {
+          bounds: 20 20 100 100;
+          color: rgb(255,0,0);
+        }
+        color {
+          bounds: 21 21 98 98;
+          color: rgb(0,0,255);
+        }
+      }
+    }
+  }
+}
+transform {
+  transform: translate(0, 40) scale(0.8) translate(240, 0);
+  child: clip {
+    clip: 10 10 120 120;
+    child: blur {
+      radius: 0 10;
+      child: container {
+        color {
+          bounds: 20 20 100 100;
+          color: rgb(255,0,0);
+        }
+        color {
+          bounds: 21 21 98 98;
+          color: rgb(0,0,255);
+        }
+      }
+    }
+  }
+}
+transform {
+  transform: translate(0, 40) scale(0.8) translate(360, 0);
+  child: clip {
+    clip: 10 10 120 120;
+    child: blur {
+      radius: 10;
+      child: container {
+        color {
+          bounds: 20 20 100 100;
+          color: rgb(255,0,0);
+        }
+        color {
+          bounds: 21 21 98 98;
+          color: rgb(0,0,255);
+        }
+      }
+    }
+  }
+}
