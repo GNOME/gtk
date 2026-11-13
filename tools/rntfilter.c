@@ -85,7 +85,7 @@ static const RntFilter filters[] = {
   {
     .name = "load-svg",
     .description = "Load from SVGs",
-    .run = filter_load_icon,
+    .run = filter_load_svg,
   },
   {
     .name = "match",
