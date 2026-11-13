@@ -44,7 +44,7 @@ clip {
 
 /* cover the blur */
 border {
-  outline: -37 -37 74 74;
+  outline: -38 -38 76 76;
   colors: black;
-  widths: 4;
+  widths: 6;
 }
