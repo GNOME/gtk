@@ -796,6 +796,7 @@ gsk_gpu_node_processor_downscale_blur (GskGpuRenderPass      *self,
 static void
 gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
                                 const graphene_rect_t     *rect,
+                                const graphene_rect_t     *quad_filter_rect,
                                 const graphene_rect_t     *padded_rect,
                                 const graphene_size_t     *scale,
                                 const graphene_size_t     *sigma,
@@ -812,9 +813,9 @@ gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
 
   if (sigma->width > 0.f && sigma->height > 0.f)
     {
-      intermediate_rect = GRAPHENE_RECT_INIT (rect->origin.x,
+      intermediate_rect = GRAPHENE_RECT_INIT (quad_filter_rect->origin.x,
                                               padded_rect->origin.y,
-                                              rect->size.width,
+                                              quad_filter_rect->size.width,
                                               padded_rect->size.height);
 
       intermediate = gsk_gpu_node_processor_run_blur_pass (self->frame,
@@ -845,7 +846,7 @@ gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
                                                                  self->ccs,
                                                                  source_depth,
                                                                  scale,
-                                                                 rect,
+                                                                 quad_filter_rect,
                                                                  intermediate,
                                                                  &intermediate_rect,
                                                                  intermediate_sampler,
@@ -860,7 +861,7 @@ gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
                                                                 : GSK_QUAD_KERNEL_LINEAR,
                               scale->height != self->scale.height ? GSK_QUAD_KERNEL_GAUSSIAN
                                                                   : GSK_QUAD_KERNEL_LINEAR,
-                              rect);
+                              quad_filter_rect);
 
       g_object_unref (pass2);
     }
@@ -2447,7 +2448,7 @@ gsk_gpu_node_processor_add_blur_node (GskGpuRenderPass *self,
 {
   GskRenderNode *child;
   GskGpuImage *image;
-  graphene_rect_t tex_rect, clip, padded_clip;
+  graphene_rect_t tex_rect, clip, quad_filter_clip, padded_clip;
   GskGpuSampler tex_sampler;
   const graphene_size_t *sigma;
   graphene_size_t padding, scale, scaled_sigma;
@@ -2468,11 +2469,17 @@ gsk_gpu_node_processor_add_blur_node (GskGpuRenderPass *self,
   gsk_blur_node_get_padding (&scaled_sigma, &padding);
   if (!gsk_gpu_render_pass_get_clip_bounds (self, &clip))
     return;
-  if (!gsk_rect_intersection (&clip, &node->bounds, &clip))
+  if (!gsk_rect_intersection (&clip, &node->bounds, &clip) ||
+      !gsk_rect_snap_to_grid_grow (&clip, &self->scale, &self->offset, &clip))
     return;
-  graphene_rect_inset_r (&clip, - padding.width, - padding.height, &padded_clip);
-  if (!gsk_rect_snap_to_grid_grow (&clip, &self->scale, &self->offset, &clip) ||
-      !gsk_rect_snap_to_grid_grow (&padded_clip, &self->scale, &self->offset, &padded_clip))
+  graphene_rect_inset_r (&clip,
+                         scale.width == self->scale.width ? 0 : -1.f / scale.width,
+                         scale.height == self->scale.height ? 0 : -1.f / scale.height,
+                         &quad_filter_clip);
+  if (!gsk_rect_snap_to_grid_grow (&quad_filter_clip, &self->scale, &self->offset, &padded_clip))
+    return;
+  graphene_rect_inset_r (&quad_filter_clip, - padding.width, - padding.height, &padded_clip);
+  if (!gsk_rect_snap_to_grid_grow (&padded_clip, &self->scale, &self->offset, &padded_clip))
     return;
 
   image = gsk_gpu_get_child_as_image (self->frame,
@@ -2489,6 +2496,7 @@ gsk_gpu_node_processor_add_blur_node (GskGpuRenderPass *self,
 
   gsk_gpu_node_processor_blur_op (self,
                                   &clip,
+                                  &quad_filter_clip,
                                   &padded_clip,
                                   &scale,
                                   &scaled_sigma,
@@ -2589,6 +2597,7 @@ gsk_gpu_node_processor_add_shadow_node_slow (GskGpuRenderPass *self,
             continue;
 
           gsk_gpu_node_processor_blur_op (self,
+                                          &bounds,
                                           &bounds,
                                           &padded_bounds,
                                           &self->scale,
@@ -2728,6 +2737,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuRenderPass *self,
           if (!gsk_rect_snap_to_grid_grow (&padded_bounds, &self->scale, &self->offset, &padded_bounds))
             continue;
           gsk_gpu_node_processor_blur_op (self,
+                                          &bounds,
                                           &bounds,
                                           &padded_bounds,
                                           &self->scale,
