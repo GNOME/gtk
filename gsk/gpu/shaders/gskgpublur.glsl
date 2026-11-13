@@ -20,7 +20,7 @@ PASS_FLAT(2) vec4 _blur_color;
 PASS(3) vec2 _tex_coord;
 PASS_FLAT(4) vec2 _tex_blur_step;
 PASS_FLAT(5) uint _samples_per_side;
-PASS_FLAT(7) vec3 _initial_gaussian;
+PASS_FLAT(6) float _sigma;
 PASS_FLAT(8) float _opacity;
 
 
@@ -42,9 +42,7 @@ run (out vec2 pos)
   float sigma = length (GSK_GLOBAL_SCALE * in_blur_direction);
   _tex_blur_step = GSK_GLOBAL_SCALE * in_blur_direction / sigma / rect_size (tex_rect);
   _samples_per_side = uint (3.0 * ceil (sigma));
-  _initial_gaussian.x = 1.0;
-  _initial_gaussian.y = exp (-0.5 / (sigma * sigma));
-  _initial_gaussian.z = _initial_gaussian.y * _initial_gaussian.y;
+  _sigma = sigma;
   _opacity = in_opacity;
 }
 
@@ -58,19 +56,18 @@ void
 run (out vec4 color,
      out vec2 position)
 {
-  vec3 incremental_gaussian = _initial_gaussian;
+  float factor = -0.5 / (_sigma * _sigma);
   vec4 sum = texture (GSK_TEXTURE0, _tex_coord);
   float coefficient_sum = 1.0;
-  incremental_gaussian.xy *= incremental_gaussian.yz;
   vec2 p = _tex_blur_step;
 
   for (uint i = 0u; i < _samples_per_side; i++)
     {
-      sum += texture (GSK_TEXTURE0, _tex_coord - p) * incremental_gaussian.x;
-      sum += texture (GSK_TEXTURE0, _tex_coord + p) * incremental_gaussian.x;
+      float weight = exp (factor * float (i + 1u) * float (i + 1u));
+      sum += texture (GSK_TEXTURE0, _tex_coord - p) * weight;
+      sum += texture (GSK_TEXTURE0, _tex_coord + p) * weight;
 
-      coefficient_sum += 2.0 * incremental_gaussian.x;
-      incremental_gaussian.xy *= incremental_gaussian.yz;
+      coefficient_sum += 2.0 * weight;
 
       p += _tex_blur_step;
     }
