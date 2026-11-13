@@ -612,6 +612,21 @@ it (to keep it from leaking to child processes). So, if you need its
 value for your own purposes, you have to read it before calling
 [func@Gtk.init].
 
+### `MESA_VK_DEVICE_SELECT`
+
+This environment variable influences the Mesa device selection Vulkan
+layer. It can be set to the PCI ID of the GPU you want to use. Other
+possible values include `list`, `cpu`, `igpu`, `dgpu`.
+
+For more information, see the [Mesa documentation](https://docs.mesa3d.org/envvars.html).
+
+### `VK_DRIVER_FILES`
+
+This environment variable influences the Vulkan loader by giving it
+a hardcoded list of icd files to load.
+
+For more information, see the [Vulkan loader documenation](https://github.com/KhronosGroup/Vulkan-Loader/blob/main/docs/LoaderDriverInterface.md#overriding-the-default-driver-discovery).
+
 ## Interactive debugging
 
 ![The inspector](inspector.png)
