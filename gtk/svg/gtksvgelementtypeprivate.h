@@ -34,6 +34,7 @@ const char * svg_element_type_get_name             (SvgElementType  type);
 gboolean     svg_element_type_is_container         (SvgElementType  type);
 gboolean     svg_element_type_is_path              (SvgElementType  type);
 gboolean     svg_element_type_is_text              (SvgElementType  type);
+gboolean     svg_element_type_is_text_child        (SvgElementType  type);
 gboolean     svg_element_type_is_gradient          (SvgElementType  type);
 gboolean     svg_element_type_is_filter            (SvgElementType  type);
 gboolean     svg_element_type_never_rendered       (SvgElementType  type);

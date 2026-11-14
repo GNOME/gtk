@@ -2005,6 +2005,14 @@ start_element_cb (GMarkupParseContext  *context,
           return;
         }
 
+      if (data->current_shape &&
+          svg_element_type_is_text_child (shape_type) &&
+          !svg_element_type_is_text (svg_element_get_element_type (data->current_shape)))
+        {
+          skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "Parent must be a text element");
+          return;
+        }
+
       if (shape_type != SVG_ELEMENT_USE &&
           !svg_element_type_is_clip_path_content (shape_type) &&
           has_ancestor (context, "clipPath") &&
