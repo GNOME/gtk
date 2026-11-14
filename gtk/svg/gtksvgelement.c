@@ -205,7 +205,7 @@ text_node_clear (TextNode *self)
       // shape node not owned
       break;
     case TEXT_NODE_CHARACTERS:
-      g_clear_pointer (&self->characters.chunks, g_array_unref);
+      g_clear_pointer (&self->characters.layouts, g_array_unref);
       g_free (self->characters.text);
       break;
     default:
@@ -214,7 +214,7 @@ text_node_clear (TextNode *self)
 }
 
 void
-text_chunk_clear (TextChunk *self)
+text_layout_clear (TextLayout *self)
 {
   g_clear_object (&self->layout);
 }
@@ -3074,7 +3074,7 @@ svg_element_clone (SvgElement        *element,
             case TEXT_NODE_CHARACTERS:
               tn.type = TEXT_NODE_CHARACTERS;
               tn.characters.text = g_strdup (t->characters.text);
-              tn.characters.chunks = NULL;
+              tn.characters.layouts = NULL;
               break;
             case TEXT_NODE_SHAPE:
               tn.type = TEXT_NODE_SHAPE;

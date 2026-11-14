@@ -2663,7 +2663,7 @@ text_cb (GMarkupParseContext  *context,
     {
       TextNode node = {
         .type = TEXT_NODE_CHARACTERS,
-        .characters = { .text = g_strndup (text, len), .chunks = NULL }
+        .characters = { .text = g_strndup (text, len), .layouts = NULL }
       };
       g_array_append_val (text_parent->text, node);
       return;
