@@ -1998,19 +1998,23 @@ start_element_cb (GMarkupParseContext  *context,
       SvgElement *shape = NULL;
       const char *id;
 
-      if (data->current_shape &&
-          !svg_element_type_is_container (svg_element_get_element_type (data->current_shape)))
+      if (svg_element_type_is_text_child (shape_type))
         {
-          skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "Parent element can't contain shapes");
-          return;
+          if (data->current_shape &&
+              !svg_element_type_is_text (svg_element_get_element_type (data->current_shape)))
+            {
+              skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "Parent must be a text element");
+              return;
+            }
         }
-
-      if (data->current_shape &&
-          svg_element_type_is_text_child (shape_type) &&
-          !svg_element_type_is_text (svg_element_get_element_type (data->current_shape)))
+      else
         {
-          skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "Parent must be a text element");
-          return;
+          if (data->current_shape &&
+              !svg_element_type_is_container (svg_element_get_element_type (data->current_shape)))
+            {
+              skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "Parent element can't contain shapes");
+              return;
+             }
         }
 
       if (shape_type != SVG_ELEMENT_USE &&

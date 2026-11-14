@@ -23,16 +23,16 @@
 
 #include "gtksvgelementtypeprivate.h"
 
-/* FIXME: Some of these do not 100% correspond to the spec definition, currently */
 typedef enum
 {
   ELEMENT_IS_CONTAINER      = 1 << 0,
-  ELEMENT_IS_PATH           = 1 << 1,
+  ELEMENT_IS_NEVER_RENDERED = 1 << 1,
   ELEMENT_IS_TEXT           = 1 << 2,
   ELEMENT_IS_TEXT_CHILD     = 1 << 3,
-  ELEMENT_IS_GRADIENT       = 1 << 4,
-  ELEMENT_IS_FILTER         = 1 << 5,
-  ELEMENT_IS_NEVER_RENDERED = 1 << 6,
+  /* these are not categories from the spec */
+  ELEMENT_IS_PATH           = 1 << 4,
+  ELEMENT_IS_GRADIENT       = 1 << 5,
+  ELEMENT_IS_FILTER         = 1 << 6,
 } ElementTypeFlags;
 
 typedef struct
@@ -107,11 +107,11 @@ static ElementTypeInfo element_types[] = {
   },
   [SVG_ELEMENT_TEXT] = {
     .name = "text",
-    .flags = ELEMENT_IS_CONTAINER | ELEMENT_IS_TEXT,
+    .flags = ELEMENT_IS_TEXT,
   },
   [SVG_ELEMENT_TEXT_SPAN] = {
     .name = "tspan",
-    .flags = ELEMENT_IS_CONTAINER | ELEMENT_IS_TEXT | ELEMENT_IS_TEXT_CHILD | ELEMENT_IS_NEVER_RENDERED,
+    .flags = ELEMENT_IS_TEXT | ELEMENT_IS_TEXT_CHILD,
   },
   [SVG_ELEMENT_SVG] = {
     .name = "svg",

@@ -1459,7 +1459,9 @@ svg_element_insert_after (SvgElement *element,
                           SvgElement *child,
                           SvgElement *sibling)
 {
-  g_assert (svg_element_type_is_container (element->type) || element->type == SVG_ELEMENT_USE);
+  g_assert ((svg_element_type_is_text_child (child->type) && svg_element_type_is_text (element->type)) ||
+            (!svg_element_type_is_text_child (child->type) &&
+              (svg_element_type_is_container (element->type) || element->type == SVG_ELEMENT_USE)));
   g_assert (sibling == NULL || sibling->parent == element);
 
   child->parent = element;
