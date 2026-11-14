@@ -2010,6 +2010,14 @@ start_element_cb (GMarkupParseContext  *context,
               skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "Parent must not be a text element");
               return;
             }
+          else if (shape_type == SVG_ELEMENT_TEXT_PATH)
+            {
+              if (data->current_shape->type != SVG_ELEMENT_TEXT)
+                {
+                  skip_element (data, context, GTK_SVG_ERROR_INVALID_ELEMENT, "<textPath> only allowed as direct child of <text>");
+                  return;
+                }
+            }
           else if (svg_element_type_is_text_child (shape_type))
             {
               if (!svg_element_holds_text_content (data->current_shape))
@@ -2294,8 +2302,7 @@ start_element_cb (GMarkupParseContext  *context,
       return;
     }
 
-  if (strcmp (element_name, "textPath") == 0 ||
-      strcmp (element_name, "feConvolveMatrix") == 0 ||
+  if (strcmp (element_name, "feConvolveMatrix") == 0 ||
       strcmp (element_name, "feDiffuseLighting") == 0 ||
       strcmp (element_name, "feMorphology") == 0 ||
       strcmp (element_name, "feSpecularLighting") == 0)

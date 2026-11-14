@@ -847,6 +847,7 @@ svg_element_get_path (SvgElement            *element,
     case SVG_ELEMENT_MARKER:
     case SVG_ELEMENT_TEXT:
     case SVG_ELEMENT_TEXT_SPAN:
+    case SVG_ELEMENT_TEXT_PATH:
     case SVG_ELEMENT_SVG:
     case SVG_ELEMENT_IMAGE:
     case SVG_ELEMENT_FILTER:
@@ -949,6 +950,7 @@ svg_element_get_current_path (SvgElement            *element,
         case SVG_ELEMENT_MARKER:
         case SVG_ELEMENT_TEXT:
         case SVG_ELEMENT_TEXT_SPAN:
+        case SVG_ELEMENT_TEXT_PATH:
         case SVG_ELEMENT_SVG:
         case SVG_ELEMENT_IMAGE:
         case SVG_ELEMENT_FILTER:
@@ -1022,6 +1024,7 @@ svg_element_get_current_path (SvgElement            *element,
         case SVG_ELEMENT_MARKER:
         case SVG_ELEMENT_TEXT:
         case SVG_ELEMENT_TEXT_SPAN:
+        case SVG_ELEMENT_TEXT_PATH:
         case SVG_ELEMENT_SVG:
         case SVG_ELEMENT_IMAGE:
         case SVG_ELEMENT_FILTER:
@@ -1209,6 +1212,7 @@ svg_element_get_current_bounds (SvgElement            *element,
       break;
     case SVG_ELEMENT_TEXT:
     case SVG_ELEMENT_TEXT_SPAN:
+    case SVG_ELEMENT_TEXT_PATH:
       {
         SvgElement *elt = element;
         while (svg_element_get_element_type (elt) != SVG_ELEMENT_TEXT)
@@ -1398,6 +1402,7 @@ svg_element_get_current_stroke_bounds (SvgElement            *element,
       break;
     case SVG_ELEMENT_TEXT:
     case SVG_ELEMENT_TEXT_SPAN:
+    case SVG_ELEMENT_TEXT_PATH:
       if (!element->valid_bounds)
         g_critical ("No valid bounds for text");
       graphene_rect_init_from_rect (&b, &element->bounds);

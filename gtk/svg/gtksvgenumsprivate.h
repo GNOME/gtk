@@ -438,4 +438,22 @@ typedef enum
   SVG_RENDERING_SYMBOLIC,
 } SvgRendering;
 
+typedef enum
+{
+  TEXT_PATH_METHOD_ALIGN,
+  TEXT_PATH_METHOD_STRETCH,
+} TextPathMethod;
+
+typedef enum
+{
+  TEXT_PATH_SPACING_AUTO,
+  TEXT_PATH_SPACING_EXACT,
+} TextPathSpacing;
+
+typedef enum
+{
+  TEXT_PATH_SIDE_LEFT,
+  TEXT_PATH_SIDE_RIGHT,
+} TextPathSide;
+
 G_END_DECLS
