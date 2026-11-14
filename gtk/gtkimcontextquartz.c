@@ -243,7 +243,18 @@ output_result (GtkIMContext *context,
     }
   if (!fixed_str && !marked_str)
     {
+      unsigned int filtered =
+           GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (surface),
+                                                GIC_FILTER_KEY));
+
       if (qc->preedit_str && strlen (qc->preedit_str) > 0)
+        retval = TRUE;
+      /* The input method consumed the key without producing text yet,
+       * e.g. a digit choosing an entry in the press-and-hold accent menu
+       * (the accented letter is committed afterwards). The event must not
+       * be handled again.
+       */
+      else if (filtered == GIC_FILTER_FILTERED)
         retval = TRUE;
     }
   g_free (fixed_str);
@@ -298,6 +309,13 @@ quartz_filter_keypress (GtkIMContext *context,
                          TIC_IN_KEY_DOWN,
                          GUINT_TO_POINTER (TRUE));
       [nsview keyDown: nsevent];
+    }
+  else
+    {
+      /* Only key down events go through the input method */
+      g_object_set_data (G_OBJECT (client_surface),
+                         GIC_FILTER_KEY,
+                         GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
     }
   /* JIS_Eisu || JIS_Kana */
   if (keycode == 102 || keycode == 104)
