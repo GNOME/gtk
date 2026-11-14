@@ -175,11 +175,13 @@ typedef enum {
   GSK_GPU_OPTIMIZE_DUAL_BLEND           = 1 <<  8,
   GSK_GPU_OPTIMIZE_DAMAGE               = 1 <<  9,
   GSK_GPU_OPTIMIZE_SHADOW               = 1 << 10,
-  GSK_GPU_OPTIMIZE_PROFILE              = 1 << 11,
+  GSK_GPU_OPTIMIZE_FAST_BLUR            = 1 << 11,
+  GSK_GPU_OPTIMIZE_PROFILE              = 1 << 12,
 } GskGpuOptimizations;
 
 typedef enum {
   GSK_QUAD_KERNEL_LINEAR = 0, /* default "unused" setting */
   GSK_QUAD_KERNEL_CATMULL_ROM,
   GSK_QUAD_KERNEL_MITCHELL_NETRAVALI,
+  GSK_QUAD_KERNEL_GAUSSIAN,
 } GskQuadKernel;

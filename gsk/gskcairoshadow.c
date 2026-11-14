@@ -1,5 +1,6 @@
 #include "gskcairoshadowprivate.h"
 
+#include "gskblurnodeprivate.h"
 #include "gskroundedrectprivate.h"
 
 #include "gdk/gdkcairoprivate.h"
@@ -181,7 +182,7 @@ gsk_cairo_shadow_draw_corner (cairo_t               *cr,
       corner_box.corner[0] = box->corner[corner];
       gsk_rounded_rect_path (&corner_box, mask_cr);
       cairo_fill (mask_cr);
-      gsk_cairo_blur_surface (mask, radius, GSK_BLUR_X | GSK_BLUR_Y);
+      gsk_blur_image_surface (mask, &GRAPHENE_SIZE_INIT (radius, radius), 3);
       cairo_destroy (mask_cr);
       g_hash_table_insert (corner_mask_cache, g_memdup2 (&key, sizeof (key)), mask);
     }

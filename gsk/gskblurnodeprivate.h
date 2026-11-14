@@ -8,6 +8,9 @@ G_BEGIN_DECLS
 GskRenderNode *         gsk_blur_node_new2                      (GskRenderNode          *child,
                                                                  const graphene_size_t  *sigma);
 
+void                    gsk_blur_image_surface                  (cairo_surface_t        *surface,
+                                                                 const graphene_size_t  *sigma,
+                                                                 int                     iterations);
 void                    gsk_blur_node_get_padding               (const graphene_size_t  *sigma,
                                                                  graphene_size_t        *out_padding);
 
