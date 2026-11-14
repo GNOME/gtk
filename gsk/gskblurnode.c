@@ -246,10 +246,10 @@ compute_fraction (float  sigma,
   *frac = a;
 }
 
-static void
-blur_image_surface (cairo_surface_t       *surface,
-                    const graphene_size_t *sigma,
-                    int                    iterations)
+void
+gsk_blur_image_surface (cairo_surface_t       *surface,
+                        const graphene_size_t *sigma,
+                        int                    iterations)
 {
   cairo_surface_t *tmp;
   int width, height;
@@ -306,7 +306,7 @@ gsk_blur_node_draw (GskRenderNode *node,
   gsk_render_node_draw_full (self->child, cr2, data);
   cairo_destroy (cr2);
 
-  blur_image_surface (surface, &self->sigma, 3);
+  gsk_blur_image_surface (surface, &self->sigma, 3);
   cairo_surface_mark_dirty (surface);
 
   cairo_set_source_surface (cr, surface, 0, 0);
