@@ -81,7 +81,6 @@ gsk_shadow_node_draw (GskRenderNode *node,
   for (i = 0; i < self->n_shadows; i++)
     {
       GskShadowEntry *shadow = &self->shadows[i];
-      cairo_pattern_t *pattern;
 
       /* We don't need to draw invisible shadows */
       if (gdk_color_is_clear (&shadow->color))
@@ -90,16 +89,8 @@ gsk_shadow_node_draw (GskRenderNode *node,
       cairo_save (cr);
       cr = gsk_cairo_blur_start_drawing (cr, shadow->radius, GSK_BLUR_X | GSK_BLUR_Y);
 
-      cairo_save (cr);
       cairo_translate (cr, shadow->offset.x, shadow->offset.y);
-      cairo_push_group (cr);
       gsk_render_node_draw_full (self->child, cr, data);
-      pattern = cairo_pop_group (cr);
-      cairo_reset_clip (cr);
-      gdk_cairo_set_source_color (cr, data->ccs, &shadow->color);
-      cairo_mask (cr, pattern);
-      cairo_pattern_destroy (pattern);
-      cairo_restore (cr);
 
       cr = gsk_cairo_blur_finish_drawing (cr, data->ccs, shadow->radius, &shadow->color, GSK_BLUR_X | GSK_BLUR_Y);
       cairo_restore (cr);
