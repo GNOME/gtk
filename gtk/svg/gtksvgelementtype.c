@@ -109,7 +109,7 @@ static ElementTypeInfo element_types[] = {
     .name = "text",
     .flags = ELEMENT_IS_CONTAINER | ELEMENT_IS_TEXT,
   },
-  [SVG_ELEMENT_TSPAN] = {
+  [SVG_ELEMENT_TEXT_SPAN] = {
     .name = "tspan",
     .flags = ELEMENT_IS_CONTAINER | ELEMENT_IS_TEXT | ELEMENT_IS_TEXT_CHILD | ELEMENT_IS_NEVER_RENDERED,
   },

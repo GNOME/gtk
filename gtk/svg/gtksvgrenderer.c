@@ -4103,7 +4103,7 @@ do_generate_layouts (SvgElement             *self,
                 chunk = &g_array_index (node->characters.chunks, TextChunk, node->characters.chunks->len - 1);
                 chunk->layout = text_create_layout (self, fontmap, the_text, len, wmode, &origin, &cbounds, &is_vertical, &chunk->r);
 
-                if (svg_element_get_element_type (self) == SVG_ELEMENT_TSPAN)
+                if (svg_element_get_element_type (self) == SVG_ELEMENT_TEXT_SPAN)
                   {
                     const PangoFontDescription *font_desc = pango_layout_get_font_description (chunk->layout);
                     PangoContext *context = pango_layout_get_context (chunk->layout);

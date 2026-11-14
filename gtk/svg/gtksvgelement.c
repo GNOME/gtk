@@ -845,7 +845,7 @@ svg_element_get_path (SvgElement            *element,
     case SVG_ELEMENT_PATTERN:
     case SVG_ELEMENT_MARKER:
     case SVG_ELEMENT_TEXT:
-    case SVG_ELEMENT_TSPAN:
+    case SVG_ELEMENT_TEXT_SPAN:
     case SVG_ELEMENT_SVG:
     case SVG_ELEMENT_IMAGE:
     case SVG_ELEMENT_FILTER:
@@ -947,7 +947,7 @@ svg_element_get_current_path (SvgElement            *element,
         case SVG_ELEMENT_PATTERN:
         case SVG_ELEMENT_MARKER:
         case SVG_ELEMENT_TEXT:
-        case SVG_ELEMENT_TSPAN:
+        case SVG_ELEMENT_TEXT_SPAN:
         case SVG_ELEMENT_SVG:
         case SVG_ELEMENT_IMAGE:
         case SVG_ELEMENT_FILTER:
@@ -1020,7 +1020,7 @@ svg_element_get_current_path (SvgElement            *element,
         case SVG_ELEMENT_PATTERN:
         case SVG_ELEMENT_MARKER:
         case SVG_ELEMENT_TEXT:
-        case SVG_ELEMENT_TSPAN:
+        case SVG_ELEMENT_TEXT_SPAN:
         case SVG_ELEMENT_SVG:
         case SVG_ELEMENT_IMAGE:
         case SVG_ELEMENT_FILTER:
@@ -1207,7 +1207,7 @@ svg_element_get_current_bounds (SvgElement            *element,
       ret = TRUE;
       break;
     case SVG_ELEMENT_TEXT:
-    case SVG_ELEMENT_TSPAN:
+    case SVG_ELEMENT_TEXT_SPAN:
       {
         SvgElement *elt = element;
         while (svg_element_get_element_type (elt) != SVG_ELEMENT_TEXT)
@@ -1396,7 +1396,7 @@ svg_element_get_current_stroke_bounds (SvgElement            *element,
       ret = TRUE;
       break;
     case SVG_ELEMENT_TEXT:
-    case SVG_ELEMENT_TSPAN:
+    case SVG_ELEMENT_TEXT_SPAN:
       if (!element->valid_bounds)
         g_critical ("No valid bounds for text");
       graphene_rect_init_from_rect (&b, &element->bounds);
@@ -1493,7 +1493,7 @@ svg_element_insert_after (SvgElement *element,
                              child->css_node,
                              sibling ? sibling->css_node : NULL);
 
-  if (child->type == SVG_ELEMENT_TSPAN)
+  if (child->type == SVG_ELEMENT_TEXT_SPAN)
     {
       SvgElement *text_parent = NULL;
 
