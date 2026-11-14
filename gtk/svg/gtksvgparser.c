@@ -2661,11 +2661,26 @@ text_cb (GMarkupParseContext  *context,
 
   if (text_parent)
     {
-      TextNode node = {
-        .type = TEXT_NODE_CHARACTERS,
-        .characters = { .text = g_strndup (text, len), .layouts = NULL }
-      };
-      g_array_append_val (text_parent->text, node);
+      if (text_parent->text->len > 0)
+        {
+          TextNode *last = &g_array_index (text_parent->text, TextNode, text_parent->text->len - 1);
+          if (last->type == TEXT_NODE_CHARACTERS)
+            {
+              GString *s = g_string_new (last->characters.text);
+              g_string_append_len (s, text, len);
+              g_free (last->characters.text);
+              last->characters.text = g_string_free (s, FALSE);
+              return;
+            }
+        }
+
+      {
+        TextNode node = {
+          .type = TEXT_NODE_CHARACTERS,
+          .characters = { .text = g_strndup (text, len), .layouts = NULL }
+        };
+        g_array_append_val (text_parent->text, node);
+      }
       return;
     }
 
