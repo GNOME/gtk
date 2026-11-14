@@ -50,6 +50,30 @@ gsk_blur_node_finalize (GskRenderNode *node)
   parent_class->finalize (node);
 }
 
+static int
+cairo_image_surface_get_n_channels (cairo_surface_t *surface)
+{
+  switch (cairo_image_surface_get_format (surface))
+  {
+    case CAIRO_FORMAT_ARGB32:
+      return 4;
+
+    case CAIRO_FORMAT_A8:
+      return 1;
+
+    case CAIRO_FORMAT_RGB24:
+    case CAIRO_FORMAT_A1:
+    case CAIRO_FORMAT_RGB16_565:
+    case CAIRO_FORMAT_RGB30:
+    case CAIRO_FORMAT_RGB96F:
+    case CAIRO_FORMAT_RGBA128F:
+    case CAIRO_FORMAT_INVALID:
+    default:
+      g_assert_not_reached ();
+      return 0;
+  }
+}
+
 static void
 blur_once (cairo_surface_t *src,
            cairo_surface_t *dest,
@@ -60,14 +84,14 @@ blur_once (cairo_surface_t *src,
 {
   int width, height, src_rowstride, dest_rowstride, n_channels;
   guchar *p_src, *p_dest, *c1, *c11, *c2, *c22;
-  int x, y, i, i1, i11, i2, i22, width_minus_1, height_minus_1;
-  float r, g, b, a;
+  int x, y, c, i, i1, i11, i2, i22, width_minus_1, height_minus_1;
+  float v[4];
   guchar *p_dest_row, *p_dest_col;
   float weight;
 
   width = cairo_image_surface_get_width (src);
   height = cairo_image_surface_get_height (src);
-  n_channels = 4;
+  n_channels = cairo_image_surface_get_n_channels (src);
 
   /* horizontal blur */
   p_src = cairo_image_surface_get_data (src);
@@ -81,32 +105,26 @@ blur_once (cairo_surface_t *src,
   for (y = 0; y < height; y++)
     {
       /* calc the initial sums of the kernel */
-      r = g = b = a = 0;
+      v[0] = v[1] = v[2] = v[3] = 0;
       if (ha > 0)
         {
           c1 = p_src + (CLAMP (-hradius - 1, 0, width_minus_1) * n_channels);
           c2 = p_src + (CLAMP (hradius + 1, 0, width_minus_1) * n_channels);
-          r += (c1[0] + c2[0]) * ha;
-          g += (c1[1] + c2[1]) * ha;
-          b += (c1[2] + c2[2]) * ha;
-          a += (c1[3] + c2[3]) * ha;
+          for (c = 0; c < n_channels; c++)
+            v[c] = (c1[c] + c2[c]) * ha;
         }
       for (i = -hradius; i <= hradius; i++)
         {
           c1 = p_src + (CLAMP (i, 0, width_minus_1) * n_channels);
-          r += c1[0];
-          g += c1[1];
-          b += c1[2];
-          a += c1[3];
+          for (c = 0; c < n_channels; c++)
+            v[c] += c1[c];
         }
       p_dest_row = p_dest;
       for (x = 0; x < width; x++)
         {
           /* set as the mean of the kernel */
-          p_dest_row[0] = roundf (r * weight);
-          p_dest_row[1] = roundf (g * weight);
-          p_dest_row[2] = roundf (b * weight);
-          p_dest_row[3] = roundf (a * weight);
+          for (c = 0; c < n_channels; c++)
+            p_dest_row[c] = roundf (v[c] * weight);
           p_dest_row += n_channels;
 
           /* the pixels to add to the kernel */
@@ -132,10 +150,8 @@ blur_once (cairo_surface_t *src,
           c2 = p_src + (i2 * n_channels);
 
           /* calc the new sums of the kernel */
-          r += c11[0] * ha + c1[0] * (1 - ha) - c22[0] * ha - c2[0] * (1 - ha);
-          g += c11[1] * ha + c1[1] * (1 - ha) - c22[1] * ha - c2[1] * (1 - ha);
-          b += c11[2] * ha + c1[2] * (1 - ha) - c22[2] * ha - c2[2] * (1 - ha);
-          a += c11[3] * ha + c1[3] * (1 - ha) - c22[3] * ha - c2[3] * (1 - ha);
+          for (c = 0; c < n_channels; c++)
+            v[c] += c11[c] * ha + c1[c] * (1 - ha) - c22[c] * ha - c2[c] * (1 - ha);
         }
 
       p_src += src_rowstride;
@@ -154,34 +170,27 @@ blur_once (cairo_surface_t *src,
   for (x = 0; x < width; x++)
     {
       /* calc the initial sums of the kernel */
-      r = g = b = a = 0;
+      v[0] = v[1] = v[2] = v[3] = 0;
       if (va > 0)
         {
           c1 = p_src + (CLAMP (-vradius - 1, 0, height_minus_1) * src_rowstride);
           c2 = p_src + (CLAMP (vradius + 1, 0, height_minus_1) * src_rowstride);
-          r += (c1[0] + c2[0]) * va;
-          g += (c1[1] + c2[1]) * va;
-          b += (c1[2] + c2[2]) * va;
-          a += (c1[3] + c2[3]) * va;
+          for (c = 0; c < n_channels; c++)
+            v[c] = (c1[c] + c2[c]) * va;
         }
       for (i = -vradius; i <= vradius; i++)
         {
           c1 = p_src + (CLAMP (i, 0, height_minus_1) * src_rowstride);
-          r += c1[0];
-          g += c1[1];
-          b += c1[2];
-          a += c1[3];
+          for (c = 0; c < n_channels; c++)
+            v[c] += c1[c];
         }
 
       p_dest_col = p_dest;
       for (y = 0; y < height; y++)
         {
           /* set as the mean of the kernel */
-
-          p_dest_col[0] = roundf (r * weight);
-          p_dest_col[1] = roundf (g * weight);
-          p_dest_col[2] = roundf (b * weight);
-          p_dest_col[3] = roundf (a * weight);
+          for (c = 0; c < n_channels; c++)
+            p_dest_col[c] = roundf (v[c] * weight);
           p_dest_col += dest_rowstride;
 
           /* the pixels to add to the kernel */
@@ -207,10 +216,8 @@ blur_once (cairo_surface_t *src,
           c2 = p_src + (i2 * src_rowstride);
 
           /* calc the new sums of the kernel */
-          r += c11[0] * va + c1[0] * (1 - va) - c22[0] * va - c2[0] * (1 - va);
-          g += c11[1] * va + c1[1] * (1 - va) - c22[1] * va - c2[1] * (1 - va);
-          b += c11[2] * va + c1[2] * (1 - va) - c22[2] * va - c2[2] * (1 - va);
-          a += c11[3] * va + c1[3] * (1 - va) - c22[3] * va - c2[3] * (1 - va);
+          for (c = 0; c < n_channels; c++)
+            v[c] += c11[c] * va + c1[c] * (1 - va) - c22[c] * va - c2[c] * (1 - va);
         }
 
       p_src += n_channels;
@@ -252,15 +259,14 @@ gsk_blur_image_surface (cairo_surface_t       *surface,
                         int                    iterations)
 {
   cairo_surface_t *tmp;
-  int width, height;
-  int hradius, vradius;
   float hfrac, vfrac;
+  int hradius, vradius;
 
   cairo_surface_flush (surface);
 
-  width = cairo_image_surface_get_width (surface);
-  height = cairo_image_surface_get_height (surface);
-  tmp = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+  tmp = cairo_image_surface_create (cairo_image_surface_get_format (surface),
+                                    cairo_image_surface_get_width (surface),
+                                    cairo_image_surface_get_height (surface));
 
   compute_fraction (sigma->width, iterations, &hradius, &hfrac);
   compute_fraction (sigma->height, iterations, &vradius, &vfrac);
