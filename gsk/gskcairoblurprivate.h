@@ -36,9 +36,6 @@ typedef enum {
   GSK_BLUR_REPEAT = 1<<2
 } GskBlurFlags;
 
-void            gsk_cairo_blur_surface          (cairo_surface_t *surface,
-                                                 double           radius,
-                                                 GskBlurFlags     flags);
 int             gsk_cairo_blur_compute_pixels   (double           radius);
 
 cairo_t *       gsk_cairo_blur_start_drawing    (cairo_t         *cr,
