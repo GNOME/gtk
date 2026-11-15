@@ -43,9 +43,11 @@
 #include "gtksvgclipprivate.h"
 #include "gtksvgmaskprivate.h"
 #include "gtksvgfilterprivate.h"
+#include "gtksvgrendererprivate.h"
 #include "gtkmain.h"
 #include "gsk/gskpathprivate.h"
 #include "gsk/gskrectprivate.h"
+#include "gsk/gskroundedrectprivate.h"
 
 #define CLONE_LIMIT 15000
 
@@ -70,7 +72,7 @@ svg_element_changed (SvgElement *self,
   g_signal_emit (self, changed_signal, 0, attr);
 }
 
-static GParamSpec *svg_element_prop[NUM_PROPERTIES];
+static GParamSpec *svg_element_prop[SVG_ELEMENT_NUM_PROPERTIES];
 
 G_DEFINE_TYPE (SvgElement, svg_element, G_TYPE_OBJECT)
 

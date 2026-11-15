@@ -72,7 +72,8 @@ void     svg_css_media_block_free      (SvgCssMediaBlock *media);
 void     svg_css_media_block_evaluate  (SvgCssMediaBlock *media,
                                         GArray           *features);
 
-SvgCssMediaCondition * parse_media_query (GtkCssParser *parser);
+SvgCssMediaCondition * parse_media_query     (GtkCssParser *parser);
+SvgCssMediaCondition * parse_media_condition (GtkCssParser *parser);
 
 void                   gtk_svg_update_media (GtkSvg *self);
 
