@@ -37,6 +37,7 @@ static const GdkDebugKey gsk_gpu_optimization_keys[] = {
   { "shadow",    GSK_GPU_OPTIMIZE_SHADOW,            "Always use the slow fallback path for shadow nodes" },
   { "fast-blur", GSK_GPU_OPTIMIZE_FAST_BLUR,         "Don't use downsampling for larger blur radii, sample every pixel instead" },
   { "profile",   GSK_GPU_OPTIMIZE_PROFILE,           "Disable profiling support" },
+  { "copypaste", GSK_GPU_OPTIMIZE_COPY_PASTE,        "Replay copy/paste nodes before rendering" },
 };
 
 typedef struct _GskGpuRendererPrivate GskGpuRendererPrivate;

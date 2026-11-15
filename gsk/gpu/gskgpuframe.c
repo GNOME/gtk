@@ -858,7 +858,8 @@ gsk_gpu_frame_render (GskGpuFrame            *self,
 {
   GskRenderPassType pass_type = texture ? GSK_RENDER_PASS_EXPORT : GSK_RENDER_PASS_PRESENT;
 
-  node = gsk_render_node_replace_copy_paste (gsk_render_node_ref (node));
+  if (!gsk_gpu_frame_should_optimize (self, GSK_GPU_OPTIMIZE_COPY_PASTE))
+    node = gsk_render_node_replace_copy_paste (gsk_render_node_ref (node));
 
   gsk_gpu_frame_cleanup (self);
 
@@ -866,7 +867,8 @@ gsk_gpu_frame_render (GskGpuFrame            *self,
 
   gsk_gpu_frame_submit (self, pass_type);
 
-  gsk_render_node_unref (node);
+  if (!gsk_gpu_frame_should_optimize (self, GSK_GPU_OPTIMIZE_COPY_PASTE))
+    gsk_render_node_unref (node);
 }
 
 static gboolean
