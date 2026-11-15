@@ -304,7 +304,8 @@ gsk_gpu_occlusion_try_node (GskGpuOcclusion *self,
 {
   GskGpuRenderPass *result;
 
-  gsk_gpu_frame_start_node (self->frame, node, pos);
+  if (!gsk_gpu_frame_start_node (self->frame, node, pos))
+    return NULL;
 
   result = gsk_gpu_occlusion_try_node_untracked (self, node);
   

@@ -812,7 +812,10 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
   priv->timestamp = timestamp;
   gsk_gpu_cache_set_time (gsk_gpu_device_get_cache (priv->device), timestamp);
 
-  gsk_gpu_frame_start_node (self, node, 0);
+  if (!gsk_gpu_frame_start_node (self, node, 0))
+    {
+      g_assert_not_reached ();
+    }
 
   gsk_gpu_node_processor_process (self, target, target_color_state, clip, node, viewport, pass_type);
 
@@ -976,8 +979,10 @@ gsk_gpu_frame_download_texture (GskGpuFrame           *self,
  * the currently rendered node at the given position.
  *
  * To end rendering that node, call gsk_gpu_frame_end_node().
+ *
+ * Returns: true if the node should be rendered.
  **/
-void
+gboolean
 gsk_gpu_frame_start_node (GskGpuFrame   *self,
                           GskRenderNode *node,
                           gsize          pos)
@@ -1004,6 +1009,8 @@ gsk_gpu_frame_start_node (GskGpuFrame   *self,
 #endif
 
   GSK_GPU_FRAME_GET_CLASS (self)->start_node (self, node, pos);
+
+  return TRUE;
 }
 
 /*<private>
