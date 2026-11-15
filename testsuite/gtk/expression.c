@@ -30,6 +30,33 @@ inc_counter (gpointer data)
 }
 
 static void
+unwatch_watches (gpointer data)
+{
+  GtkExpressionWatch **watches = data;
+
+  g_clear_pointer (&watches[0], gtk_expression_watch_unwatch);
+  g_clear_pointer (&watches[1], gtk_expression_watch_unwatch);
+}
+
+static void
+test_watch_reentrancy (void)
+{
+  GObject *object = g_object_new (G_TYPE_OBJECT, NULL);
+  GtkExpression *expr = gtk_object_expression_new (object);
+  GtkExpressionWatch *watches[2];
+  guint count = 0;
+
+  watches[0] = gtk_expression_watch (expr, NULL, inc_counter, &count, NULL);
+  watches[1] = gtk_expression_watch (expr, NULL, unwatch_watches, watches, NULL);
+  gtk_expression_unref (expr);
+
+  g_object_unref (object);
+  g_assert_null (watches[0]);
+  g_assert_null (watches[1]);
+  g_assert_cmpuint (count, ==, 0);
+}
+
+static void
 test_property (void)
 {
   GValue value = G_VALUE_INIT;
@@ -820,6 +847,7 @@ main (int argc, char *argv[])
   setlocale (LC_ALL, "C");
 
   g_test_add_func ("/expression/property", test_property);
+  g_test_add_func ("/expression/watch-reentrancy", test_watch_reentrancy);
   g_test_add_func ("/expression/interface-property", test_interface_property);
   g_test_add_func ("/expression/cclosure", test_cclosure);
   g_test_add_func ("/expression/closure", test_closure);

@@ -1005,9 +1005,19 @@ struct _GtkObjectExpression
 
 struct _GtkObjectExpressionWatch
 {
-  GtkExpressionNotify    notify;
-  gpointer               user_data;
+  GtkExpressionNotify notify;
+  gpointer            user_data;
+  guint               refs;
+  gboolean            active;
 };
+
+static void
+gtk_object_expression_watch_unref (GtkObjectExpressionWatch *owatch)
+{
+  owatch->refs--;
+  if (owatch->refs == 0)
+    g_free (owatch);
+}
 
 static void
 gtk_object_expression_weak_ref_cb (gpointer  data,
@@ -1018,14 +1028,30 @@ gtk_object_expression_weak_ref_cb (gpointer  data,
 
   if (self != NULL)
     {
-      GSList *iter = self->watches;
+      GPtrArray *pending;
+      GSList *iter;
+      guint i;
 
-      while (iter)
+      pending = g_ptr_array_new_with_free_func ((GDestroyNotify) gtk_object_expression_watch_unref);
+      gtk_expression_ref ((GtkExpression *) self);
+      for (iter = self->watches; iter != NULL; iter = iter->next)
         {
           GtkObjectExpressionWatch *owatch = iter->data;
-          iter = iter->next;
-          owatch->notify (owatch->user_data);
+
+          owatch->refs++;
+          g_ptr_array_add (pending, owatch);
         }
+
+      for (i = 0; i < pending->len; i++)
+        {
+          GtkObjectExpressionWatch *owatch = g_ptr_array_index (pending, i);
+
+          if (owatch->active)
+            owatch->notify (owatch->user_data);
+        }
+
+      g_ptr_array_unref (pending);
+      gtk_expression_unref ((GtkExpression *) self);
     }
 
   weak_ref_guard_unref (guard);
@@ -1089,7 +1115,7 @@ gtk_object_expression_evaluate (GtkExpression *expr,
 static gsize
 gtk_object_expression_watch_size (GtkExpression *expr)
 {
-  return sizeof (GtkObjectExpressionWatch);
+  return sizeof (GtkObjectExpressionWatch *);
 }
 
 static void
@@ -1100,10 +1126,13 @@ gtk_object_expression_watch (GtkExpression         *expr,
                              gpointer               user_data)
 {
   GtkObjectExpression *self = (GtkObjectExpression *) expr;
-  GtkObjectExpressionWatch *owatch = (GtkObjectExpressionWatch *) watch;
+  GtkObjectExpressionWatch *owatch = g_new0 (GtkObjectExpressionWatch, 1);
 
   owatch->notify = notify;
   owatch->user_data = user_data;
+  owatch->refs = 1;
+  owatch->active = TRUE;
+  *(GtkObjectExpressionWatch **) watch = owatch;
   self->watches = g_slist_prepend (self->watches, owatch);
 }
 
@@ -1112,8 +1141,11 @@ gtk_object_expression_unwatch (GtkExpression         *expr,
                                GtkExpressionSubWatch *watch)
 {
   GtkObjectExpression *self = (GtkObjectExpression *) expr;
+  GtkObjectExpressionWatch *owatch = g_steal_pointer ((GtkObjectExpressionWatch **) watch);
 
-  self->watches = g_slist_remove (self->watches, watch);
+  self->watches = g_slist_remove (self->watches, owatch);
+  owatch->active = FALSE;
+  gtk_object_expression_watch_unref (owatch);
 }
 
 static const GtkExpressionTypeInfo gtk_object_expression_info =
