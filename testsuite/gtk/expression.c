@@ -57,6 +57,20 @@ test_watch_reentrancy (void)
 }
 
 static void
+test_watch_this_self_unwatch (void)
+{
+  GObject *object = g_object_new (G_TYPE_OBJECT, NULL);
+  GtkExpression *expr = gtk_constant_expression_new (G_TYPE_INT, 1);
+  GtkExpressionWatch *watches[2] = { NULL, NULL };
+
+  watches[0] = gtk_expression_watch (expr, object, unwatch_watches, watches, NULL);
+  gtk_expression_unref (expr);
+
+  g_object_unref (object);
+  g_assert_null (watches[0]);
+}
+
+static void
 test_property (void)
 {
   GValue value = G_VALUE_INIT;
@@ -848,6 +862,7 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/expression/property", test_property);
   g_test_add_func ("/expression/watch-reentrancy", test_watch_reentrancy);
+  g_test_add_func ("/expression/watch-this-self-unwatch", test_watch_this_self_unwatch);
   g_test_add_func ("/expression/interface-property", test_interface_property);
   g_test_add_func ("/expression/cclosure", test_cclosure);
   g_test_add_func ("/expression/closure", test_closure);

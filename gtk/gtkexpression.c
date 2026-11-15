@@ -2220,6 +2220,10 @@ gtk_expression_watch_is_watching (GtkExpressionWatch *watch)
 }
 
 static void
+gtk_expression_watch_unwatch_internal (GtkExpressionWatch *watch,
+                                       gboolean            notify);
+
+static void
 gtk_expression_watch_this_cb (gpointer data,
                               GObject *this)
 {
@@ -2229,10 +2233,7 @@ gtk_expression_watch_this_cb (gpointer data,
   if (watch != NULL)
     {
       g_weak_ref_set (&watch->this_wr, NULL);
-
-      watch->notify (watch->user_data);
-
-      gtk_expression_watch_unwatch (watch);
+      gtk_expression_watch_unwatch_internal (watch, TRUE);
     }
 
   weak_ref_guard_unref (guard);
@@ -2349,6 +2350,41 @@ gtk_expression_watch_unref (GtkExpressionWatch *watch)
   g_atomic_rc_box_release_full (watch, gtk_expression_watch_finalize);
 }
 
+static void
+gtk_expression_watch_unwatch_internal (GtkExpressionWatch *watch,
+                                       gboolean            notify)
+{
+  GObject *this;
+  GtkExpression *expression;
+
+  if (!gtk_expression_watch_is_watching (watch))
+    return;
+
+  expression = g_steal_pointer (&watch->expression);
+  gtk_expression_subwatch_finish (expression, (GtkExpressionSubWatch *) watch->sub);
+
+  this = g_weak_ref_get (&watch->this_wr);
+
+  if (this)
+    {
+      g_object_weak_unref (this, gtk_expression_watch_this_cb, watch->guard);
+      weak_ref_guard_unref (watch->guard);
+      g_weak_ref_set (&watch->this_wr, NULL);
+    }
+
+  if (notify)
+    watch->notify (watch->user_data);
+
+  if (watch->user_destroy)
+    watch->user_destroy (watch->user_data);
+
+  g_clear_object (&this);
+
+  gtk_expression_unref (expression);
+
+  gtk_expression_watch_unref (watch);
+}
+
 /**
  * gtk_expression_watch_unwatch:
  * @watch: (transfer none): watch to release
@@ -2361,30 +2397,7 @@ gtk_expression_watch_unref (GtkExpressionWatch *watch)
 void
 gtk_expression_watch_unwatch (GtkExpressionWatch *watch)
 {
-  GObject *this;
-
-  if (!gtk_expression_watch_is_watching (watch))
-    return;
-
-  gtk_expression_subwatch_finish (watch->expression, (GtkExpressionSubWatch *) watch->sub);
-
-  this = g_weak_ref_get (&watch->this_wr);
-
-  if (this)
-    {
-      g_object_weak_unref (this, gtk_expression_watch_this_cb, watch->guard);
-      weak_ref_guard_unref (watch->guard);
-      g_weak_ref_set (&watch->this_wr, NULL);
-    }
-
-  if (watch->user_destroy)
-    watch->user_destroy (watch->user_data);
-
-  g_clear_object (&this);
-
-  g_clear_pointer (&watch->expression, gtk_expression_unref);
-
-  gtk_expression_watch_unref (watch);
+  gtk_expression_watch_unwatch_internal (watch, FALSE);
 }
 
 /**
