@@ -44,6 +44,7 @@
 #include "gtksvgmaskprivate.h"
 #include "gtksvgfilterprivate.h"
 #include "gtksvgrendererprivate.h"
+#include "gtksvgtextprivate.h"
 #include "gtkmain.h"
 #include "gsk/gskpathprivate.h"
 #include "gsk/gskrectprivate.h"
