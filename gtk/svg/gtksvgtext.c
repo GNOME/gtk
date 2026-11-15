@@ -88,6 +88,7 @@ preserve_space (WhiteSpace space)
 static char *
 text_chomp (const char *in,
             WhiteSpace  space,
+            gboolean   *initial,
             gboolean   *lastwasspace)
 {
   size_t len = strlen (in);
@@ -95,6 +96,8 @@ text_chomp (const char *in,
 
   for (size_t i = 0; i < len; i++)
     {
+      *initial = *initial && str->len == 0;
+
       if (in[i] == '\r')
         {
           if (in[i+1] == '\n')
@@ -108,7 +111,7 @@ text_chomp (const char *in,
               g_string_append_c (str, '\n');
               *lastwasspace = TRUE;
             }
-          else if (!*lastwasspace)
+          else if (!*lastwasspace && !*initial)
             {
               g_string_append_c (str, ' ');
               *lastwasspace = TRUE;
@@ -123,7 +126,7 @@ text_chomp (const char *in,
               g_string_append_c (str, ' ');
               *lastwasspace = TRUE;
             }
-          else if (!*lastwasspace)
+          else if (!*lastwasspace && !*initial)
             {
               g_string_append_c (str, ' ');
               *lastwasspace = TRUE;
@@ -136,6 +139,42 @@ text_chomp (const char *in,
     }
 
   return g_string_free_and_steal (str);
+}
+
+static TextLayout *
+find_last_layout (SvgElement *shape)
+{
+  for (unsigned int i = shape->text->len; i > 0; i--)
+    {
+      TextNode *node = &g_array_index (shape->text, TextNode, i - 1);
+      if (node->type == TEXT_NODE_SHAPE)
+        {
+          TextLayout *layout = find_last_layout (node->shape.shape);
+          if (layout)
+            return layout;
+        }
+      else
+        {
+          if (node->characters.layouts->len > 0)
+            return &g_array_index (node->characters.layouts, TextLayout, node->characters.layouts->len - 1);
+        }
+    }
+
+  return NULL;
+}
+
+static void
+strip_trailing_space (SvgElement *shape)
+{
+  TextLayout *layout;
+  const char *text;
+
+  /* Remove the leftover final space. Note that we rely on text_chomp
+   * only considering single-byte whitespace
+   */
+  layout = find_last_layout (shape);
+  text = pango_layout_get_text (layout->layout);
+  pango_layout_set_text (layout->layout, text, strlen (text) - 1);
 }
 
 /* }}} */
@@ -669,9 +708,10 @@ do_generate_layouts (SvgElement             *self,
                      PangoFontMap           *fontmap,
                      WhiteSpace              space,
                      WritingMode             wmode,
-                    double                 *x,
+                     double                 *x,
                      double                 *y,
-                     TextLayout            **lastwithspace,
+                     gboolean               *initial,
+                     gboolean               *lastwasspace,
                      TextOffset             *offsets,
                      const graphene_rect_t  *viewport,
                      graphene_rect_t        *bounds)
@@ -736,7 +776,7 @@ do_generate_layouts (SvgElement             *self,
             double y2 = *y + baseline_shift;
 
             space2 = svg_enum_get (svg_element_get_current_value (node->shape.shape, SVG_PROPERTY_SPACE));
-            node->shape.has_bounds = do_generate_layouts (node->shape.shape, fontmap, space2, wmode, x, &y2, lastwithspace, &offset, viewport, &node->shape.bounds);
+            node->shape.has_bounds = do_generate_layouts (node->shape.shape, fontmap, space2, wmode, x, &y2, initial, lastwasspace, &offset, viewport, &node->shape.bounds);
             *y = y2 - baseline_shift;
             if (node->shape.has_bounds)
               {
@@ -752,7 +792,6 @@ do_generate_layouts (SvgElement             *self,
             graphene_point_t origin;
             graphene_rect_t cbounds;
             gboolean is_vertical;
-            gboolean lastwasspace;
             char *text;
             const char *ch;
             TextLayout layout0 = { NULL, };
@@ -762,8 +801,7 @@ do_generate_layouts (SvgElement             *self,
             unsigned int text_idx;
             PangoLanguage *lang;
 
-            lastwasspace = *lastwithspace != NULL;
-            text = text_chomp (node->characters.text, space, &lastwasspace);
+            text = text_chomp (node->characters.text, space, initial, lastwasspace);
 
             g_assert (node->characters.layouts == NULL);
             node->characters.layouts = array_new_with_clear_func (sizeof (TextLayout), (GDestroyNotify) text_layout_clear);
@@ -828,11 +866,6 @@ do_generate_layouts (SvgElement             *self,
                   *x += cbounds.size.width;
               }
 
-            if (!lastwasspace)
-              *lastwithspace = NULL;
-            else if (*text != '\0')
-              *lastwithspace = layout;
-
             g_free (text);
           }
           break;
@@ -888,8 +921,8 @@ generate_layouts (SvgElement            *shape,
 {
   PangoFontMap *fontmap = get_fontmap (svg);
   gboolean retval;
-  TextLayout dummy;
-  TextLayout *layout = &dummy;
+  gboolean initial = TRUE;
+  gboolean lastwasspace = FALSE;
   double x = 0;
   double y = 0;
   WhiteSpace space;
@@ -913,18 +946,10 @@ generate_layouts (SvgElement            *shape,
   wmode = svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_WRITING_MODE));
   anchor = svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_TEXT_ANCHOR));
 
-  retval = do_generate_layouts (shape, fontmap, space, wmode, &x, &y, &layout, NULL, viewport, bounds);
+  retval = do_generate_layouts (shape, fontmap, space, wmode, &x, &y, &initial, &lastwasspace, NULL, viewport, bounds);
 
-  if (layout && layout != &dummy)
-    {
-      const char *text;
-
-      /* Remove the leftover final space. Note that we rely on text_chomp
-       * only considering single-byte whitespace
-       */
-      text = pango_layout_get_text (layout->layout);
-      pango_layout_set_text (layout->layout, text, strlen (text) - 1);
-    }
+  if (lastwasspace)
+    strip_trailing_space (shape);
 
 #if 0
   g_print ("---\nAFTER\n");
