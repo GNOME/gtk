@@ -16,6 +16,7 @@
 
 #include "gskcopypasteutilsprivate.h"
 #include "gskdebugprivate.h"
+#include "gsknodewalkerprivate.h"
 #include "gskrendererprivate.h"
 
 #include "gdk/gdkdmabufdownloaderprivate.h"
@@ -33,19 +34,6 @@
 #define GDK_ARRAY_TYPE_NAME GskGpuOps
 #define GDK_ARRAY_ELEMENT_TYPE guchar
 #define GDK_ARRAY_BY_VALUE 1
-#include "gdk/gdkarrayimpl.c"
-
-typedef struct _GskNodeStackNode GskNodeStackNode;
-struct _GskNodeStackNode {
-  GskRenderNode *node;
-  guint pos;
-};
-
-#define GDK_ARRAY_NAME gsk_node_stack
-#define GDK_ARRAY_TYPE_NAME GskNodeStack
-#define GDK_ARRAY_ELEMENT_TYPE GskNodeStackNode
-#define GDK_ARRAY_BY_VALUE 1
-#define GDK_ARRAY_PREALLOC 64
 #include "gdk/gdkarrayimpl.c"
 
 typedef struct _GskGpuFramePrivate GskGpuFramePrivate;
@@ -72,7 +60,7 @@ struct _GskGpuFramePrivate
   guchar *storage_buffer_data;
   gsize storage_buffer_used;
 
-  GskNodeStack node_stack;
+  GskNodeWalker *node_walker;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GskGpuFrame, gsk_gpu_frame, G_TYPE_OBJECT)
@@ -89,7 +77,7 @@ gsk_gpu_frame_default_cleanup (GskGpuFrame *self)
   GskGpuOp *op;
   gsize i;
 
-  g_assert (gsk_node_stack_get_size (&priv->node_stack) == 0);
+  g_assert (priv->node_walker == NULL);
 
   priv->n_globals = 0;
 
@@ -181,17 +169,11 @@ gsk_gpu_frame_default_start_node (GskGpuFrame   *self,
                                   GskRenderNode *node,
                                   gsize          pos)
 {
-  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
-
-  gsk_node_stack_append (&priv->node_stack, &(GskNodeStackNode) { node, pos });
 }
 
 static void
 gsk_gpu_frame_default_end_node (GskGpuFrame *self)
 {
-  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
-
-  gsk_node_stack_set_size (&priv->node_stack, gsk_node_stack_get_size (&priv->node_stack) - 1);
 }
 
 static GskDebugProfile *
@@ -217,7 +199,7 @@ gsk_gpu_frame_finalize (GObject *object)
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
 
   gsk_gpu_ops_clear (&priv->ops);
-  gsk_node_stack_clear (&priv->node_stack);
+  g_assert (priv->node_walker == NULL);
 
   g_clear_object (&priv->vertex_buffer);
   g_clear_object (&priv->globals_buffer);
@@ -254,7 +236,6 @@ gsk_gpu_frame_init (GskGpuFrame *self)
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
 
   gsk_gpu_ops_init (&priv->ops);
-  gsk_node_stack_init (&priv->node_stack);
 }
 
 void
@@ -812,14 +793,14 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
   priv->timestamp = timestamp;
   gsk_gpu_cache_set_time (gsk_gpu_device_get_cache (priv->device), timestamp);
 
-  if (!gsk_gpu_frame_start_node (self, node, 0))
-    {
-      g_assert_not_reached ();
-    }
+  g_assert (priv->node_walker == NULL);
+  priv->node_walker = gsk_node_walker_new (node);
+  GSK_GPU_FRAME_GET_CLASS (self)->start_node (self, node, 0);
 
   gsk_gpu_node_processor_process (self, target, target_color_state, clip, node, viewport, pass_type);
 
-  gsk_gpu_frame_end_node (self);
+  GSK_GPU_FRAME_GET_CLASS (self)->end_node (self);
+  g_clear_pointer (&priv->node_walker, gsk_node_walker_free);
 
   if (texture)
     gsk_gpu_download_op (self, target, target_color_state, texture);
@@ -987,26 +968,12 @@ gsk_gpu_frame_start_node (GskGpuFrame   *self,
                           GskRenderNode *node,
                           gsize          pos)
 {
-#ifndef G_DISABLE_ASSERT
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
-  gsize n = gsk_node_stack_get_size (&priv->node_stack);
 
-  if (n > 0)
-    {
-      GskNodeStackNode *stack;
-      GskRenderNode **children;
-      gsize n_children;
+  g_assert (priv->node_walker);
 
-      stack = gsk_node_stack_get (&priv->node_stack, n - 1);
-      children = gsk_render_node_get_children (stack->node, &n_children);
-      g_assert (pos < n_children);
-      g_assert (children[pos] == node);
-    }
-  else
-    {
-      g_assert (pos == 0);
-    }
-#endif
+  if (!gsk_node_walker_start_node (priv->node_walker, node, pos))
+    return FALSE;
 
   GSK_GPU_FRAME_GET_CLASS (self)->start_node (self, node, pos);
 
@@ -1022,11 +989,9 @@ gsk_gpu_frame_start_node (GskGpuFrame   *self,
 void
 gsk_gpu_frame_end_node (GskGpuFrame *self)
 {
-#ifndef G_DISABLE_ASSERT
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
 
-  g_assert (gsk_node_stack_get_size (&priv->node_stack) > 0);
-#endif
+  gsk_node_walker_end_node (priv->node_walker);
 
   GSK_GPU_FRAME_GET_CLASS (self)->end_node (self);
 }
