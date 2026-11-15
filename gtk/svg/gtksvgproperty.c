@@ -491,6 +491,32 @@ number_is_positive_or_auto (const SvgValue *value)
          svg_value_is_positive_number (value);
 }
 
+static SvgValue *
+parse_space (const char  *text,
+             GError     **error)
+{
+  /* Quitely accept the xml:space values here */
+  if (strcmp (text, "default") == 0)
+    return svg_white_space_new (WHITE_SPACE_NORMAL);
+  else if (strcmp (text, "preserve") == 0)
+    return svg_white_space_new (WHITE_SPACE_PRESERVE_SPACES);
+  else
+    {
+      GtkCssParser *parser;
+      SvgValue *result;
+
+      parser = parser_new_for_string (text);
+      result = svg_white_space_parse (parser);
+      gtk_css_parser_unref (parser);
+
+      if (!result)
+        g_set_error (error,
+                     GTK_SVG_ERROR, GTK_SVG_ERROR_INVALID_ATTRIBUTE,
+                     "Value is not valid");
+      return result;
+    }
+}
+
 typedef enum
 {
   SVG_PROPERTY_IS_INHERITED     = 1 << 0,
@@ -912,9 +938,10 @@ static SvgPropertyInfo shape_attrs[] = {
     .parse_value = svg_orient_parse,
   },
   [SVG_PROPERTY_SPACE] = {
-    .flags = SVG_PROPERTY_IS_INHERITED | SVG_PROPERTY_IS_DISCRETE | SVG_PROPERTY_NO_CSS,
+    .flags = SVG_PROPERTY_IS_INHERITED | SVG_PROPERTY_IS_DISCRETE,
     .applies_to = ELEMENT_ANY,
-    .parse_value = svg_xml_space_parse,
+    .parse_value = svg_white_space_parse,
+    .parse_presentation = parse_space,
   },
   [SVG_PROPERTY_LANG] = {
     .flags = SVG_PROPERTY_IS_INHERITED | SVG_PROPERTY_IS_DISCRETE | SVG_PROPERTY_NO_CSS,
@@ -1252,7 +1279,7 @@ static void
 shape_attrs_init_default_values (void)
 {
   shape_attrs[SVG_PROPERTY_LANG].initial_value = svg_language_new_default ();
-  shape_attrs[SVG_PROPERTY_SPACE].initial_value = svg_xml_space_new (XML_SPACE_DEFAULT);
+  shape_attrs[SVG_PROPERTY_SPACE].initial_value = svg_white_space_new (WHITE_SPACE_NORMAL);
   shape_attrs[SVG_PROPERTY_DISPLAY].initial_value = svg_display_new (DISPLAY_INLINE);
   shape_attrs[SVG_PROPERTY_VISIBILITY].initial_value = svg_visibility_new (VISIBILITY_VISIBLE);
   shape_attrs[SVG_PROPERTY_FONT_SIZE].initial_value = svg_font_size_new (FONT_SIZE_MEDIUM);
@@ -1580,6 +1607,7 @@ static SvgPropertyLookup shape_attr_lookups[] = {
   { "refY", BIT (SVG_ELEMENT_MARKER), 0, SVG_PROPERTY_REF_Y },
   { "markerUnits", BIT (SVG_ELEMENT_MARKER), 0, SVG_PROPERTY_MARKER_UNITS },
   { "orient", BIT (SVG_ELEMENT_MARKER), 0, SVG_PROPERTY_MARKER_ORIENT },
+  { "white-space", ELEMENT_ANY, 0, SVG_PROPERTY_SPACE },
   { "xml:space", ELEMENT_ANY, 0, SVG_PROPERTY_SPACE },
   { "lang", ELEMENT_ANY, 0, SVG_PROPERTY_LANG },
   { "xml:lang", ELEMENT_ANY, 0, SVG_PROPERTY_LANG },

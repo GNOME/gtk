@@ -122,6 +122,7 @@ test_data = [
   'text-text-03-b.svg',
   'text-text-10-t.svg',
   'text-vertical.svg',
+  'text-whitespace.svg',
   'times.svg',
   'too-many-elements.test',
   'transforms.svg',

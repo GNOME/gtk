@@ -307,9 +307,53 @@ apply_transform (GskRenderNode *node,
 /* }}} */
 /* {{{ Text */
 
+static inline gboolean
+preserve_newline (WhiteSpace space)
+{
+  switch (space)
+    {
+    case WHITE_SPACE_NORMAL:
+    case WHITE_SPACE_NOWRAP:
+    case WHITE_SPACE_COLLAPSE:
+    case WHITE_SPACE_PRESERVE_SPACES:
+      return FALSE;
+    case WHITE_SPACE_PRE:
+    case WHITE_SPACE_PRE_WRAP:
+    case WHITE_SPACE_BREAK_SPACES:
+    case WHITE_SPACE_PRE_LINE:
+    case WHITE_SPACE_PRESERVE:
+    case WHITE_SPACE_PRESERVE_BREAKS:
+      return TRUE;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static inline gboolean
+preserve_space (WhiteSpace space)
+{
+  switch (space)
+    {
+    case WHITE_SPACE_NORMAL:
+    case WHITE_SPACE_NOWRAP:
+    case WHITE_SPACE_PRE_LINE:
+    case WHITE_SPACE_COLLAPSE:
+    case WHITE_SPACE_PRESERVE_BREAKS:
+      return FALSE;
+    case WHITE_SPACE_PRE:
+    case WHITE_SPACE_PRE_WRAP:
+    case WHITE_SPACE_BREAK_SPACES:
+    case WHITE_SPACE_PRESERVE:
+    case WHITE_SPACE_PRESERVE_SPACES:
+      return TRUE;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 static char *
 text_chomp (const char *in,
-            XmlSpace    space,
+            WhiteSpace  space,
             gboolean   *lastwasspace)
 {
   size_t len = strlen (in);
@@ -323,10 +367,29 @@ text_chomp (const char *in,
             i++;
         }
 
-      if (in[i] == '\r' || in[i] == '\n' ||
-          (space == XML_SPACE_DEFAULT && (in[i] == '\t' || in[i] == ' ')))
+      if (in[i] == '\r' || in[i] == '\n')
         {
-          if (!*lastwasspace)
+          if (preserve_newline (space))
+            {
+              g_string_append_c (str, '\n');
+              *lastwasspace = TRUE;
+            }
+          else if (!*lastwasspace)
+            {
+              g_string_append_c (str, ' ');
+              *lastwasspace = TRUE;
+            }
+          continue;
+        }
+
+      if (in[i] == '\t' || in[i] == ' ')
+        {
+          if (preserve_space (space))
+            {
+              g_string_append_c (str, ' ');
+              *lastwasspace = TRUE;
+            }
+          else if (!*lastwasspace)
             {
               g_string_append_c (str, ' ');
               *lastwasspace = TRUE;
@@ -3966,7 +4029,7 @@ has_text_position (TextOffset *offsets)
 static gboolean
 do_generate_layouts (SvgElement             *self,
                      PangoFontMap           *fontmap,
-                     XmlSpace                space,
+                     WhiteSpace              space,
                      WritingMode             wmode,
                      double                 *x,
                      double                 *y,
@@ -4031,7 +4094,7 @@ do_generate_layouts (SvgElement             *self,
         {
         case TEXT_NODE_SHAPE:
           {
-            XmlSpace space2;
+            WhiteSpace space2;
             double y2 = *y + baseline_shift;
 
             space2 = svg_enum_get (svg_element_get_current_value (node->shape.shape, SVG_PROPERTY_SPACE));
@@ -4234,7 +4297,7 @@ generate_layouts (SvgElement            *self,
   TextLayout *layout = &dummy;
   double x = 0;
   double y = 0;
-  XmlSpace space;
+  WhiteSpace space;
   WritingMode wmode;
   TextAnchor anchor;
   float dx, dy;

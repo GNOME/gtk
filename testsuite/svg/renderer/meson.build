@@ -173,6 +173,7 @@ test_data = [
   'text-dominant-baseline-01.svg',
   'text-fonts-02-t.svg',
   'text-multiple-coordinates.svg',
+  'text-newline.svg',
   'text-stroke-gradient.svg',
   'text-text-03-b.svg',
   'text-text-10-t.svg',
