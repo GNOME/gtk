@@ -85,6 +85,28 @@ preserve_space (WhiteSpace space)
     }
 }
 
+static inline gboolean
+preserve_tab (WhiteSpace space)
+{
+  switch (space)
+    {
+    case WHITE_SPACE_NORMAL:
+    case WHITE_SPACE_PRE_LINE:
+    case WHITE_SPACE_COLLAPSE:
+    case WHITE_SPACE_PRESERVE_BREAKS:
+    case WHITE_SPACE_PRESERVE_SPACES:
+    case WHITE_SPACE_NOWRAP:
+      return FALSE;
+    case WHITE_SPACE_PRE:
+    case WHITE_SPACE_PRE_WRAP:
+    case WHITE_SPACE_PRESERVE:
+    case WHITE_SPACE_BREAK_SPACES:
+      return TRUE;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 static char *
 text_chomp (const char *in,
             WhiteSpace  space,
@@ -111,15 +133,36 @@ text_chomp (const char *in,
               g_string_append_c (str, '\n');
               *lastwasspace = TRUE;
             }
+          else if (preserve_space (space))
+            {
+              g_string_append_c (str, ' ');
+              *lastwasspace = TRUE;
+            }
           else if (!*lastwasspace && !*initial)
             {
               g_string_append_c (str, ' ');
               *lastwasspace = TRUE;
             }
-          continue;
         }
-
-      if (in[i] == '\t' || in[i] == ' ')
+      else if (in[i] == '\t')
+        {
+          if (preserve_tab (space))
+            {
+              g_string_append_c (str, '\t');
+              *lastwasspace = TRUE;
+            }
+          else if (preserve_space (space))
+            {
+              g_string_append_c (str, ' ');
+              *lastwasspace = TRUE;
+            }
+          else if (!*lastwasspace && !*initial)
+            {
+              g_string_append_c (str, ' ');
+              *lastwasspace = TRUE;
+            }
+        }
+      else if (in[i] == ' ')
         {
           if (preserve_space (space))
             {
@@ -131,11 +174,12 @@ text_chomp (const char *in,
               g_string_append_c (str, ' ');
               *lastwasspace = TRUE;
             }
-          continue;
         }
-
-      g_string_append_c (str, in[i]);
-      *lastwasspace = FALSE;
+      else
+        {
+          g_string_append_c (str, in[i]);
+          *lastwasspace = FALSE;
+        }
     }
 
   return g_string_free_and_steal (str);
