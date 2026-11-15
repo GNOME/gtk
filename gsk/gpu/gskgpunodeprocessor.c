@@ -424,7 +424,8 @@ gsk_gpu_node_processor_add_node (GskGpuRenderPass *self,
                                  GskRenderNode       *node,
                                  gsize                pos)
 {
-  gsk_gpu_frame_start_node (self->frame, node, pos);
+  if (!gsk_gpu_frame_start_node (self->frame, node, pos))
+    return;
 
   gsk_gpu_node_processor_add_node_untracked (self, node);
 
@@ -579,7 +580,8 @@ gsk_gpu_get_child_as_image (GskGpuFrame           *frame,
 {
   GskGpuImage *result;
 
-  gsk_gpu_frame_start_node (frame, child, pos);
+  if (!gsk_gpu_frame_start_node (frame, child, pos))
+    return NULL;
 
   result = gsk_gpu_get_node_as_image (frame,
                                       flags,
@@ -664,7 +666,8 @@ gsk_gpu_node_processor_get_node_as_image (GskGpuRenderPass   *self,
 {
   GskGpuImage *result;
 
-  gsk_gpu_frame_start_node (self->frame, node, pos);
+  if (!gsk_gpu_frame_start_node (self->frame, node, pos))
+    return NULL;
 
   result = gsk_gpu_node_processor_get_node_as_image_untracked (self,
                                                                flags,
@@ -1147,7 +1150,8 @@ gsk_gpu_node_processor_add_opacity_node (GskGpuRenderPass *self,
 
   child = gsk_opacity_node_get_child (node);
 
-  gsk_gpu_frame_start_node (self->frame, child, 0);
+  if (!gsk_gpu_frame_start_node (self->frame, child, 0))
+    return;
 
   if (gsk_render_node_clears_background (child))
     gsk_gpu_node_processor_add_with_offscreen (self, child);
@@ -2502,7 +2506,8 @@ gsk_gpu_node_processor_add_shadow_node_slow (GskGpuRenderPass *self,
   if (!gsk_gpu_render_pass_get_clip_bounds (self, &clip))
     return;
 
-  gsk_gpu_frame_start_node (self->frame, child, 0);
+  if (!gsk_gpu_frame_start_node (self->frame, child, 0))
+    return;
 
   for (i = 0; i < n_shadows; i++)
     {
@@ -4473,7 +4478,8 @@ gsk_gpu_node_processor_add_isolation_node (GskGpuRenderPass *self,
       if (gsk_render_node_get_copy_mode (child) != GSK_COPY_NONE ||
           gsk_render_node_clears_background (child))
         {
-          gsk_gpu_frame_start_node (self->frame, child, 0);
+          if (!gsk_gpu_frame_start_node (self->frame, child, 0))
+            return;
           gsk_gpu_node_processor_add_with_offscreen (self, child);
           gsk_gpu_frame_end_node (self->frame);
           return;
