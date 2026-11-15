@@ -1028,7 +1028,6 @@ store_done_cb (GObject      *source_object,
       g_error_free (error);
     }
 
-  g_object_unref (task);
   GTK_DEBUG (PRINTING, "gtk_cups_secrets_service_store finished.");
 }
 
