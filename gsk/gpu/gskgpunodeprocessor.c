@@ -57,6 +57,7 @@
 #include "gskcompositenode.h"
 #include "gskconicgradientnodeprivate.h"
 #include "gskcontainernodeprivate.h"
+#include "gskcopynode.h"
 #include "gskcrossfadenode.h"
 #include "gskdebugprivate.h"
 #include "gskdebugnode.h"
@@ -4248,14 +4249,13 @@ static void
 gsk_gpu_node_processor_add_copy_node (GskGpuRenderPass *self,
                                       GskRenderNode    *node)
 {
-  g_warning_once ("Bug: The GPU renderer should never see copy nodes");
+  gsk_gpu_node_processor_add_node (self, gsk_copy_node_get_child (node), 0);
 }
 
 static void
 gsk_gpu_node_processor_add_paste_node (GskGpuRenderPass *self,
                                        GskRenderNode    *node)
 {
-  g_warning_once ("Bug: The GPU renderer should never see paste nodes");
 }
 
 static gboolean
