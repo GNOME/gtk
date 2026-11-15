@@ -107,18 +107,23 @@ preserve_tab (WhiteSpace space)
     }
 }
 
+typedef struct
+{
+  WhiteSpace space;
+  gboolean initial;
+  gboolean trailing;
+} WhiteSpaceContext;
+
 static char *
-text_chomp (const char *in,
-            WhiteSpace  space,
-            gboolean   *initial,
-            gboolean   *lastwasspace)
+text_chomp (const char        *in,
+            WhiteSpaceContext *context)
 {
   size_t len = strlen (in);
   GString *str = g_string_sized_new (len);
 
   for (size_t i = 0; i < len; i++)
     {
-      *initial = *initial && str->len == 0;
+      context->initial = context->initial && str->len == 0;
 
       if (in[i] == '\r')
         {
@@ -128,57 +133,57 @@ text_chomp (const char *in,
 
       if (in[i] == '\r' || in[i] == '\n')
         {
-          if (preserve_newline (space))
+          if (preserve_newline (context->space))
             {
               g_string_append_c (str, '\n');
-              *lastwasspace = TRUE;
+              context->trailing = TRUE;
             }
-          else if (preserve_space (space))
+          else if (preserve_space (context->space))
             {
               g_string_append_c (str, ' ');
-              *lastwasspace = TRUE;
+              context->trailing = TRUE;
             }
-          else if (!*lastwasspace && !*initial)
+          else if (!context->trailing && !context->initial)
             {
               g_string_append_c (str, ' ');
-              *lastwasspace = TRUE;
+              context->trailing = TRUE;
             }
         }
       else if (in[i] == '\t')
         {
-          if (preserve_tab (space))
+          if (preserve_tab (context->space))
             {
               g_string_append_c (str, '\t');
-              *lastwasspace = TRUE;
+              context->trailing = TRUE;
             }
-          else if (preserve_space (space))
+          else if (preserve_space (context->space))
             {
               g_string_append_c (str, ' ');
-              *lastwasspace = TRUE;
+              context->trailing = TRUE;
             }
-          else if (!*lastwasspace && !*initial)
+          else if (!context->trailing && !context->initial)
             {
               g_string_append_c (str, ' ');
-              *lastwasspace = TRUE;
+              context->trailing = TRUE;
             }
         }
       else if (in[i] == ' ')
         {
-          if (preserve_space (space))
+          if (preserve_space (context->space))
             {
               g_string_append_c (str, ' ');
-              *lastwasspace = TRUE;
+              context->trailing = TRUE;
             }
-          else if (!*lastwasspace && !*initial)
+          else if (!context->trailing && !context->initial)
             {
               g_string_append_c (str, ' ');
-              *lastwasspace = TRUE;
+              context->trailing = TRUE;
             }
         }
       else
         {
           g_string_append_c (str, in[i]);
-          *lastwasspace = FALSE;
+          context->trailing = FALSE;
         }
     }
 
@@ -208,17 +213,30 @@ find_last_layout (SvgElement *shape)
 }
 
 static void
-strip_trailing_space (SvgElement *shape)
+strip_trailing_space (SvgElement        *shape,
+                      WhiteSpaceContext *context)
 {
   TextLayout *layout;
   const char *text;
+  size_t len;
 
   /* Remove the leftover final space. Note that we rely on text_chomp
    * only considering single-byte whitespace
    */
   layout = find_last_layout (shape);
+  if (layout == NULL)
+    return;
+
   text = pango_layout_get_text (layout->layout);
-  pango_layout_set_text (layout->layout, text, strlen (text) - 1);
+  len = strlen (text);
+
+  if (len == 0)
+    return;
+
+  if ((text[len - 1] == ' ' && !preserve_space (context->space)) ||
+      (text[len - 1] == '\n' && !preserve_newline (context->space)) ||
+      (text[len - 1] == '\t' && !preserve_tab (context->space)))
+    pango_layout_set_text (layout->layout, text, len - 1);
 }
 
 /* }}} */
@@ -270,8 +288,8 @@ writing_mode_to_gravity (WritingMode wmode)
 }
 
 static PangoDirection
-writing_mode_to_direction (WritingMode    wmode,
-                           PangoDirection dir)
+apply_writing_mode_to_direction (WritingMode    wmode,
+                                 PangoDirection dir)
 {
   switch (wmode)
     {
@@ -494,12 +512,63 @@ svg_element_get_baseline_shift (SvgElement   *shape,
   return baseline_shift;
 }
 
+static float
+svg_element_get_line_height (SvgElement   *shape,
+                             PangoContext *context)
+{
+  PangoFontDescription *desc;
+  PangoFontMetrics *metrics;
+  float line_height;
+
+  desc = svg_element_get_font_description (shape);
+  metrics = pango_context_get_metrics (context, desc, pango_context_get_language (context));
+
+  line_height = pango_font_metrics_get_height (metrics) / (double) PANGO_SCALE;
+
+  pango_font_metrics_unref (metrics);
+  pango_font_description_free (desc);
+
+  return line_height;
+}
+
 /* }}} */
 /* {{{ Text */
 
+static PangoContext *
+svg_element_get_pango_context (SvgElement   *self,
+                               PangoFontMap *fontmap,
+                               WritingMode   wmode)
+{
+  PangoContext *context;
+  UnicodeBidi bidi;
+  PangoDirection direction, dir;
+  PangoGravity gravity;
+
+  context = pango_font_map_create_context (fontmap);
+
+  pango_context_set_language (context, svg_language_get (svg_element_get_current_value (self, SVG_PROPERTY_LANG), 0));
+
+  bidi = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_UNICODE_BIDI));
+  dir = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_DIRECTION));
+
+  gravity = writing_mode_to_gravity (wmode);
+  direction = apply_writing_mode_to_direction (wmode, dir);
+
+  pango_context_set_base_gravity (context, gravity);
+
+  if (bidi == UNICODE_BIDI_OVERRIDE || bidi == UNICODE_BIDI_EMBED)
+    pango_context_set_base_dir (context, direction);
+  else if (dir != PANGO_DIRECTION_LTR)
+    pango_context_set_base_dir (context, dir);
+  else
+    pango_context_set_base_dir (context, direction);
+
+  return context;
+}
+
 static PangoLayout *
 text_create_layout (SvgElement       *self,
-                    PangoFontMap     *fontmap,
+                    PangoContext     *context,
                     const char       *text,
                     int               len,
                     WritingMode       wmode,
@@ -508,10 +577,8 @@ text_create_layout (SvgElement       *self,
                     gboolean         *is_vertical,
                     double           *rotation)
 {
-  PangoContext *context;
   UnicodeBidi bidi;
   PangoDirection direction, dir;
-  PangoGravity gravity;
   PangoFontDescription *desc;
   PangoLayout *layout;
   PangoFontMetrics *metrics;
@@ -523,25 +590,12 @@ text_create_layout (SvgElement       *self,
   DominantBaseline baseline;
   char *text_with_bidi = NULL;
 
-  context = pango_font_map_create_context (fontmap);
-  pango_context_set_language (context, svg_language_get (svg_element_get_current_value (self, SVG_PROPERTY_LANG), 0));
-
   bidi = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_UNICODE_BIDI));
   dir = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_DIRECTION));
 
   text_with_bidi = apply_bidi_to_text (bidi, dir, text, len);
 
-  gravity = writing_mode_to_gravity (wmode);
-  direction = writing_mode_to_direction (wmode, dir);
-
-  pango_context_set_base_gravity (context, gravity);
-
-  if (bidi == UNICODE_BIDI_OVERRIDE || bidi == UNICODE_BIDI_EMBED)
-    pango_context_set_base_dir (context, direction);
-  else if (dir != PANGO_DIRECTION_LTR)
-    pango_context_set_base_dir (context, dir);
-  else
-    pango_context_set_base_dir (context, direction);
+  direction = apply_writing_mode_to_direction (wmode, dir);
 
   desc = svg_element_get_font_description (self);
   attrs = svg_element_get_text_attrs (self);
@@ -644,7 +698,6 @@ text_create_layout (SvgElement       *self,
     }
 
   pango_font_metrics_unref (metrics);
-  g_object_unref (context);
 
   return layout;
 }
@@ -748,24 +801,24 @@ has_text_position (TextOffset *offsets)
 }
 
 static gboolean
-do_generate_layouts (SvgElement             *self,
-                     PangoFontMap           *fontmap,
-                     WhiteSpace              space,
-                     WritingMode             wmode,
-                     double                 *x,
-                     double                 *y,
-                     gboolean               *initial,
-                     gboolean               *lastwasspace,
-                     TextOffset             *offsets,
-                     const graphene_rect_t  *viewport,
-                     graphene_rect_t        *bounds)
+do_generate_layouts (SvgElement            *self,
+                     PangoContext          *context,
+                     WhiteSpaceContext     *ws_ctx,
+                     WritingMode            wmode,
+                     double                *x,
+                     double                *y,
+                     TextOffset            *offsets,
+                     const graphene_rect_t *viewport,
+                     graphene_rect_t       *bounds)
 {
   double dx = 0;
   double dy = 0;
   gboolean set_bounds = FALSE;
   SvgValue *v;
-  double baseline_shift = 0;
+  float baseline_shift;
+  float line_height;
   TextOffset offset;
+  gboolean is_vertical;
 
   g_assert (svg_element_type_is_text (self->type));
 
@@ -775,6 +828,10 @@ do_generate_layouts (SvgElement             *self,
   offset.elt = self;
   offset.idx = 0;
   offset.next = offsets;
+
+  is_vertical = svg_writing_mode_is_vertical (wmode);
+  baseline_shift = svg_element_get_baseline_shift (self, context);
+  line_height = svg_element_get_line_height (self, context);
 
   v = svg_element_get_current_value (self, SVG_PROPERTY_TEXT_X);
   if (svg_numbers_get_length (v) > 0)
@@ -816,11 +873,13 @@ do_generate_layouts (SvgElement             *self,
         {
         case TEXT_NODE_SHAPE:
           {
-            WhiteSpace space2;
+            WhiteSpace space = ws_ctx->space;
             double y2 = *y + baseline_shift;
 
-            space2 = svg_enum_get (svg_element_get_current_value (node->shape.shape, SVG_PROPERTY_SPACE));
-            node->shape.has_bounds = do_generate_layouts (node->shape.shape, fontmap, space2, wmode, x, &y2, initial, lastwasspace, &offset, viewport, &node->shape.bounds);
+            ws_ctx->space = svg_enum_get (svg_element_get_current_value (node->shape.shape, SVG_PROPERTY_SPACE));
+            node->shape.has_bounds = do_generate_layouts (node->shape.shape, context, ws_ctx, wmode, x, &y2, &offset, viewport, &node->shape.bounds);
+            ws_ctx->space = space;
+
             *y = y2 - baseline_shift;
             if (node->shape.has_bounds)
               {
@@ -835,8 +894,8 @@ do_generate_layouts (SvgElement             *self,
           {
             graphene_point_t origin;
             graphene_rect_t cbounds;
-            gboolean is_vertical;
             char *text;
+            GStrv lines;
             const char *ch;
             TextLayout layout0 = { NULL, };
             TextLayout *layout = NULL;
@@ -844,73 +903,95 @@ do_generate_layouts (SvgElement             *self,
             PangoLogAttr *attrs;
             unsigned int text_idx;
             PangoLanguage *lang;
-
-            text = text_chomp (node->characters.text, space, initial, lastwasspace);
+            double x0 = *x;
+            double y0 = *y;
 
             g_assert (node->characters.layouts == NULL);
             node->characters.layouts = array_new_with_clear_func (sizeof (TextLayout), (GDestroyNotify) text_layout_clear);
 
             lang = svg_language_get (svg_element_get_current_value (self, SVG_PROPERTY_LANG), 0);
-            attrs_len = g_utf8_strlen (text, -1) + 1;
-            attrs = g_newa (PangoLogAttr, attrs_len);
-            pango_get_log_attrs (text, strlen (text), -1, lang, attrs, attrs_len);
+            text = text_chomp (node->characters.text, ws_ctx);
+            lines = g_strsplit (text, "\n", 0);
+            g_free (text);
 
-            ch = text;
-            text_idx = 0;
-            while (*ch)
+            for (unsigned int l = 0; lines[l]; l++)
               {
-                TextPosition pos = { 0, };
-                const char *the_text;
-                size_t len;
-
-                the_text = ch;
-                get_text_position (&offset, &pos, viewport);
-                advance_text_offset (&offset, 1);
-                if (has_text_position (&offset))
+                if (l > 0)
                   {
-                    do {
-                      ch = g_utf8_next_char (ch);
-                      text_idx++;
-                    } while (!attrs[text_idx].is_cursor_position);
-
-                    len = ch - the_text;
-                  }
-                else
-                  {
-                    advance_text_offset (&offset, g_utf8_strlen (ch, -1) - 1);
-                    len = strlen (the_text);
-                    ch = &the_text[len];
+                    if (is_vertical)
+                      {
+                        *x += line_height;
+                        *y = y0;
+                      }
+                    else
+                      {
+                        *x = x0;
+                        *y += line_height;
+                      }
+                    advance_text_offset (&offset, 1); /* newline is an addressable char */
                   }
 
-                g_array_append_val (node->characters.layouts, layout0);
-                layout = &g_array_index (node->characters.layouts, TextLayout, node->characters.layouts->len - 1);
-                layout->layout = text_create_layout (self, fontmap, the_text, len, wmode, &origin, &cbounds, &is_vertical, &layout->r);
+                text = lines[l];
 
-                baseline_shift = svg_element_get_baseline_shift (self, pango_layout_get_context (layout->layout));
+                attrs_len = g_utf8_strlen (text, -1) + 1;
+                attrs = g_newa (PangoLogAttr, attrs_len);
+                pango_get_log_attrs (text, strlen (text), -1, lang, attrs, attrs_len);
 
-                if (pos.has_x)
-                  *x = pos.x;
-                if (pos.has_dx)
-                  *x += pos.dx;
-                if (pos.has_y)
-                  *y = pos.y;
-                if (pos.has_dy)
-                  *y += pos.dy;
+                ch = text;
+                text_idx = 0;
+                while (*ch)
+                  {
+                    TextPosition pos = { 0, };
+                    const char *the_text;
+                    size_t len;
 
-                layout->x = *x + origin.x;
-                layout->y = *y + origin.y + baseline_shift;
+                    the_text = ch;
+                    get_text_position (&offset, &pos, viewport);
+                    advance_text_offset (&offset, 1);
+                    if (has_text_position (&offset))
+                      {
+                        do {
+                          ch = g_utf8_next_char (ch);
+                          text_idx++;
+                        } while (!attrs[text_idx].is_cursor_position);
 
-                graphene_rect_offset (&cbounds, *x, *y);
+                        len = ch - the_text;
+                      }
+                    else
+                      {
+                        advance_text_offset (&offset, g_utf8_strlen (ch, -1) - 1);
+                        len = strlen (the_text);
+                        ch = &the_text[len];
+                      }
 
-                ADD_BBOX (&cbounds)
+                    g_array_append_val (node->characters.layouts, layout0);
+                    layout = &g_array_index (node->characters.layouts, TextLayout, node->characters.layouts->len - 1);
+                    layout->layout = text_create_layout (self, context, the_text, len, wmode, &origin, &cbounds, &is_vertical, &layout->r);
 
-                if (is_vertical)
-                  *y += cbounds.size.height;
-                else
-                  *x += cbounds.size.width;
+                    if (pos.has_x)
+                      *x = pos.x;
+                    if (pos.has_dx)
+                      *x += pos.dx;
+                    if (pos.has_y)
+                      *y = pos.y;
+                    if (pos.has_dy)
+                      *y += pos.dy;
+
+                    layout->x = *x + origin.x;
+                    layout->y = *y + origin.y + baseline_shift;
+
+                    graphene_rect_offset (&cbounds, *x, *y);
+
+                    ADD_BBOX (&cbounds)
+
+                    if (is_vertical)
+                      *y += cbounds.size.height;
+                    else
+                      *x += cbounds.size.width;
+                  }
               }
 
-            g_free (text);
+            g_strfreev (lines);
           }
           break;
         default:
@@ -963,20 +1044,18 @@ generate_layouts (SvgElement            *shape,
                   graphene_rect_t       *bounds,
                   graphene_point_t      *offset)
 {
-  PangoFontMap *fontmap = get_fontmap (svg);
+  PangoContext *context;
   gboolean retval;
-  gboolean initial = TRUE;
-  gboolean lastwasspace = FALSE;
+  WhiteSpaceContext ws_ctx;
   double x = 0;
   double y = 0;
-  WhiteSpace space;
   WritingMode wmode;
   TextAnchor anchor;
   float dx, dy;
 
 #if 0
   g_print ("---\nBEFORE\n");
-  print_layouts (self, TRUE);
+  print_layouts (shape, TRUE);
 #endif
 
   for (unsigned int i = 0; i < shape->text->len; i++)
@@ -986,18 +1065,22 @@ generate_layouts (SvgElement            *shape,
         g_assert (node->characters.layouts == NULL);
     }
 
-  space = svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_SPACE));
+  ws_ctx.space = svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_SPACE));
+  ws_ctx.initial = TRUE;
+  ws_ctx.trailing = FALSE;
+
   wmode = svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_WRITING_MODE));
   anchor = svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_TEXT_ANCHOR));
 
-  retval = do_generate_layouts (shape, fontmap, space, wmode, &x, &y, &initial, &lastwasspace, NULL, viewport, bounds);
+  context = svg_element_get_pango_context (shape, get_fontmap (svg), wmode);
 
-  if (lastwasspace)
-    strip_trailing_space (shape);
+  retval = do_generate_layouts (shape, context, &ws_ctx, wmode, &x, &y, NULL, viewport, bounds);
+
+  strip_trailing_space (shape, &ws_ctx);
 
 #if 0
   g_print ("---\nAFTER\n");
-  print_layouts (self, FALSE);
+  print_layouts (shape, FALSE);
 #endif
 
   if (!retval)
@@ -1030,6 +1113,8 @@ generate_layouts (SvgElement            *shape,
   shape->valid_bounds = TRUE;
   offset->x = dx;
   offset->y = dy;
+
+  g_object_unref (context);
 
   return retval;
 }
