@@ -916,12 +916,7 @@ widget_handle_method (GDBusConnection       *connection,
   GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
   GtkWidget *widget = GTK_WIDGET (accessible);
   GtkActionNode *node = _gtk_widget_get_action_node (widget, FALSE);
-
-  if (node == NULL)
-    return;
-
-  char **actions = gtk_action_node_list_actions (node, TRUE);
-
+  char **actions = node != NULL ? gtk_action_node_list_actions (node, TRUE) : NULL;
   int n_actions = actions != NULL ? g_strv_length (actions) : 0;
 
   /* XXX: We need more fields in the action API */
@@ -1014,12 +1009,7 @@ widget_handle_get_property (GDBusConnection  *connection,
   GtkWidget *widget = GTK_WIDGET (accessible);
   GtkActionNode *node = _gtk_widget_get_action_node (widget, FALSE);
   GVariant *res = NULL;
-
-  if (node == NULL)
-    return res;
-
-  char **actions = gtk_action_node_list_actions (node, TRUE);
-
+  char **actions = node != NULL ? gtk_action_node_list_actions (node, TRUE) : NULL;
   int n_actions = actions != NULL ? g_strv_length (actions) : 0;
 
   if (g_strcmp0 (property_name, "NActions") == 0)
@@ -1027,6 +1017,8 @@ widget_handle_get_property (GDBusConnection  *connection,
   else
     g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
                  "Unknown property '%s'", property_name);
+
+  g_strfreev (actions);
 
   return res;
 }
