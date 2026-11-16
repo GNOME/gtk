@@ -172,6 +172,7 @@ test_data = [
   'text-decorations-galore.svg',
   'text-dominant-baseline-01.svg',
   'text-fonts-02-t.svg',
+  'text-layout-dx.svg',
   'text-multiple-coordinates.svg',
   'text-newline.svg',
   'text-stroke-gradient.svg',

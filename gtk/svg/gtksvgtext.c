@@ -781,17 +781,13 @@ get_text_position (TextOffset            *offsets,
 }
 
 static gboolean
-has_text_position (TextOffset *offsets)
+starts_chunk (TextOffset *offsets)
 {
   while (offsets)
     {
       if (offsets->idx < svg_numbers_get_length (svg_element_get_current_value (offsets->elt, SVG_PROPERTY_TEXT_X)))
         return TRUE;
       if (offsets->idx < svg_numbers_get_length (svg_element_get_current_value (offsets->elt, SVG_PROPERTY_TEXT_Y)))
-        return TRUE;
-      if (offsets->idx < svg_numbers_get_length (svg_element_get_current_value (offsets->elt, SVG_PROPERTY_TEXT_DX)))
-        return TRUE;
-      if (offsets->idx < svg_numbers_get_length (svg_element_get_current_value (offsets->elt, SVG_PROPERTY_TEXT_DY)))
         return TRUE;
 
       offsets = offsets->next;
@@ -805,17 +801,18 @@ do_generate_layouts (SvgElement            *self,
                      PangoContext          *context,
                      WhiteSpaceContext     *ws_ctx,
                      WritingMode            wmode,
+                     double                *x0,
+                     double                *y0,
                      double                *x,
                      double                *y,
+                     double                *baseline_shift,
                      TextOffset            *offsets,
                      const graphene_rect_t *viewport,
                      graphene_rect_t       *bounds)
 {
-  double dx = 0;
-  double dy = 0;
+  WhiteSpace space = ws_ctx->space;
+  double bl_shift = *baseline_shift;
   gboolean set_bounds = FALSE;
-  SvgValue *v;
-  float baseline_shift;
   float line_height;
   TextOffset offset;
   gboolean is_vertical;
@@ -830,27 +827,29 @@ do_generate_layouts (SvgElement            *self,
   offset.next = offsets;
 
   is_vertical = svg_writing_mode_is_vertical (wmode);
-  baseline_shift = svg_element_get_baseline_shift (self, context);
   line_height = svg_element_get_line_height (self, context);
 
-  v = svg_element_get_current_value (self, SVG_PROPERTY_TEXT_X);
-  if (svg_numbers_get_length (v) > 0)
-    *x = svg_numbers_get (v, 0, viewport->size.width);
+#if 0
+  get_text_position (&offset, &pos, viewport);
 
-  v = svg_element_get_current_value (self, SVG_PROPERTY_TEXT_Y);
-  if (svg_numbers_get_length (v) > 0)
-    *y = svg_numbers_get (v, 0, viewport->size.height);
+  if (pos.has_x)
+    *x = pos.x;
 
-  v = svg_element_get_current_value (self, SVG_PROPERTY_TEXT_DX);
-  if (svg_numbers_get_length (v) > 0)
-    dx = svg_numbers_get (v, 0, viewport->size.width);
+  if (pos.has_y)
+    *y = pos.y;
 
-  v = svg_element_get_current_value (self, SVG_PROPERTY_TEXT_DY);
-  if (svg_numbers_get_length (v) > 0)
-    dy = svg_numbers_get (v, 0, viewport->size.height);
+  if (pos.has_dx)
+    dx = pos.dx;
+
+  if (pos.has_dy)
+    dy = pos.dy;
 
   *x += dx;
   *y += dy;
+#endif
+
+  *baseline_shift += svg_element_get_baseline_shift (self, context);
+  ws_ctx->space = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_SPACE));
 
 #define ADD_BBOX(box) do {                          \
   if (!set_bounds)                                  \
@@ -873,14 +872,11 @@ do_generate_layouts (SvgElement            *self,
         {
         case TEXT_NODE_SHAPE:
           {
-            WhiteSpace space = ws_ctx->space;
-            double y2 = *y + baseline_shift;
 
-            ws_ctx->space = svg_enum_get (svg_element_get_current_value (node->shape.shape, SVG_PROPERTY_SPACE));
-            node->shape.has_bounds = do_generate_layouts (node->shape.shape, context, ws_ctx, wmode, x, &y2, &offset, viewport, &node->shape.bounds);
+            node->shape.has_bounds = do_generate_layouts (node->shape.shape, context, ws_ctx, wmode, x0, y0, x, y, baseline_shift, &offset, viewport, &node->shape.bounds);
+
             ws_ctx->space = space;
 
-            *y = y2 - baseline_shift;
             if (node->shape.has_bounds)
               {
                 graphene_rect_init_from_rect (&node->shape.shape->bounds, &node->shape.bounds);
@@ -903,8 +899,6 @@ do_generate_layouts (SvgElement            *self,
             PangoLogAttr *attrs;
             unsigned int text_idx;
             PangoLanguage *lang;
-            double x0 = *x;
-            double y0 = *y;
 
             g_assert (node->characters.layouts == NULL);
             node->characters.layouts = array_new_with_clear_func (sizeof (TextLayout), (GDestroyNotify) text_layout_clear);
@@ -921,11 +915,11 @@ do_generate_layouts (SvgElement            *self,
                     if (is_vertical)
                       {
                         *x += line_height;
-                        *y = y0;
+                        *y = *y0;
                       }
                     else
                       {
-                        *x = x0;
+                        *x = *x0;
                         *y += line_height;
                       }
                     advance_text_offset (&offset, 1); /* newline is an addressable char */
@@ -939,21 +933,48 @@ do_generate_layouts (SvgElement            *self,
 
                 ch = text;
                 text_idx = 0;
-                while (*ch)
+                do
                   {
-                    TextPosition pos = { 0, };
                     const char *the_text;
+                    TextPosition pos = { 0, };
                     size_t len;
 
                     the_text = ch;
                     get_text_position (&offset, &pos, viewport);
-                    advance_text_offset (&offset, 1);
-                    if (has_text_position (&offset))
+
+                    if (pos.has_x)
                       {
-                        do {
-                          ch = g_utf8_next_char (ch);
-                          text_idx++;
-                        } while (!attrs[text_idx].is_cursor_position);
+                        *x0 = pos.x;
+                        *x = pos.x;
+                      }
+                    if (pos.has_dx)
+                      {
+                        *x0 += pos.dx;
+                        *x += pos.dx;
+                      }
+                    if (pos.has_y)
+                      {
+                        *y0 = pos.y;
+                        *y = pos.y;
+                      }
+                    if (pos.has_dy)
+                      {
+                        *y0 += pos.dy;
+                        *y += pos.dy;
+                      }
+
+                    if (*ch == '\0')
+                      break;
+
+                    advance_text_offset (&offset, 1);
+                    if (starts_chunk (&offset))
+                      {
+                        do
+                          {
+                            ch = g_utf8_next_char (ch);
+                            text_idx++;
+                          }
+                        while (!attrs[text_idx].is_cursor_position);
 
                         len = ch - the_text;
                       }
@@ -968,17 +989,8 @@ do_generate_layouts (SvgElement            *self,
                     layout = &g_array_index (node->characters.layouts, TextLayout, node->characters.layouts->len - 1);
                     layout->layout = text_create_layout (self, context, the_text, len, wmode, &origin, &cbounds, &is_vertical, &layout->r);
 
-                    if (pos.has_x)
-                      *x = pos.x;
-                    if (pos.has_dx)
-                      *x += pos.dx;
-                    if (pos.has_y)
-                      *y = pos.y;
-                    if (pos.has_dy)
-                      *y += pos.dy;
-
                     layout->x = *x + origin.x;
-                    layout->y = *y + origin.y + baseline_shift;
+                    layout->y = *y + origin.y + *baseline_shift;
 
                     graphene_rect_offset (&cbounds, *x, *y);
 
@@ -989,6 +1001,7 @@ do_generate_layouts (SvgElement            *self,
                     else
                       *x += cbounds.size.width;
                   }
+                while (*ch);
               }
 
             g_strfreev (lines);
@@ -998,6 +1011,9 @@ do_generate_layouts (SvgElement            *self,
           g_assert_not_reached ();
         }
     }
+
+  *baseline_shift = bl_shift;
+  ws_ctx->space = space;
 
 #undef ADD_BBOX
   return set_bounds;
@@ -1047,8 +1063,11 @@ generate_layouts (SvgElement            *shape,
   PangoContext *context;
   gboolean retval;
   WhiteSpaceContext ws_ctx;
+  double x0 = 0;
+  double y0 = 0;
   double x = 0;
   double y = 0;
+  double baseline_shift = 0;
   WritingMode wmode;
   TextAnchor anchor;
   float dx, dy;
@@ -1074,7 +1093,7 @@ generate_layouts (SvgElement            *shape,
 
   context = svg_element_get_pango_context (shape, get_fontmap (svg), wmode);
 
-  retval = do_generate_layouts (shape, context, &ws_ctx, wmode, &x, &y, NULL, viewport, bounds);
+  retval = do_generate_layouts (shape, context, &ws_ctx, wmode, &x0, &y0, &x, &y, &baseline_shift, NULL, viewport, bounds);
 
   strip_trailing_space (shape, &ws_ctx);
 

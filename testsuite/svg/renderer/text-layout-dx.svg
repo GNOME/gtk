@@ -1,0 +1,8 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <text x="20" y="20" white-space="preserve-breaks">
+    One
+    Two <tspan dx="10">2.5</tspan>
+    Three
+  </text>
+  <rect x='1' y='1' width='198' height='198' fill='none' stroke='black'/>
+</svg>
