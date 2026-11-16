@@ -7566,7 +7566,7 @@ gtk_text_compute_cursor_extents (GtkText         *self,
 
   layout = gtk_text_ensure_layout (self, TRUE);
   text = pango_layout_get_text (layout);
-  position = CLAMP (position, 0, g_utf8_strlen (text, -1));
+  position = MIN (position, g_utf8_strlen (text, -1));
   index = g_utf8_offset_to_pointer (text, position) - text;
 
   pango_layout_get_cursor_pos (layout, index,
@@ -7762,8 +7762,8 @@ gtk_text_accessible_text_get_contents (GtkAccessibleText *self,
   char *string;
   gsize size;
 
-  start = CLAMP (start, 0, len);
-  end = CLAMP (end, 0, len);
+  start = MIN (start, len);
+  end = MIN (end, len);
 
   if (end <= start)
     {
