@@ -147,8 +147,6 @@ tiff_io_seek (thandle_t handle,
       offset += io->size;
       break;
     }
-  if (offset < 0)
-    return -1;
 
   io->position = offset;
 
