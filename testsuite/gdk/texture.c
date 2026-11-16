@@ -460,6 +460,25 @@ test_texture_downloader (void)
   g_object_unref (texture);
 }
 
+static void
+test_texture_download_stride_overflow (void)
+{
+  const guint32 pixels[2] = { 0, 0 };
+  guchar data[8] = { 0 };
+  GdkTexture *texture;
+  GBytes *bytes;
+
+  bytes = g_bytes_new (pixels, sizeof pixels);
+  texture = gdk_memory_texture_new (1, 2, GDK_MEMORY_DEFAULT, bytes, 4);
+  g_bytes_unref (bytes);
+
+  g_test_expect_message ("Gdk", G_LOG_LEVEL_CRITICAL, "*size for plane*overflow*");
+  gdk_texture_download (texture, data, G_MAXSIZE);
+  g_test_assert_expected_messages ();
+
+  g_object_unref (texture);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -476,6 +495,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/texture/icon/serialize", test_texture_icon_serialize);
   g_test_add_func ("/texture/diff", test_texture_diff);
   g_test_add_func ("/texture/downloader", test_texture_downloader);
+  g_test_add_func ("/texture/download-stride-overflow", test_texture_download_stride_overflow);
 
   return g_test_run ();
 }
