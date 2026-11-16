@@ -45,6 +45,8 @@ typedef struct
 {
   PangoLayout *layout;
   double x, y, r;
+  double x0, y0;
+  TextAnchor anchor;
 } TextLayout;
 
 void text_layout_clear (TextLayout *self);
