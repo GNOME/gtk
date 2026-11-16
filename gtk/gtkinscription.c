@@ -1408,8 +1408,8 @@ gtk_inscription_accessible_text_get_contents (GtkAccessibleText *self,
   text = gtk_inscription_get_text (GTK_INSCRIPTION (self));
   len = g_utf8_strlen (text, -1);
 
-  start = CLAMP (start, 0, len);
-  end = CLAMP (end, 0, len);
+  start = MIN (start, len);
+  end = MIN (end, len);
 
   if (end <= start)
     {

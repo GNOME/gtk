@@ -761,7 +761,7 @@ gdk_dmabuf_texture_builder_get_fd (GdkDmabufTextureBuilder *self,
                                    unsigned int             plane)
 {
   g_return_val_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self), 0);
-  g_return_val_if_fail (0 <= plane && plane < GDK_DMABUF_MAX_PLANES, 0);
+  g_return_val_if_fail (plane < GDK_DMABUF_MAX_PLANES, 0);
 
   return self->dmabuf.planes[plane].fd;
 }
@@ -782,7 +782,7 @@ gdk_dmabuf_texture_builder_set_fd (GdkDmabufTextureBuilder *self,
                                    int                      fd)
 {
   g_return_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self));
-  g_return_if_fail (0 <= plane && plane < GDK_DMABUF_MAX_PLANES);
+  g_return_if_fail (plane < GDK_DMABUF_MAX_PLANES);
 
   if (self->dmabuf.planes[plane].fd == fd)
     return;
@@ -806,7 +806,7 @@ gdk_dmabuf_texture_builder_get_stride (GdkDmabufTextureBuilder *self,
                                        unsigned int             plane)
 {
   g_return_val_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self), 0);
-  g_return_val_if_fail (0 <= plane && plane < GDK_DMABUF_MAX_PLANES, 0);
+  g_return_val_if_fail (plane < GDK_DMABUF_MAX_PLANES, 0);
 
   return self->dmabuf.planes[plane].stride;
 }
@@ -829,7 +829,7 @@ gdk_dmabuf_texture_builder_set_stride (GdkDmabufTextureBuilder *self,
                                        unsigned int             stride)
 {
   g_return_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self));
-  g_return_if_fail (0 <= plane && plane < GDK_DMABUF_MAX_PLANES);
+  g_return_if_fail (plane < GDK_DMABUF_MAX_PLANES);
 
   if (self->dmabuf.planes[plane].stride == stride)
     return;
@@ -853,7 +853,7 @@ gdk_dmabuf_texture_builder_get_offset (GdkDmabufTextureBuilder *self,
                                        unsigned int             plane)
 {
   g_return_val_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self), 0);
-  g_return_val_if_fail (0 <= plane && plane < GDK_DMABUF_MAX_PLANES, 0);
+  g_return_val_if_fail (plane < GDK_DMABUF_MAX_PLANES, 0);
 
   return self->dmabuf.planes[plane].offset;
 }
@@ -874,7 +874,7 @@ gdk_dmabuf_texture_builder_set_offset (GdkDmabufTextureBuilder *self,
                                        unsigned int             offset)
 {
   g_return_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self));
-  g_return_if_fail (0 <= plane && plane < GDK_DMABUF_MAX_PLANES);
+  g_return_if_fail (plane < GDK_DMABUF_MAX_PLANES);
 
   if (self->dmabuf.planes[plane].offset == offset)
     return;
@@ -962,7 +962,7 @@ gdk_dmabuf_texture_builder_get_update_texture (GdkDmabufTextureBuilder *self)
  */
 void
 gdk_dmabuf_texture_builder_set_update_texture (GdkDmabufTextureBuilder *self,
-                                               GdkTexture          *texture)
+                                               GdkTexture              *texture)
 {
   g_return_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self));
   g_return_if_fail (texture == NULL || GDK_IS_TEXTURE (texture));
@@ -1012,7 +1012,7 @@ gdk_dmabuf_texture_builder_get_update_region (GdkDmabufTextureBuilder *self)
  */
 void
 gdk_dmabuf_texture_builder_set_update_region (GdkDmabufTextureBuilder *self,
-                                              cairo_region_t      *region)
+                                              cairo_region_t          *region)
 {
   g_return_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self));
 
@@ -1058,10 +1058,10 @@ gdk_dmabuf_texture_builder_set_update_region (GdkDmabufTextureBuilder *self,
  * Since: 4.14
  */
 GdkTexture *
-gdk_dmabuf_texture_builder_build (GdkDmabufTextureBuilder *self,
-                                  GDestroyNotify           destroy,
-                                  gpointer                 data,
-                                  GError                 **error)
+gdk_dmabuf_texture_builder_build (GdkDmabufTextureBuilder  *self,
+                                  GDestroyNotify            destroy,
+                                  gpointer                  data,
+                                  GError                  **error)
 {
   g_return_val_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self), NULL);
   g_return_val_if_fail (destroy == NULL || data != NULL, NULL);

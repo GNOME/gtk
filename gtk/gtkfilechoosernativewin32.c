@@ -619,11 +619,7 @@ filechooser_win32_thread (gpointer _data)
               g_object_unref (item);
             }
 	  g_object_unref (filters);
-
-	  if (current_filter_index >= 0)
-	    hr = IFileDialog_SetFileTypeIndex (pfd, current_filter_index + 1);
-	  else
-	    hr = IFileDialog_SetFileTypeIndex (pfd, 1);
+	  hr = IFileDialog_SetFileTypeIndex (pfd, current_filter_index + 1);
         }
       else
         {

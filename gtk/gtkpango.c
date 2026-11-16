@@ -747,8 +747,6 @@ gtk_pango_get_run_attributes (PangoLayout     *layout,
   /* If offset out of range, set offset in range */
   if (offset > len)
     offset = len;
-  else if (offset < 0)
-    offset = 0;
 
   names = g_ptr_array_new_null_terminated (16, g_free, TRUE);
   values = g_ptr_array_new_null_terminated (16, g_free, TRUE);

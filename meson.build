@@ -352,6 +352,9 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     '-Wold-style-definition',
     '-Wpointer-arith',
     '-Wshadow',
+    '-Wshift-count-overflow',
+    '-Wshift-negative-value',
+    '-Wshift-overflow',
     '-Wstrict-prototypes',
     '-Wswitch-default',
     '-Wswitch-enum',
@@ -398,11 +401,17 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
   endif
 
   if cc.get_id() == 'gcc'
-    test_cflags += ['-Wcast-align'] # This warns too much on clang
+    test_cflags += [
+      '-Wcast-align', # This warns too much on clang
+      '-Wshift-overflow=2',
+    ]
   endif
 
   if cc.get_id() == 'clang'
-    test_cflags += ['-Wno-error=unused-but-set-global']
+    test_cflags += [
+      '-Wno-error=unused-but-set-global',
+      '-Wshift-sign-overflow',
+    ]
   endif
 
   if not gtk_debug_cflags.contains('-DG_DISABLE_ASSERT')
