@@ -203,6 +203,20 @@
 -(NSRange)selectedRange
 {
   GDK_DEBUG (EVENTS, "selectedRange");
+
+  if (![self hasMarkedText])
+    {
+      guint cursor_pos = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT ([self gdkSurface]),
+                                                              TIC_CURSOR_POS));
+
+      /* Report the real cursor position, so that input methods can
+       * refer to text before it (e.g. the press-and-hold accent menu
+       * replaces the letter that was typed when the key went down).
+       */
+      if (cursor_pos > 0)
+        return NSMakeRange (cursor_pos - 1, 0);
+    }
+
   return selectedRange;
 }
 
@@ -277,7 +291,34 @@
   GDK_DEBUG (EVENTS, "insertText");
 
   if ([self hasMarkedText])
-    [self unmarkText];
+    {
+      [self unmarkText];
+    }
+  else
+    {
+      guint cursor_pos = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT ([self gdkSurface]),
+                                                              TIC_CURSOR_POS));
+
+      if (cursor_pos > 0 &&
+          replacementRange.location != NSNotFound &&
+          replacementRange.length > 0)
+        {
+          g_object_set_data (G_OBJECT ([self gdkSurface]),
+                             TIC_REPLACE_OFFSET,
+                             GINT_TO_POINTER ((int)replacementRange.location - (int)(cursor_pos - 1)));
+          g_object_set_data (G_OBJECT ([self gdkSurface]),
+                             TIC_REPLACE_LEN,
+                             GUINT_TO_POINTER (replacementRange.length));
+          cursor_pos = replacementRange.location + 1;
+        }
+
+      /* The text is committed only after -keyDown: returns, but input
+       * methods may ask for the cursor position before that. */
+      if (cursor_pos > 0)
+        g_object_set_data (G_OBJECT ([self gdkSurface]),
+                           TIC_CURSOR_POS,
+                           GUINT_TO_POINTER (cursor_pos + [(NSString *)([aString isKindOfClass: [NSAttributedString class]] ? [aString string] : aString) length]));
+    }
 
   if ([aString isKindOfClass: [NSAttributedString class]])
     string = [aString string];
