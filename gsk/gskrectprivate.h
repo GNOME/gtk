@@ -468,17 +468,27 @@ gsk_rect_is_integral (const graphene_rect_t *rect)
          isintegralf (rect->size.height);
 }
 
+static inline gboolean
+gsk_rect_fits_cairo_int (float value)
+{
+  return (double) value >= G_MININT && (double) value <= G_MAXINT;
+}
+
 static inline gboolean G_GNUC_WARN_UNUSED_RESULT
 gsk_rect_to_cairo_exact (const graphene_rect_t *graphene,
                          cairo_rectangle_int_t *cairo)
 {
-  if (!gsk_rect_is_integral (graphene))
+  if (!gsk_rect_is_integral (graphene) ||
+      !gsk_rect_fits_cairo_int (graphene->origin.x) ||
+      !gsk_rect_fits_cairo_int (graphene->origin.y) ||
+      !gsk_rect_fits_cairo_int (graphene->size.width) ||
+      !gsk_rect_fits_cairo_int (graphene->size.height))
     return FALSE;
 
-  cairo->x = graphene->origin.x;
-  cairo->y = graphene->origin.y;
-  cairo->width = graphene->size.width;
-  cairo->height = graphene->size.height;
+  cairo->x = (int) graphene->origin.x;
+  cairo->y = (int) graphene->origin.y;
+  cairo->width = (int) graphene->size.width;
+  cairo->height = (int) graphene->size.height;
 
   return TRUE;
 }
@@ -487,12 +497,27 @@ static inline gboolean G_GNUC_WARN_UNUSED_RESULT
 gsk_rect_to_cairo_shrink (const graphene_rect_t *graphene,
                           cairo_rectangle_int_t *cairo)
 {
-  cairo->x = ceilf (graphene->origin.x);
-  cairo->y = ceilf (graphene->origin.y);
-  cairo->width = floorf (graphene->origin.x + graphene->size.width) - cairo->x;
-  cairo->height = floorf (graphene->origin.y + graphene->size.height) - cairo->y;
+  float x = ceilf (graphene->origin.x);
+  float y = ceilf (graphene->origin.y);
+  float width;
+  float height;
 
-  return cairo->width > 0 && cairo->height > 0;
+  if (!gsk_rect_fits_cairo_int (x) || !gsk_rect_fits_cairo_int (y))
+    return FALSE;
+
+  cairo->x = (int) x;
+  cairo->y = (int) y;
+  width = floorf (graphene->origin.x + graphene->size.width) - (float) cairo->x;
+  height = floorf (graphene->origin.y + graphene->size.height) - (float) cairo->y;
+
+  if (!(width > 0 && (double) width <= G_MAXINT &&
+        height > 0 && (double) height <= G_MAXINT))
+    return FALSE;
+
+  cairo->width = (int) width;
+  cairo->height = (int) height;
+
+  return TRUE;
 }
 
 static inline gboolean

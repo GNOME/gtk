@@ -167,6 +167,35 @@ test_my_subtract (void)
     }
 }
 
+static void
+test_cairo_int_range (void)
+{
+  cairo_rectangle_int_t cairo;
+  graphene_rect_t rect;
+
+  rect = GRAPHENE_RECT_INIT (1, 2, 3, 4);
+  g_assert_true (gsk_rect_to_cairo_exact (&rect, &cairo));
+  g_assert_cmpint (cairo.x, ==, 1);
+  g_assert_cmpint (cairo.y, ==, 2);
+  g_assert_cmpint (cairo.width, ==, 3);
+  g_assert_cmpint (cairo.height, ==, 4);
+
+  rect = GRAPHENE_RECT_INIT (0x1p31f, 0, 1, 1);
+  g_assert_false (gsk_rect_to_cairo_exact (&rect, &cairo));
+  g_assert_false (gsk_rect_to_cairo_shrink (&rect, &cairo));
+
+  rect = GRAPHENE_RECT_INIT (0, 0, 0x1p31f, 1);
+  g_assert_false (gsk_rect_to_cairo_exact (&rect, &cairo));
+  g_assert_false (gsk_rect_to_cairo_shrink (&rect, &cairo));
+
+  rect = GRAPHENE_RECT_INIT (1.25f, 2.25f, 3.75f, 4.75f);
+  g_assert_true (gsk_rect_to_cairo_shrink (&rect, &cairo));
+  g_assert_cmpint (cairo.x, ==, 2);
+  g_assert_cmpint (cairo.y, ==, 3);
+  g_assert_cmpint (cairo.width, ==, 3);
+  g_assert_cmpint (cairo.height, ==, 4);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -175,6 +204,7 @@ main (int   argc,
 
   g_test_add_func ("/rect/subtract", test_subtract);
   g_test_add_func ("/rect/my_subtract", test_my_subtract);
+  g_test_add_func ("/rect/cairo-int-range", test_cairo_int_range);
 
   return g_test_run ();
 }
