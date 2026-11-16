@@ -279,7 +279,7 @@ gsk_path_measure_get_point (GskPathMeasure *self,
       distance -= self->measures[i].length;
     }
 
-  g_assert (0 <= i && i < self->n_contours);
+  g_assert (i < self->n_contours);
 
   distance = CLAMP (distance, 0, self->measures[i].length);
 
