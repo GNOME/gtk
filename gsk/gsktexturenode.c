@@ -68,8 +68,8 @@ gsk_texture_node_draw_oversized (GskRenderNode *node,
   cairo_surface_t *surface;
   int x, y, width, height;
   GdkTextureDownloader downloader;
-  GBytes *bytes;
-  const guchar *data;
+  GdkMemoryLayout layout;
+  guchar *data;
   gsize stride;
   graphene_rect_t bounds;
 
@@ -78,18 +78,28 @@ gsk_texture_node_draw_oversized (GskRenderNode *node,
 
   width = gdk_texture_get_width (self->texture);
   height = gdk_texture_get_height (self->texture);
+
+  if (!gdk_memory_layout_try_init (&layout, GDK_MEMORY_DEFAULT, (gsize) width, (gsize) height, 1))
+    {
+      g_warning ("Texture dimensions %d × %d exceed the supported download size", width, height);
+      return;
+    }
+
+  stride = layout.planes[0].stride;
+  data = g_try_malloc (layout.size);
+
+  if (data == NULL)
+    {
+      g_warning ("Failed to allocate %" G_GSIZE_FORMAT " bytes for texture download", layout.size);
+      return;
+    }
+
   gdk_texture_downloader_init (&downloader, self->texture);
   gdk_texture_downloader_set_format (&downloader, GDK_MEMORY_DEFAULT);
-  bytes = gdk_texture_downloader_download_bytes (&downloader, &stride);
+  gdk_texture_downloader_download_into (&downloader, data, stride);
   gdk_texture_downloader_finish (&downloader);
-  data = g_bytes_get_data (bytes, NULL);
-  gdk_memory_convert_color_state ((guchar *) data,
-                                  &GDK_MEMORY_LAYOUT_SIMPLE (
-                                      GDK_MEMORY_DEFAULT,
-                                      stride,
-                                      width,
-                                      height
-                                  ),
+  gdk_memory_convert_color_state (data,
+                                  &layout,
                                   GDK_COLOR_STATE_SRGB,
                                   ccs);
 
@@ -112,7 +122,7 @@ gsk_texture_node_draw_oversized (GskRenderNode *node,
       for (y = 0; y < height; y += MAX_CAIRO_IMAGE_HEIGHT)
         {
           int tile_height = MIN (MAX_CAIRO_IMAGE_HEIGHT, height - y);
-          surface = cairo_image_surface_create_for_data ((guchar *) data + stride * y + 4 * x,
+          surface = cairo_image_surface_create_for_data (data + stride * y + 4 * x,
                                                          CAIRO_FORMAT_ARGB32,
                                                          tile_width, tile_height,
                                                          stride);
@@ -129,6 +139,7 @@ gsk_texture_node_draw_oversized (GskRenderNode *node,
 
   cairo_pop_group_to_source (cr);
   cairo_paint (cr);
+  g_free (data);
 }
 
 static void
