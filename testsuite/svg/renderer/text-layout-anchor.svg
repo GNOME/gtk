@@ -1,0 +1,7 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <path d="m 100,0 0,150" style="fill:none;stroke:#add8e6"/>
+  <text x="100 100 100" y="50 95 140"
+        style="font-size: 42px; text-anchor: middle">I❤SVG</text>
+
+  <rect x='1' y='1' width='198' height='198' fill='none' stroke='black'/>
+</svg>

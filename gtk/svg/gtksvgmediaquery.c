@@ -206,8 +206,6 @@ parse_media_feature (GtkCssParser *parser)
   return NULL;
 }
 
-static SvgCssMediaCondition * parse_media_condition (GtkCssParser *parser);
-
 static SvgCssMediaCondition *
 parse_media_in_parens (GtkCssParser *parser)
 {
@@ -232,7 +230,7 @@ parse_media_in_parens (GtkCssParser *parser)
   return condition;
 }
 
-static SvgCssMediaCondition *
+SvgCssMediaCondition *
 parse_media_condition (GtkCssParser *parser)
 {
   SvgCssMediaCondition *condition;

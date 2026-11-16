@@ -45,8 +45,4 @@ GskRenderNode * gtk_svg_apply_filter  (GtkSvg                *self,
                                        const graphene_rect_t *bounds,
                                        GskRenderNode         *node);
 
-void            ensure_valid_text_bounds (SvgElement            *shape,
-                                          GtkSvg                *self,
-                                          const graphene_rect_t *viewport);
-
 G_END_DECLS

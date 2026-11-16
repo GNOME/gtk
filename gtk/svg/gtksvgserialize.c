@@ -46,6 +46,7 @@
 #include "gtksvggpaprivate.h"
 #include "gtksvgtimespecprivate.h"
 #include "gtksvgparserprivate.h"
+#include "gtksvgenumprivate.h"
 
 #include <stdint.h>
 

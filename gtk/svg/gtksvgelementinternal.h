@@ -45,9 +45,11 @@ typedef struct
 {
   PangoLayout *layout;
   double x, y, r;
-} TextChunk;
+  double x0, y0;
+  TextAnchor anchor;
+} TextLayout;
 
-void text_chunk_clear (TextChunk *self);
+void text_layout_clear (TextLayout *self);
 
 typedef struct
 {
@@ -60,7 +62,7 @@ typedef struct
     } shape;
     struct {
       char *text;
-      GArray *chunks;
+      GArray *layouts;
     } characters;
   };
 } TextNode;

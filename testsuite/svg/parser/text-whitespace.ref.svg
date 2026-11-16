@@ -1,0 +1,22 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        viewBox='0 0 100 100'>
+  <text
+          white-space='normal'
+          x='20'
+          y='20'>
+    abc
+    
+    <tspan
+            white-space='normal'>def</tspan>
+    ghi
+    
+    <tspan
+            white-space='preserve-spaces'>jk  l </tspan>
+    
+    <tspan
+            white-space='pre'>m
+n</tspan>
+  </text>
+</svg>

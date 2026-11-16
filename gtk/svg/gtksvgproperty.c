@@ -491,6 +491,32 @@ number_is_positive_or_auto (const SvgValue *value)
          svg_value_is_positive_number (value);
 }
 
+static SvgValue *
+parse_space (const char  *text,
+             GError     **error)
+{
+  /* Quitely accept the xml:space values here */
+  if (strcmp (text, "default") == 0)
+    return svg_white_space_new (WHITE_SPACE_NORMAL);
+  else if (strcmp (text, "preserve") == 0)
+    return svg_white_space_new (WHITE_SPACE_PRESERVE_SPACES);
+  else
+    {
+      GtkCssParser *parser;
+      SvgValue *result;
+
+      parser = parser_new_for_string (text);
+      result = svg_white_space_parse (parser);
+      gtk_css_parser_unref (parser);
+
+      if (!result)
+        g_set_error (error,
+                     GTK_SVG_ERROR, GTK_SVG_ERROR_INVALID_ATTRIBUTE,
+                     "Value is not valid");
+      return result;
+    }
+}
+
 typedef enum
 {
   SVG_PROPERTY_IS_INHERITED     = 1 << 0,
@@ -514,7 +540,7 @@ typedef struct
   (BIT (SVG_ELEMENT_CIRCLE) | BIT (SVG_ELEMENT_ELLIPSE) | BIT (SVG_ELEMENT_IMAGE) | \
    BIT (SVG_ELEMENT_LINE) | BIT (SVG_ELEMENT_PATH) | BIT (SVG_ELEMENT_POLYGON) | \
    BIT (SVG_ELEMENT_POLYLINE) | BIT (SVG_ELEMENT_RECT) | BIT (SVG_ELEMENT_TEXT) | \
-   BIT (SVG_ELEMENT_TSPAN) | \
+   BIT (SVG_ELEMENT_TEXT_SPAN) | \
    BIT (SVG_ELEMENT_CLIP_PATH) | BIT (SVG_ELEMENT_DEFS) | BIT (SVG_ELEMENT_GROUP) | \
    BIT (SVG_ELEMENT_MARKER) | BIT (SVG_ELEMENT_MASK) | BIT (SVG_ELEMENT_PATTERN) | \
    BIT (SVG_ELEMENT_SVG) | BIT (SVG_ELEMENT_SYMBOL) | \
@@ -527,7 +553,7 @@ typedef struct
    BIT (SVG_ELEMENT_PATH) | BIT (SVG_ELEMENT_POLYGON) | BIT (SVG_ELEMENT_POLYLINE) | \
    BIT (SVG_ELEMENT_RECT))
 
-#define ELEMENT_TEXTS (BIT (SVG_ELEMENT_TEXT) | BIT (SVG_ELEMENT_TSPAN))
+#define ELEMENT_TEXTS (BIT (SVG_ELEMENT_TEXT) | BIT (SVG_ELEMENT_TEXT_SPAN))
 
 #define ELEMENT_GRAPHICS (ELEMENT_SHAPES | ELEMENT_TEXTS | BIT (SVG_ELEMENT_IMAGE))
 
@@ -570,15 +596,15 @@ static SvgPropertyInfo shape_attrs[] = {
     .parse_value = svg_visibility_parse,
   },
   [SVG_PROPERTY_TRANSFORM] = {
-    .applies_to = (ELEMENT_PAINT_SERVERS | BIT (SVG_ELEMENT_CLIP_PATH) | ELEMENT_RENDERABLE) & ~BIT (SVG_ELEMENT_TSPAN),
+    .applies_to = (ELEMENT_PAINT_SERVERS | BIT (SVG_ELEMENT_CLIP_PATH) | ELEMENT_RENDERABLE) & ~BIT (SVG_ELEMENT_TEXT_SPAN),
     .parse_value = svg_transform_parse_css,
   },
   [SVG_PROPERTY_TRANSFORM_ORIGIN] = {
-    .applies_to = (ELEMENT_PAINT_SERVERS | BIT (SVG_ELEMENT_CLIP_PATH) | ELEMENT_RENDERABLE) & ~BIT (SVG_ELEMENT_TSPAN),
+    .applies_to = (ELEMENT_PAINT_SERVERS | BIT (SVG_ELEMENT_CLIP_PATH) | ELEMENT_RENDERABLE) & ~BIT (SVG_ELEMENT_TEXT_SPAN),
     .parse_value = parse_transform_origin,
   },
   [SVG_PROPERTY_TRANSFORM_BOX] = {
-    .applies_to = (ELEMENT_PAINT_SERVERS | BIT (SVG_ELEMENT_CLIP_PATH) | ELEMENT_RENDERABLE) & ~BIT (SVG_ELEMENT_TSPAN),
+    .applies_to = (ELEMENT_PAINT_SERVERS | BIT (SVG_ELEMENT_CLIP_PATH) | ELEMENT_RENDERABLE) & ~BIT (SVG_ELEMENT_TEXT_SPAN),
     .parse_value = svg_transform_box_parse,
   },
   [SVG_PROPERTY_OPACITY] = {
@@ -912,9 +938,10 @@ static SvgPropertyInfo shape_attrs[] = {
     .parse_value = svg_orient_parse,
   },
   [SVG_PROPERTY_SPACE] = {
-    .flags = SVG_PROPERTY_IS_INHERITED | SVG_PROPERTY_IS_DISCRETE | SVG_PROPERTY_NO_CSS,
+    .flags = SVG_PROPERTY_IS_INHERITED | SVG_PROPERTY_IS_DISCRETE,
     .applies_to = ELEMENT_ANY,
-    .parse_value = svg_xml_space_parse,
+    .parse_value = svg_white_space_parse,
+    .parse_presentation = parse_space,
   },
   [SVG_PROPERTY_LANG] = {
     .flags = SVG_PROPERTY_IS_INHERITED | SVG_PROPERTY_IS_DISCRETE | SVG_PROPERTY_NO_CSS,
@@ -1252,7 +1279,7 @@ static void
 shape_attrs_init_default_values (void)
 {
   shape_attrs[SVG_PROPERTY_LANG].initial_value = svg_language_new_default ();
-  shape_attrs[SVG_PROPERTY_SPACE].initial_value = svg_xml_space_new (XML_SPACE_DEFAULT);
+  shape_attrs[SVG_PROPERTY_SPACE].initial_value = svg_white_space_new (WHITE_SPACE_NORMAL);
   shape_attrs[SVG_PROPERTY_DISPLAY].initial_value = svg_display_new (DISPLAY_INLINE);
   shape_attrs[SVG_PROPERTY_VISIBILITY].initial_value = svg_visibility_new (VISIBILITY_VISIBLE);
   shape_attrs[SVG_PROPERTY_FONT_SIZE].initial_value = svg_font_size_new (FONT_SIZE_MEDIUM);
@@ -1463,7 +1490,7 @@ svg_property_ref_initial_value (SvgProperty    attr,
     {
       if (shape_type == SVG_ELEMENT_TEXT)
         return svg_numbers_new1 (0);
-      else if (shape_type == SVG_ELEMENT_TSPAN)
+      else if (shape_type == SVG_ELEMENT_TEXT_SPAN)
         return svg_numbers_new_none ();
     }
 
@@ -1491,11 +1518,11 @@ static SvgPropertyLookup shape_attr_lookups[] = {
   { "display", ELEMENT_ANY, 0, SVG_PROPERTY_DISPLAY },
   { "visibility", ELEMENT_ANY, 0, SVG_PROPERTY_VISIBILITY },
   { "font-size", ELEMENT_ANY, 0, SVG_PROPERTY_FONT_SIZE },
-  { "transform", ((ELEMENT_PAINT_SERVERS | BIT (SVG_ELEMENT_CLIP_PATH) | ELEMENT_RENDERABLE) & ~BIT (SVG_ELEMENT_TSPAN)) & ~ELEMENT_PAINT_SERVERS, 0, SVG_PROPERTY_TRANSFORM },
+  { "transform", ((ELEMENT_PAINT_SERVERS | BIT (SVG_ELEMENT_CLIP_PATH) | ELEMENT_RENDERABLE) & ~BIT (SVG_ELEMENT_TEXT_SPAN)) & ~ELEMENT_PAINT_SERVERS, 0, SVG_PROPERTY_TRANSFORM },
   { "gradientTransform", ELEMENT_GRADIENTS, 0, SVG_PROPERTY_TRANSFORM },
   { "patternTransform", BIT (SVG_ELEMENT_PATTERN), 0, SVG_PROPERTY_TRANSFORM },
-  { "transform-origin", ((ELEMENT_PAINT_SERVERS | BIT (SVG_ELEMENT_CLIP_PATH) | ELEMENT_RENDERABLE) & ~BIT (SVG_ELEMENT_TSPAN)), 0, SVG_PROPERTY_TRANSFORM_ORIGIN },
-  { "transform-box", ((ELEMENT_PAINT_SERVERS | BIT (SVG_ELEMENT_CLIP_PATH) | ELEMENT_RENDERABLE) & ~BIT (SVG_ELEMENT_TSPAN)), 0, SVG_PROPERTY_TRANSFORM_BOX },
+  { "transform-origin", ((ELEMENT_PAINT_SERVERS | BIT (SVG_ELEMENT_CLIP_PATH) | ELEMENT_RENDERABLE) & ~BIT (SVG_ELEMENT_TEXT_SPAN)), 0, SVG_PROPERTY_TRANSFORM_ORIGIN },
+  { "transform-box", ((ELEMENT_PAINT_SERVERS | BIT (SVG_ELEMENT_CLIP_PATH) | ELEMENT_RENDERABLE) & ~BIT (SVG_ELEMENT_TEXT_SPAN)), 0, SVG_PROPERTY_TRANSFORM_BOX },
   { "opacity", ELEMENT_ANY, 0, SVG_PROPERTY_OPACITY },
   { "color", ELEMENT_ANY, 0, SVG_PROPERTY_COLOR },
   { "color-interpolation", ELEMENT_CONTAINERS | ELEMENT_GRAPHICS | ELEMENT_GRADIENTS | SVG_ELEMENT_USE, 0, SVG_PROPERTY_COLOR_INTERPOLATION },
@@ -1580,6 +1607,7 @@ static SvgPropertyLookup shape_attr_lookups[] = {
   { "refY", BIT (SVG_ELEMENT_MARKER), 0, SVG_PROPERTY_REF_Y },
   { "markerUnits", BIT (SVG_ELEMENT_MARKER), 0, SVG_PROPERTY_MARKER_UNITS },
   { "orient", BIT (SVG_ELEMENT_MARKER), 0, SVG_PROPERTY_MARKER_ORIENT },
+  { "white-space", ELEMENT_ANY, 0, SVG_PROPERTY_SPACE },
   { "xml:space", ELEMENT_ANY, 0, SVG_PROPERTY_SPACE },
   { "lang", ELEMENT_ANY, 0, SVG_PROPERTY_LANG },
   { "xml:lang", ELEMENT_ANY, 0, SVG_PROPERTY_LANG },

@@ -43,9 +43,12 @@
 #include "gtksvgclipprivate.h"
 #include "gtksvgmaskprivate.h"
 #include "gtksvgfilterprivate.h"
+#include "gtksvgrendererprivate.h"
+#include "gtksvgtextprivate.h"
 #include "gtkmain.h"
 #include "gsk/gskpathprivate.h"
 #include "gsk/gskrectprivate.h"
+#include "gsk/gskroundedrectprivate.h"
 
 #define CLONE_LIMIT 15000
 
@@ -70,7 +73,7 @@ svg_element_changed (SvgElement *self,
   g_signal_emit (self, changed_signal, 0, attr);
 }
 
-static GParamSpec *svg_element_prop[NUM_PROPERTIES];
+static GParamSpec *svg_element_prop[SVG_ELEMENT_NUM_PROPERTIES];
 
 G_DEFINE_TYPE (SvgElement, svg_element, G_TYPE_OBJECT)
 
@@ -203,7 +206,7 @@ text_node_clear (TextNode *self)
       // shape node not owned
       break;
     case TEXT_NODE_CHARACTERS:
-      g_clear_pointer (&self->characters.chunks, g_array_unref);
+      g_clear_pointer (&self->characters.layouts, g_array_unref);
       g_free (self->characters.text);
       break;
     default:
@@ -212,7 +215,7 @@ text_node_clear (TextNode *self)
 }
 
 void
-text_chunk_clear (TextChunk *self)
+text_layout_clear (TextLayout *self)
 {
   g_clear_object (&self->layout);
 }
@@ -843,7 +846,7 @@ svg_element_get_path (SvgElement            *element,
     case SVG_ELEMENT_PATTERN:
     case SVG_ELEMENT_MARKER:
     case SVG_ELEMENT_TEXT:
-    case SVG_ELEMENT_TSPAN:
+    case SVG_ELEMENT_TEXT_SPAN:
     case SVG_ELEMENT_SVG:
     case SVG_ELEMENT_IMAGE:
     case SVG_ELEMENT_FILTER:
@@ -945,7 +948,7 @@ svg_element_get_current_path (SvgElement            *element,
         case SVG_ELEMENT_PATTERN:
         case SVG_ELEMENT_MARKER:
         case SVG_ELEMENT_TEXT:
-        case SVG_ELEMENT_TSPAN:
+        case SVG_ELEMENT_TEXT_SPAN:
         case SVG_ELEMENT_SVG:
         case SVG_ELEMENT_IMAGE:
         case SVG_ELEMENT_FILTER:
@@ -1018,7 +1021,7 @@ svg_element_get_current_path (SvgElement            *element,
         case SVG_ELEMENT_PATTERN:
         case SVG_ELEMENT_MARKER:
         case SVG_ELEMENT_TEXT:
-        case SVG_ELEMENT_TSPAN:
+        case SVG_ELEMENT_TEXT_SPAN:
         case SVG_ELEMENT_SVG:
         case SVG_ELEMENT_IMAGE:
         case SVG_ELEMENT_FILTER:
@@ -1205,7 +1208,7 @@ svg_element_get_current_bounds (SvgElement            *element,
       ret = TRUE;
       break;
     case SVG_ELEMENT_TEXT:
-    case SVG_ELEMENT_TSPAN:
+    case SVG_ELEMENT_TEXT_SPAN:
       {
         SvgElement *elt = element;
         while (svg_element_get_element_type (elt) != SVG_ELEMENT_TEXT)
@@ -1394,7 +1397,7 @@ svg_element_get_current_stroke_bounds (SvgElement            *element,
       ret = TRUE;
       break;
     case SVG_ELEMENT_TEXT:
-    case SVG_ELEMENT_TSPAN:
+    case SVG_ELEMENT_TEXT_SPAN:
       if (!element->valid_bounds)
         g_critical ("No valid bounds for text");
       graphene_rect_init_from_rect (&b, &element->bounds);
@@ -1457,7 +1460,9 @@ svg_element_insert_after (SvgElement *element,
                           SvgElement *child,
                           SvgElement *sibling)
 {
-  g_assert (svg_element_type_is_container (element->type) || element->type == SVG_ELEMENT_USE);
+  g_assert ((svg_element_type_is_text_child (child->type) && svg_element_type_is_text (element->type)) ||
+            (!svg_element_type_is_text_child (child->type) &&
+              (svg_element_type_is_container (element->type) || element->type == SVG_ELEMENT_USE)));
   g_assert (sibling == NULL || sibling->parent == element);
 
   child->parent = element;
@@ -1491,7 +1496,7 @@ svg_element_insert_after (SvgElement *element,
                              child->css_node,
                              sibling ? sibling->css_node : NULL);
 
-  if (child->type == SVG_ELEMENT_TSPAN)
+  if (child->type == SVG_ELEMENT_TEXT_SPAN)
     {
       SvgElement *text_parent = NULL;
 
@@ -3070,7 +3075,7 @@ svg_element_clone (SvgElement        *element,
             case TEXT_NODE_CHARACTERS:
               tn.type = TEXT_NODE_CHARACTERS;
               tn.characters.text = g_strdup (t->characters.text);
-              tn.characters.chunks = NULL;
+              tn.characters.layouts = NULL;
               break;
             case TEXT_NODE_SHAPE:
               tn.type = TEXT_NODE_SHAPE;
