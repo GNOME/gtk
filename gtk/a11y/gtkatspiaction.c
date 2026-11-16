@@ -1028,6 +1028,8 @@ widget_handle_get_property (GDBusConnection  *connection,
     g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
                  "Unknown property '%s'", property_name);
 
+  g_strfreev (actions);
+
   return res;
 }
 
