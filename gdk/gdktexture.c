@@ -1023,18 +1023,20 @@ gdk_texture_download (GdkTexture *texture,
                       guchar     *data,
                       gsize       stride)
 {
+  GdkMemoryLayout layout;
+
   g_return_if_fail (GDK_IS_TEXTURE (texture));
   g_return_if_fail (data != NULL);
-  g_return_if_fail (stride >= gdk_texture_get_width (texture) * 4);
+
+  layout = GDK_MEMORY_LAYOUT_SIMPLE (GDK_MEMORY_DEFAULT,
+                                     texture->width,
+                                     texture->height,
+                                     stride);
+  gdk_memory_layout_return_if_invalid (&layout);
 
   gdk_texture_do_download (texture,
                            data,
-                           &GDK_MEMORY_LAYOUT_SIMPLE (
-                              GDK_MEMORY_DEFAULT,
-                              texture->width,
-                              texture->height,
-                              stride
-                           ),
+                           &layout,
                            GDK_COLOR_STATE_SRGB);
 }
 
