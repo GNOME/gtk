@@ -100,6 +100,8 @@ compare_render_tests = [
   'css-background',
   'dihedral',
   'dihedral-f',
+  'displacement',
+  'displacement2',
   'dmabuf-mipmap',
   'empty-blend',
   'empty-blur',
