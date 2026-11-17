@@ -169,6 +169,7 @@ test_data = [
   'symbolic-rendering-1.test',
   'symbolic-rendering-2.test',
   'text-align-01-b.svg',
+  'text-bounding-box.svg',
   'text-decorations-galore.svg',
   'text-dominant-baseline-01.svg',
   'text-fonts-02-t.svg',
