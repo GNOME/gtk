@@ -3012,7 +3012,7 @@ static void
 gsk_gpu_node_processor_add_displacement_node (GskGpuRenderPass *self,
                                               GskRenderNode    *node)
 {
-  graphene_rect_t bounds, child_bounds, displacement_rect, child_rect;
+  graphene_rect_t clip, bounds, child_bounds, displacement_rect, child_rect;
   GskRenderNode *displacement_child, *child;
   GskGpuImage *displacement_image, *child_image;
   GskGpuSampler displacement_sampler, child_sampler;
@@ -3021,9 +3021,10 @@ gsk_gpu_node_processor_add_displacement_node (GskGpuRenderPass *self,
   const graphene_point_t *offset;
 
   if (!gsk_gpu_node_processor_clip_bounds (self,
-                                           &node->bounds,
+                                           gsk_displacement_node_get_clip (node),
                                            gsk_displacement_node_get_snap (node),
-                                           &bounds))
+                                           &clip) ||
+      !gsk_rect_snap_to_grid_grow (&clip, &self->scale, &self->offset, &bounds))
     return;
 
   displacement_child = gsk_displacement_node_get_displacement (node);

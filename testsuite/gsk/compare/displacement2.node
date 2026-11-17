@@ -4,7 +4,7 @@ color {
 }
 
 displacement {
-  bounds: 0 0 100 100;
+  clip: 0 0 100 100;
   channels: red green;
   scale: 20 20;
   max: 20 20;

@@ -4676,7 +4676,7 @@ parse_displacement_node (GtkCssParser *parser,
                          Context      *context)
 {
   GskRenderNode *child = NULL, *displacement = NULL;
-  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
+  graphene_rect_t clip = GRAPHENE_RECT_INIT (0, 0, 50, 50);
   GskRectSnap snap = GSK_RECT_SNAP_NONE;
   GdkColorChannel channels[2] = { GDK_COLOR_CHANNEL_RED, GDK_COLOR_CHANNEL_GREEN };
   graphene_size_t max = { 5, 5 };
@@ -4684,7 +4684,7 @@ parse_displacement_node (GtkCssParser *parser,
   /* using size_t because parse function */
   graphene_size_t offset = { 0.5, 0.5 };
   const Declaration declarations[] = {
-    { "bounds", parse_rect, NULL, &bounds },
+    { "clip", parse_rect, NULL, &clip },
     { "snap", parse_rect_snap, NULL, &snap },
     { "child", parse_node, clear_node, &child },
     { "displacement", parse_node, clear_node, &displacement },
@@ -4701,7 +4701,7 @@ parse_displacement_node (GtkCssParser *parser,
   if (displacement == NULL)
     displacement = create_default_render_node ();
 
-  result = gsk_displacement_node_new (&bounds,
+  result = gsk_displacement_node_new (&clip,
                                       snap,
                                       child,
                                       displacement,
@@ -7466,7 +7466,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         scale = gsk_displacement_node_get_scale (node);
         offset = gsk_displacement_node_get_offset (node);
         start_node (p, "displacement", node_name);
-        append_rect_param (p, "bounds", &node->bounds);
+        append_rect_param (p, "clip", gsk_displacement_node_get_clip (node));
         append_snap_param (p, "snap", gsk_displacement_node_get_snap (node));
         append_node_param (p, "child", gsk_displacement_node_get_child (node));
         append_node_param (p, "displacement", gsk_displacement_node_get_displacement (node));

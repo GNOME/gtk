@@ -55,6 +55,7 @@ struct _GskDisplacementNode
   graphene_size_t scale;
   graphene_point_t offset;
   GskRectSnap snap;
+  graphene_rect_t clip;
 };
 
 static void
@@ -191,7 +192,7 @@ gsk_displacement_node_draw (GskRenderNode *node,
   cairo_t *cr2;
   graphene_rect_t bounds, child_bounds;
 
-  if (!gsk_cairo_rect_snap (cr, &node->bounds, self->snap, &bounds))
+  if (!gsk_cairo_rect_snap (cr, &self->clip, self->snap, &bounds))
     return;
 
   gdk_cairo_rect (cr, &bounds);
@@ -270,6 +271,7 @@ gsk_displacement_node_diff (GskRenderNode *node1,
 
   if (!gsk_rect_equal (&node1->bounds, &node2->bounds) ||
       self1->snap != self2->snap ||
+      !gsk_rect_equal (&self1->clip, &self2->clip) ||
       self1->channels[0] != self2->channels[0] ||
       self1->channels[1] != self2->channels[1] ||
       !graphene_size_equal (&self1->max, &self2->max) ||
@@ -324,7 +326,7 @@ gsk_displacement_node_replay (GskRenderNode   *node,
     }
   else
     {
-      result = gsk_displacement_node_new (&node->bounds,
+      result = gsk_displacement_node_new (&self->clip,
                                           self->snap,
                                           child,
                                           displacement,
@@ -379,12 +381,12 @@ GSK_DEFINE_RENDER_NODE_TYPE (GskDisplacementNode, gsk_displacement_node)
 
 /*< private >
  * gsk_displacement_node_new:
- * @bounds: The rectangle to apply to
+ * @clip: The rectangle to operate in
  * @snap: how to snap the rectangle to the pixel grid
  * @child: The child to displace
  * @displacement: The dissplacement mask
- * @channels: Which channels to usefor the displacement in horizontal and
- *   vertical direction respectively.
+ * @channels: Which channels to use for the displacement in horizontal
+ *   and vertical direction, respectively
  * @max: The maximum displacement in units
  * @scale: The scale to apply to the displacement value
  * @offset: The offset to apply to the displacement value
@@ -410,7 +412,7 @@ GSK_DEFINE_RENDER_NODE_TYPE (GskDisplacementNode, gsk_displacement_node)
  * Returns: (transfer full) (type GskDisplacementNode): A new `GskRenderNode`
  */
 GskRenderNode *
-gsk_displacement_node_new (const graphene_rect_t  *bounds,
+gsk_displacement_node_new (const graphene_rect_t  *clip,
                            GskRectSnap             snap,
                            GskRenderNode          *child,
                            GskRenderNode          *displacement,
@@ -431,7 +433,10 @@ gsk_displacement_node_new (const graphene_rect_t  *bounds,
 
   self = gsk_render_node_alloc (GSK_TYPE_DISPLACEMENT_NODE);
   node = (GskRenderNode *) self;
-  node->bounds = *bounds;
+
+  node->bounds = *clip;
+  self->clip = *clip;
+
   self->snap = snap;
   self->child = gsk_render_node_ref (child);
   self->displacement = gsk_render_node_ref (displacement);
@@ -529,4 +534,12 @@ gsk_displacement_node_get_snap (const GskRenderNode *node)
   const GskDisplacementNode *self = (const GskDisplacementNode *) node;
 
   return self->snap;
+}
+
+const graphene_rect_t *
+gsk_displacement_node_get_clip (const GskRenderNode *node)
+{
+  const GskDisplacementNode *self = (const GskDisplacementNode *) node;
+
+  return &self->clip;
 }

@@ -1,5 +1,5 @@
 displacement {
-  bounds: 40 40 120 120;
+  clip: 40 40 120 120;
   child: color {
     bounds: 50 50 100 100;
     color: rgb(0,0,255);

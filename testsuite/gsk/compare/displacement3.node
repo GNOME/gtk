@@ -3,17 +3,15 @@ color {
   color: pink;
 }
 
-clip {
- clip: 25 25 100 100;
- child: displacement {
-  bounds: 0 0 100 100;
+displacement {
+  clip: 25 25 100 100;
   channels: red green;
   scale: 20 20;
   max: 20 20;
   displacement: container {
     color {
       bounds: 0 0 200 200;
-      color: color(srgb 0.5 0.5 0);
+      color: color(srgb 1 1 0);
     }
     color {
       bounds: 0 0 50 50;
@@ -50,5 +48,4 @@ clip {
       color: rgb(255,255,0);
     }
   }
-}
 }

@@ -524,7 +524,7 @@ static void
 replay_displacement_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
   gtk_snapshot_push_displacement (snapshot,
-                                  &node->bounds,
+                                  gsk_displacement_node_get_clip (node),
                                   gsk_displacement_node_get_channels (node),
                                   gsk_displacement_node_get_max (node),
                                   gsk_displacement_node_get_scale (node),

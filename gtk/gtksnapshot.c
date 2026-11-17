@@ -198,7 +198,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       GskIsolation features;
     } isolation;
     struct {
-      graphene_rect_t bounds;
+      graphene_rect_t clip;
       GskRectSnap snap;
       GskRenderNode *displacement_node;
       GdkColorChannel channels[2];
@@ -2199,7 +2199,7 @@ gtk_snapshot_collect_displacement (GtkSnapshot      *snapshot,
   if (state->data.displacement.displacement_node == NULL)
     state->data.displacement.displacement_node = gsk_container_node_new (NULL, 0);
 
-  node = gsk_displacement_node_new (&state->data.displacement.bounds,
+  node = gsk_displacement_node_new (&state->data.displacement.clip,
                                     state->data.displacement.snap,
                                     child_node,
                                     state->data.displacement.displacement_node,
@@ -2237,7 +2237,7 @@ gtk_snapshot_collect_displacement_displacement (GtkSnapshot      *snapshot,
 /*<private>
  * gtk_snapshot_push_displacement:
  * @snapshot: a `GtkSnapshot`
- * @bounds: The rectangle to apply to
+ * @clip: The rectangle to operate in
  * @channels: Which channels to usefor the displacement in horizontal and
  *   vertical direction respectively.
  * @max: The maximum displacement in units
@@ -2262,7 +2262,7 @@ gtk_snapshot_collect_displacement_displacement (GtkSnapshot      *snapshot,
  */
 void
 gtk_snapshot_push_displacement (GtkSnapshot            *snapshot,
-                                const graphene_rect_t  *bounds,
+                                const graphene_rect_t  *clip,
                                 const GdkColorChannel   channels[2],
                                 const graphene_size_t  *max,
                                 const graphene_size_t  *scale,
@@ -2278,7 +2278,7 @@ gtk_snapshot_push_displacement (GtkSnapshot            *snapshot,
                                    current_state->transform,
                                    gtk_snapshot_collect_displacement,
                                    gtk_snapshot_clear_displacement);
-  gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &state->data.displacement.bounds);
+  gtk_graphene_rect_scale_affine (clip, scale_x, scale_y, dx, dy, &state->data.displacement.clip);
   state->data.displacement.channels[0] = channels[0];
   state->data.displacement.channels[1] = channels[1];
   state->data.displacement.max = GRAPHENE_SIZE_INIT (max->width * scale_x,
