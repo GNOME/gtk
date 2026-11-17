@@ -833,6 +833,8 @@ apply_pos_to_chunk (TextContext *ctx,
                 {
                   layout->x += dx;
                   layout->y += dy;
+                  layout->x0 += dx;
+                  layout->y0 += dy;
                 }
             }
         }
@@ -888,18 +890,56 @@ end_chunk (TextContext *ctx)
   ctx->chunk_shape = NULL;
 }
 
-static gboolean
-do_generate_layouts (SvgElement             *self,
-                     PangoContext           *context,
-                     TextContext            *text_ctx,
-                     TextOffset             *offsets,
-                     const graphene_rect_t  *viewport,
-                     graphene_rect_t        *bounds)
+static void
+collect_bounds (SvgElement *shape)
+{
+  shape->valid_bounds = FALSE;
+
+  for (unsigned int i = 0; i < shape->text->len; i++)
+    {
+      TextNode *node = &g_array_index (shape->text, TextNode, i);
+
+      if (node->type == TEXT_NODE_SHAPE)
+        {
+          collect_bounds (node->shape.shape);
+
+          if (node->shape.shape->valid_bounds)
+            {
+              if (!shape->valid_bounds)
+                shape->bounds = node->shape.shape->bounds;
+              else
+                graphene_rect_union (&shape->bounds, &node->shape.shape->bounds, &shape->bounds);
+              shape->valid_bounds = TRUE;
+            }
+        }
+      else
+        {
+          for (unsigned int j = 0; j < node->characters.layouts->len; j++)
+            {
+              TextLayout *layout = &g_array_index (node->characters.layouts, TextLayout, j);
+
+               graphene_rect_offset (&layout->bounds, layout->x0, layout->y0);
+
+              if (!shape->valid_bounds)
+                shape->bounds = layout->bounds;
+              else
+                graphene_rect_union (&shape->bounds, &layout->bounds, &shape->bounds);
+              shape->valid_bounds = TRUE;
+            }
+        }
+    }
+}
+
+static void
+do_generate_layouts (SvgElement            *self,
+                     PangoContext          *context,
+                     TextContext           *text_ctx,
+                     TextOffset            *offsets,
+                     const graphene_rect_t *viewport)
 {
   WhiteSpace space = text_ctx->space;
   double baseline_shift = text_ctx->baseline_shift;
   TextAnchor anchor;
-  gboolean set_bounds = FALSE;
   float line_height;
   TextOffset offset;
   gboolean is_vertical;
@@ -907,7 +947,7 @@ do_generate_layouts (SvgElement             *self,
   g_assert (svg_element_type_is_text (self->type));
 
   if (svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_DISPLAY)) == DISPLAY_NONE)
-    return FALSE;
+    return;
 
   offset.elt = self;
   offset.idx = 0;
@@ -920,43 +960,17 @@ do_generate_layouts (SvgElement             *self,
   text_ctx->baseline_shift += svg_element_get_baseline_shift (self, context);
   text_ctx->space = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_SPACE));
 
-#define ADD_BBOX(box) do {                          \
-  if (!set_bounds)                                  \
-    {                                               \
-      graphene_rect_init_from_rect (bounds, (box)); \
-      set_bounds = TRUE;                            \
-    }                                               \
-  else                                              \
-    {                                               \
-      graphene_rect_t res;                          \
-      graphene_rect_union (bounds, (box), &res);    \
-      graphene_rect_init_from_rect (bounds, &res);  \
-    }                                               \
-} while(0);
-
   for (unsigned int i = 0; i < self->text->len; i++)
     {
       TextNode *node = &g_array_index (self->text, TextNode, i);
       switch (node->type)
         {
         case TEXT_NODE_SHAPE:
-          {
-
-            node->shape.has_bounds = do_generate_layouts (node->shape.shape, context, text_ctx, &offset, viewport, &node->shape.bounds);
-
-            if (node->shape.has_bounds)
-              {
-                graphene_rect_init_from_rect (&node->shape.shape->bounds, &node->shape.bounds);
-                node->shape.shape->valid_bounds = TRUE;
-
-                ADD_BBOX (&node->shape.bounds)
-              }
-          }
+          do_generate_layouts (node->shape.shape, context, text_ctx, &offset, viewport);
           break;
         case TEXT_NODE_CHARACTERS:
           {
             graphene_point_t origin;
-            graphene_rect_t cbounds;
             char *text;
             GStrv lines;
             const char *ch;
@@ -1055,7 +1069,7 @@ do_generate_layouts (SvgElement             *self,
                         ch = &the_text[len];
                       }
 
-                    layout0.layout = text_create_layout (self, context, the_text, len, text_ctx->wmode, &origin, &cbounds, &is_vertical, &layout0.r);
+                    layout0.layout = text_create_layout (self, context, the_text, len, text_ctx->wmode, &origin, &layout0.bounds, &is_vertical, &layout0.r);
                     layout0.x0 = text_ctx->x;
                     layout0.y0 = text_ctx->y;
                     layout0.x = text_ctx->x + origin.x;
@@ -1063,14 +1077,10 @@ do_generate_layouts (SvgElement             *self,
                     layout0.anchor = anchor;
                     g_array_append_val (node->characters.layouts, layout0);
 
-                    graphene_rect_offset (&cbounds, text_ctx->x, text_ctx->y);
-
-                    ADD_BBOX (&cbounds)
-
                     if (is_vertical)
-                      text_ctx->y += cbounds.size.height;
+                      text_ctx->y += layout0.bounds.size.height;
                     else
-                      text_ctx->x += cbounds.size.width;
+                      text_ctx->x += layout0.bounds.size.width;
 
                     if (text_ctx->chunk_shape == NULL || pos.has_x || pos.has_y)
                       {
@@ -1092,9 +1102,6 @@ do_generate_layouts (SvgElement             *self,
 
   text_ctx->baseline_shift = baseline_shift;
   text_ctx->space = space;
-
-#undef ADD_BBOX
-  return set_bounds;
 }
 
 #if 0
@@ -1139,7 +1146,6 @@ generate_layouts (SvgElement            *shape,
                   graphene_point_t      *offset)
 {
   PangoContext *context;
-  gboolean retval;
   WritingMode wmode;
   TextContext text_ctx = { 0, };
 
@@ -1169,29 +1175,25 @@ generate_layouts (SvgElement            *shape,
 
   context = svg_element_get_pango_context (shape, get_fontmap (svg), wmode);
 
-  retval = do_generate_layouts (shape, context, &text_ctx, NULL, viewport, bounds);
+  do_generate_layouts (shape, context, &text_ctx, NULL, viewport);
 
   strip_trailing_space (shape, &text_ctx);
   end_chunk (&text_ctx);
+
+  collect_bounds (shape);
 
 #if 0
   g_print ("---\nAFTER\n");
   print_layouts (shape, FALSE);
 #endif
 
-  if (!retval)
-    return FALSE;
-
-  graphene_rect_init (&shape->bounds,
-                      bounds->origin.x, bounds->origin.y,
-                      bounds->size.width, bounds->size.height);
-  shape->valid_bounds = TRUE;
+  *bounds = shape->bounds;
   offset->x = 0;
   offset->y = 0;
 
   g_object_unref (context);
 
-  return retval;
+  return TRUE;
 }
 
 void
