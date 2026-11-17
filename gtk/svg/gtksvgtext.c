@@ -1109,15 +1109,14 @@ static void
 print_layouts (SvgElement *self,
                gboolean    before)
 {
+  g_print ("<%s>\n", svg_element_type_get_name (self->type));
   for (unsigned int i = 0; i < self->text->len; i++)
     {
       TextNode *node = &g_array_index (self->text, TextNode, i);
       switch (node->type)
         {
         case TEXT_NODE_SHAPE:
-          g_print ("<tspan>\n");
           print_layouts (node->shape.shape, before);
-          g_print ("</tspan>\n");
           break;
         case TEXT_NODE_CHARACTERS:
           if (before)
@@ -1135,6 +1134,7 @@ print_layouts (SvgElement *self,
           g_assert_not_reached ();
         }
     }
+  g_print ("</%s>\n", svg_element_type_get_name (self->type));
 }
 #endif
 
