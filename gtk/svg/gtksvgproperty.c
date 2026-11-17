@@ -1488,9 +1488,7 @@ svg_property_ref_initial_value (SvgProperty    attr,
 
   if (attr == SVG_PROPERTY_TEXT_X || attr == SVG_PROPERTY_TEXT_Y)
     {
-      if (shape_type == SVG_ELEMENT_TEXT)
-        return svg_numbers_new1 (0);
-      else if (shape_type == SVG_ELEMENT_TEXT_SPAN)
+      if (shape_type != SVG_ELEMENT_TEXT)
         return svg_numbers_new_none ();
     }
 
