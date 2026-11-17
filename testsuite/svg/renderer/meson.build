@@ -175,6 +175,7 @@ test_data = [
   'text-fonts-02-t.svg',
   'text-layout-anchor.svg',
   'text-layout-dx.svg',
+  'text-links.svg',
   'text-multiple-coordinates.svg',
   'text-newline.svg',
   'text-stroke-gradient.svg',

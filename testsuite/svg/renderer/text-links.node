@@ -1,0 +1,63 @@
+clip {
+  clip: 0 0 400 200;
+  child: container {
+    rounded-clip {
+      clip: -20 -20 40 40 / 20;
+      child: color {
+        bounds: -20 -20 40 40;
+        color: rgb(0,0,0);
+      }
+    }
+    mask {
+      source: color {
+        bounds: 40 26 120 14;
+        color: rgb(0,0,0);
+      }
+      mask: transform {
+        transform: translate(40, 26);
+        child: fill {
+          child: color {
+            bounds: 0 15 20 1;
+            color: rgb(0,0,0);
+          }
+          path: "M 0 15 L 20 15 L 20 16 L 0 16 Z";
+          fill-rule: winding;
+        }
+      }
+    }
+    mask {
+      source: color {
+        bounds: 40 26 120 14;
+        color: rgb(0,0,0);
+      }
+      mask: transform {
+        transform: translate(60, 26);
+        child: fill {
+          child: color {
+            bounds: 0 15 10 1;
+            color: rgb(0,0,0);
+          }
+          path: "M 0 15 L 10 15 L 10 16 L 0 16 Z";
+          fill-rule: winding;
+        }
+      }
+    }
+    mask {
+      source: color {
+        bounds: 40 26 120 14;
+        color: rgb(0,0,0);
+      }
+      mask: transform {
+        transform: translate(120, 26);
+        child: fill {
+          child: color {
+            bounds: 0 15 30 1;
+            color: rgb(0,0,0);
+          }
+          path: "M 0 15 L 30 15 L 30 16 L 0 16 Z";
+          fill-rule: winding;
+        }
+      }
+    }
+  }
+}
