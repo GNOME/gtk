@@ -214,6 +214,7 @@ done with
 |line-height| [CSS Inline Layout Level 3](https://www.w3.org/TR/css-inline-3/#line-height-property) | Since 4.6 |
 |text-decoration-line| [CSS Text Decoration Level 3](https://www.w3.org/TR/css-text-decor-3/#text-decoration-line-property) | |
 |text-decoration-color| [CSS Text Decoration Level 3](https://www.w3.org/TR/css-text-decor-3/#text-decoration-color-property) | |
+|text-decoration-skip-ink| [CSS Text Decoration Level 4](https://drafts.csswg.org/css-text-decor-4/#text-decoration-skip-ink-property) | `auto` (initial), `none`, `all`; inherited. Vertical text, custom shapes, color/missing glyphs, and glyphs without available outlines do not interrupt decorations. |
 |text-decoration-style| [CSS Text Decoration Level 3](https://www.w3.org/TR/css-text-decor-3/#text-decoration-style-property) | CSS allows dashed and dotted |
 |text-shadow| [CSS Text Decoration Level 3](https://www.w3.org/TR/css-text-decor-3/#text-shadow-property) | |
 |text-decoration| [CSS Text Decoration Level 3](https://www.w3.org/TR/css-text-decor-3/#text-decoration-property) | |

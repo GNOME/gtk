@@ -183,6 +183,8 @@ gtk_css_style_get_computed_value (GtkCssStyle *style,
       return style->font->letter_spacing;
     case GTK_CSS_PROPERTY_LINE_HEIGHT:
       return style->font->line_height;
+    case GTK_CSS_PROPERTY_TEXT_DECORATION_SKIP_INK:
+      return style->font->text_decoration_skip_ink;
     case GTK_CSS_PROPERTY_TEXT_DECORATION_LINE:
       return style->text_decoration->text_decoration_line;
     case GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR:

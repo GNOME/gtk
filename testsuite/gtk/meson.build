@@ -56,6 +56,7 @@ tests = [
   { 'name': 'grid-layout' },
   { 'name': 'icontheme' },
   { 'name': 'label' },
+  { 'name': 'skip-ink' },
   { 'name': 'listbox' },
   { 'name': 'listlistmodel' },
   { 'name': 'main' },

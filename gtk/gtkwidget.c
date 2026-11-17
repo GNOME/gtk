@@ -41,6 +41,7 @@
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkcssfontvariationsvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
+#include "gtkcssenumvalueprivate.h"
 #include "gtkcsswidgetnodeprivate.h"
 #include "gtkdebug.h"
 #include "gtkgestureprivate.h"
@@ -6851,6 +6852,8 @@ gtk_widget_update_pango_context (GtkWidget        *widget,
 
   font_desc = gtk_css_style_get_pango_font (style);
   pango_context_set_font_description (context, font_desc);
+  pango_context_set_skip_ink (context,
+                              _gtk_css_text_decoration_skip_ink_value_get (style->font->text_decoration_skip_ink));
   pango_font_description_free (font_desc);
 
   if (direction != GTK_TEXT_DIR_NONE)

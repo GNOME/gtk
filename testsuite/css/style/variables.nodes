@@ -77,6 +77,7 @@ window.background:dir(ltr)
       text-decoration-line: none; /* variables.css:85:3-14 */
       text-decoration-color: rgb(255,0,0); /* variables.css:85:3-14 */
       text-decoration-style: solid; /* variables.css:85:3-14 */
+      text-decoration-skip-ink: auto; /* variables.css:85:3-14 */
       text-transform: none; /* variables.css:85:3-14 */
       font-kerning: auto; /* variables.css:85:3-14 */
       font-variant-ligatures: normal; /* variables.css:85:3-14 */

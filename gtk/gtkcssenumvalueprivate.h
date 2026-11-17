@@ -117,5 +117,10 @@ GtkCssFontVariantEastAsian _gtk_css_font_variant_east_asian_value_get     (const
 GtkCssValue *          _gtk_css_text_transform_value_new       (GtkTextTransform transform);
 GtkCssValue *          _gtk_css_text_transform_value_try_parse (GtkCssParser           *parser);
 GtkTextTransform       _gtk_css_text_transform_value_get       (const GtkCssValue      *value);
+
+GtkCssValue * _gtk_css_text_decoration_skip_ink_value_new       (PangoSkipInk       skip_ink);
+GtkCssValue * _gtk_css_text_decoration_skip_ink_value_try_parse (GtkCssParser      *parser);
+PangoSkipInk  _gtk_css_text_decoration_skip_ink_value_get       (const GtkCssValue *value);
+
 G_END_DECLS
 

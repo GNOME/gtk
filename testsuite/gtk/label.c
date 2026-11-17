@@ -281,6 +281,68 @@ test_label_set_attributes_clears (void)
     }
 }
 
+static void
+collect_underline_bounds (GskRenderNode *node,
+                          GArray        *bounds)
+{
+  if (gsk_render_node_get_node_type (node) == GSK_COLOR_NODE)
+    {
+      graphene_rect_t rect;
+
+      gsk_render_node_get_bounds (node, &rect);
+      g_array_append_val (bounds, rect);
+    }
+  else if (gsk_render_node_get_node_type (node) == GSK_CONTAINER_NODE)
+    {
+      for (guint i = 0; i < gsk_container_node_get_n_children (node); i++)
+        collect_underline_bounds (gsk_container_node_get_child (node, i), bounds);
+    }
+}
+
+static void
+test_label_skip_ink (void)
+{
+  GtkWidget *label = g_object_ref_sink (gtk_label_new (NULL));
+  GtkSnapshot *snapshot = gtk_snapshot_new ();
+  GdkRGBA color = { 0, 0, 0, 1 };
+  GskRenderNode *node;
+  GArray *bounds = g_array_new (FALSE, FALSE, sizeof (graphene_rect_t));
+  PangoFontMap *fontmap;
+  GError *error = NULL;
+  float previous_end = 0;
+  gboolean has_gap = FALSE;
+
+  fontmap = pango_context_get_font_map (gtk_widget_get_pango_context (label));
+  pango_font_map_add_font_file (fontmap,
+                                g_test_get_filename (G_TEST_DIST, "../gsk/fonts/Cantarell-VF.otf", NULL),
+                                &error);
+  g_assert_no_error (error);
+
+  gtk_label_set_markup (GTK_LABEL (label),
+                        "<span font='Cantarell 32' underline='single'>AgypA</span>");
+  gtk_snapshot_append_layout (snapshot, gtk_label_get_layout (GTK_LABEL (label)), &color);
+  node = gtk_snapshot_free_to_node (snapshot);
+  g_assert_nonnull (node);
+
+  collect_underline_bounds (node, bounds);
+  g_assert_cmpuint (bounds->len, >, 1);
+
+  for (guint i = 0; i < bounds->len; i++)
+    {
+      graphene_rect_t *rect = &g_array_index (bounds, graphene_rect_t, i);
+
+      g_assert_cmpfloat (rect->size.width, >, 0);
+      if (i > 0 && rect->origin.x > previous_end)
+        has_gap = TRUE;
+      previous_end = rect->origin.x + rect->size.width;
+    }
+
+  g_assert_true (has_gap);
+  g_array_unref (bounds);
+  gsk_render_node_unref (node);
+  g_object_unref (label);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -290,6 +352,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/label/underline-parse", test_label_underline);
   g_test_add_func ("/label/parse-more", test_label_parse_more);
   g_test_add_func ("/label/set-attributes-clears", test_label_set_attributes_clears);
+  g_test_add_func ("/label/skip-ink", test_label_skip_ink);
 
   return g_test_run ();
 }

@@ -541,6 +541,8 @@ test_data = [
   'text-decoration-color.ref.css',
   'text-decoration-line.css',
   'text-decoration-line.ref.css',
+  'text-decoration-skip-ink.css',
+  'text-decoration-skip-ink.ref.css',
   'text-decoration-style.css',
   'text-decoration-style.ref.css',
   'text-shadow.css',

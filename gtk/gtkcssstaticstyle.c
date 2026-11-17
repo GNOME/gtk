@@ -335,6 +335,9 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *sstyle,
     case GTK_CSS_PROPERTY_LETTER_SPACING:
       gtk_css_take_value (&style->font->letter_spacing, value);
       break;
+    case GTK_CSS_PROPERTY_TEXT_DECORATION_SKIP_INK:
+      gtk_css_take_value (&style->font->text_decoration_skip_ink, value);
+      break;
     case GTK_CSS_PROPERTY_LINE_HEIGHT:
       gtk_css_take_value (&style->font->line_height, value);
       break;

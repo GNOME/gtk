@@ -165,6 +165,7 @@ struct _GtkCssFontValues {
   GtkCssValue *font_feature_settings;
   GtkCssValue *font_variation_settings;
   GtkCssValue *line_height;
+  GtkCssValue *text_decoration_skip_ink;
 };
 
 struct _GtkCssTextDecorationValues {

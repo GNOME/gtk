@@ -917,6 +917,65 @@ _gtk_css_icon_style_value_get (const GtkCssValue *value)
 }
 
 /* }}} */
+/* {{{ PangoSkipInk */
+
+static const GtkCssValueClass GTK_CSS_VALUE_TEXT_DECORATION_SKIP_INK = {
+  "GtkCssTextDecorationSkipInkValue",
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
+  NULL,
+  gtk_css_value_enum_equal,
+  gtk_css_value_enum_transition,
+  NULL,
+  NULL,
+  gtk_css_value_enum_print
+};
+
+static GtkCssValue text_decoration_skip_ink_values[] = {
+  { &GTK_CSS_VALUE_TEXT_DECORATION_SKIP_INK, 1, 1, 0, 0, PANGO_SKIP_INK_AUTO, "auto" },
+  { &GTK_CSS_VALUE_TEXT_DECORATION_SKIP_INK, 1, 1, 0, 0, PANGO_SKIP_INK_ALL, "all" },
+  { &GTK_CSS_VALUE_TEXT_DECORATION_SKIP_INK, 1, 1, 0, 0, PANGO_SKIP_INK_NONE, "none" }
+};
+
+GtkCssValue *
+_gtk_css_text_decoration_skip_ink_value_new (PangoSkipInk skip_ink)
+{
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (text_decoration_skip_ink_values); i++)
+    {
+      if (text_decoration_skip_ink_values[i].value == skip_ink)
+        return gtk_css_value_ref (&text_decoration_skip_ink_values[i]);
+    }
+
+  g_return_val_if_reached (NULL);
+}
+
+GtkCssValue *
+_gtk_css_text_decoration_skip_ink_value_try_parse (GtkCssParser *parser)
+{
+  guint i;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (text_decoration_skip_ink_values); i++)
+    {
+      if (gtk_css_parser_try_ident (parser, text_decoration_skip_ink_values[i].name))
+        return gtk_css_value_ref (&text_decoration_skip_ink_values[i]);
+    }
+
+  return NULL;
+}
+
+PangoSkipInk
+_gtk_css_text_decoration_skip_ink_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_TEXT_DECORATION_SKIP_INK, PANGO_SKIP_INK_AUTO);
+
+  return value->value;
+}
+
+/* }}} */
 /* {{{ GtkCssFontKerning */
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_KERNING = {

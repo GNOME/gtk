@@ -395,6 +395,18 @@ parse_text_decoration_style (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+parse_text_decoration_skip_ink (GtkCssStyleProperty *property,
+                                GtkCssParser        *parser)
+{
+  GtkCssValue *value = _gtk_css_text_decoration_skip_ink_value_try_parse (parser);
+
+  if (value == NULL)
+    gtk_css_parser_error_syntax (parser, "unknown text decoration skip ink value");
+
+  return value;
+}
+
+static GtkCssValue *
 parse_text_transform (GtkCssStyleProperty *property,
                       GtkCssParser        *parser)
 {
@@ -956,6 +968,12 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_text_decoration_style,
                                           _gtk_css_text_decoration_style_value_new (GTK_CSS_TEXT_DECORATION_STYLE_SOLID));
+  gtk_css_style_property_register        ("text-decoration-skip-ink",
+                                          GTK_CSS_PROPERTY_TEXT_DECORATION_SKIP_INK,
+                                          GTK_STYLE_PROPERTY_INHERIT,
+                                          GTK_CSS_AFFECTS_TEXT_CONTENT,
+                                          parse_text_decoration_skip_ink,
+                                          _gtk_css_text_decoration_skip_ink_value_new (PANGO_SKIP_INK_AUTO));
   gtk_css_style_property_register        ("text-transform",
                                           GTK_CSS_PROPERTY_TEXT_TRANSFORM,
                                           GTK_STYLE_PROPERTY_INHERIT,

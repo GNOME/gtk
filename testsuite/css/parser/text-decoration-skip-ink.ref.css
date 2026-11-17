@@ -1,0 +1,23 @@
+a {
+  text-decoration-skip-ink: initial;
+}
+
+b {
+  text-decoration-skip-ink: inherit;
+}
+
+c {
+  text-decoration-skip-ink: unset;
+}
+
+d {
+  text-decoration-skip-ink: auto;
+}
+
+e {
+  text-decoration-skip-ink: none;
+}
+
+f {
+  text-decoration-skip-ink: all;
+}
