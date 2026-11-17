@@ -2643,51 +2643,14 @@ text_cb (GMarkupParseContext  *context,
          GError              **error)
 {
   ParserData *data = user_data;
-  SvgElement *text_parent = NULL;
 
   if (!data->current_shape)
     return;
 
-  if (svg_element_type_is_text (svg_element_get_element_type (data->current_shape)))
-    text_parent = data->current_shape;
-  else
-    {
-      SvgElement *parent = svg_element_get_parent (data->current_shape);
-      if (parent &&
-          svg_element_get_element_type (data->current_shape) == SVG_ELEMENT_LINK &&
-           svg_element_type_is_text (svg_element_get_element_type (parent)))
-        text_parent = parent;
-    }
-
-  if (text_parent)
-    {
-      if (text_parent->text->len > 0)
-        {
-          TextNode *last = &g_array_index (text_parent->text, TextNode, text_parent->text->len - 1);
-          if (last->type == TEXT_NODE_CHARACTERS)
-            {
-              GString *s = g_string_new (last->characters.text);
-              g_string_append_len (s, text, len);
-              g_free (last->characters.text);
-              last->characters.text = g_string_free (s, FALSE);
-              return;
-            }
-        }
-
-      {
-        TextNode node = {
-          .type = TEXT_NODE_CHARACTERS,
-          .characters = { .text = g_strndup (text, len), .layouts = NULL }
-        };
-        g_array_append_val (text_parent->text, node);
-      }
-      return;
-    }
-
-  if (!data->text.collect)
-    return;
-
-  g_string_append_len (data->text.text, text, len);
+  if (svg_element_holds_text_content (data->current_shape))
+    svg_element_add_text_content (data->current_shape, text, len);
+  else if (data->text.collect)
+    g_string_append_len (data->text.text, text, len);
 }
 
 static void

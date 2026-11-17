@@ -944,7 +944,7 @@ do_generate_layouts (SvgElement            *self,
   TextOffset offset;
   gboolean is_vertical;
 
-  g_assert (svg_element_type_is_text (self->type));
+  g_assert (svg_element_holds_text_content (self));
 
   if (svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_DISPLAY)) == DISPLAY_NONE)
     return;

@@ -3507,3 +3507,38 @@ svg_element_observe_color_stops (SvgElement *element)
 
   return G_LIST_MODEL (element->color_stop_observer);
 }
+
+gboolean
+svg_element_holds_text_content (SvgElement *element)
+{
+  return svg_element_type_is_text (element->type);
+}
+
+void
+svg_element_add_text_content (SvgElement *element,
+                              const char *text,
+                              size_t      len)
+{
+  TextNode node;
+
+  g_assert (element->text != NULL);
+
+  if (element->text->len > 0)
+    {
+      TextNode *last = &g_array_index (element->text, TextNode, element->text->len - 1);
+      if (last->type == TEXT_NODE_CHARACTERS)
+        {
+          GString *s = g_string_new (last->characters.text);
+          g_string_append_len (s, text, len);
+          g_free (last->characters.text);
+          last->characters.text = g_string_free (s, FALSE);
+          return;
+        }
+    }
+
+  node.type = TEXT_NODE_CHARACTERS;
+  node.characters.text = g_strndup (text, len);
+  node.characters.layouts = NULL;
+
+  g_array_append_val (element->text, node);
+}

@@ -337,4 +337,9 @@ GListModel *    svg_element_observe_filters     (SvgElement *element);
 
 GListModel *    svg_element_observe_color_stops (SvgElement *element);
 
+gboolean        svg_element_holds_text_content  (SvgElement *element);
+void            svg_element_add_text_content    (SvgElement *element,
+                                                 const char *text,
+                                                 size_t      len);
+
 G_END_DECLS
