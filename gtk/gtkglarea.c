@@ -186,6 +186,9 @@ typedef struct {
   gboolean has_depth_buffer;
   gboolean has_stencil_buffer;
 
+  GdkSurface *surface;
+  gulong surface_scale_handler;
+
   gboolean needs_resize;
   gboolean needs_render;
   gboolean auto_render;
@@ -220,6 +223,9 @@ enum {
 
 static void gtk_gl_area_allocate_buffers (GtkGLArea *area);
 static void gtk_gl_area_allocate_texture (GtkGLArea *area);
+static void gtk_gl_area_get_buffer_size  (GtkGLArea *area,
+                                          int       *width,
+                                          int       *height);
 
 static guint area_signals[LAST_SIGNAL] = { 0, };
 
@@ -308,6 +314,15 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
+gtk_gl_area_surface_scale_changed (GtkGLArea *area)
+{
+  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
+
+  priv->needs_resize = TRUE;
+  gtk_widget_queue_draw (GTK_WIDGET (area));
+}
+
+static void
 gtk_gl_area_realize (GtkWidget *widget)
 {
   GtkGLArea *area = GTK_GL_AREA (widget);
@@ -324,6 +339,14 @@ gtk_gl_area_realize (GtkWidget *widget)
     g_set_error_literal (&priv->error, GDK_GL_ERROR,
                          GDK_GL_ERROR_NOT_AVAILABLE,
                          _("OpenGL context creation failed"));
+
+  /* The buffer size depends on the fractional scale of the surface,
+   * which can change without the integer scale factor changing
+   */
+  priv->surface = g_object_ref (gtk_native_get_surface (gtk_widget_get_native (widget)));
+  priv->surface_scale_handler = g_signal_connect_swapped (priv->surface, "notify::scale",
+                                                          G_CALLBACK (gtk_gl_area_surface_scale_changed),
+                                                          area);
 
   priv->needs_resize = TRUE;
 }
@@ -499,6 +522,34 @@ gtk_gl_area_ensure_texture (GtkGLArea *area)
   gtk_gl_area_allocate_texture (area);
 }
 
+static double
+gtk_gl_area_get_buffer_scale (GtkGLArea *area)
+{
+  GtkNative *native = gtk_widget_get_native (GTK_WIDGET (area));
+
+  if (native == NULL)
+    return 1.0;
+
+  return gdk_surface_get_scale (gtk_native_get_surface (native));
+}
+
+/*
+ * Size of the buffers in device pixels: the widget size multiplied by
+ * the fractional scale of the surface, rounded up so the texture covers
+ * the whole widget.
+ */
+static void
+gtk_gl_area_get_buffer_size (GtkGLArea *area,
+                             int       *width,
+                             int       *height)
+{
+  GtkWidget *widget = GTK_WIDGET (area);
+  double scale = gtk_gl_area_get_buffer_scale (area);
+
+  *width = ceil (gtk_widget_get_width (widget) * scale);
+  *height = ceil (gtk_widget_get_height (widget) * scale);
+}
+
 /*
  * Allocates space of the right type and size for all the buffers
  */
@@ -506,15 +557,12 @@ static void
 gtk_gl_area_allocate_buffers (GtkGLArea *area)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
-  GtkWidget *widget = GTK_WIDGET (area);
-  int scale, width, height;
+  int width, height;
 
   if (priv->context == NULL)
     return;
 
-  scale = gtk_widget_get_scale_factor (widget);
-  width = gtk_widget_get_width (widget) * scale;
-  height = gtk_widget_get_height (widget) * scale;
+  gtk_gl_area_get_buffer_size (area, &width, &height);
 
   if (priv->has_depth_buffer || priv->has_stencil_buffer)
     {
@@ -532,8 +580,7 @@ static void
 gtk_gl_area_allocate_texture (GtkGLArea *area)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
-  GtkWidget *widget = GTK_WIDGET (area);
-  int scale, width, height;
+  int width, height;
 
   if (priv->context == NULL)
     return;
@@ -543,9 +590,7 @@ gtk_gl_area_allocate_texture (GtkGLArea *area)
 
   g_assert (priv->texture->gl_texture == NULL);
 
-  scale = gtk_widget_get_scale_factor (widget);
-  width = gtk_widget_get_width (widget) * scale;
-  height = gtk_widget_get_height (widget) * scale;
+  gtk_gl_area_get_buffer_size (area, &width, &height);
 
   if (gdk_gl_texture_builder_get_width (priv->texture->builder) != width ||
       gdk_gl_texture_builder_get_height (priv->texture->builder) != height)
@@ -677,6 +722,9 @@ gtk_gl_area_unrealize (GtkWidget *widget)
   g_clear_object (&priv->context);
   g_clear_error (&priv->error);
 
+  g_clear_signal_handler (&priv->surface_scale_handler, priv->surface);
+  g_clear_object (&priv->surface);
+
   GTK_WIDGET_CLASS (gtk_gl_area_parent_class)->unrealize (widget);
 }
 
@@ -759,12 +807,12 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
   GtkGLArea *area = GTK_GL_AREA (widget);
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
   gboolean unused;
-  int w, h, scale;
+  int w, h;
+  double scale;
   GLenum status;
 
-  scale = gtk_widget_get_scale_factor (widget);
-  w = gtk_widget_get_width (widget) * scale;
-  h = gtk_widget_get_height (widget) * scale;
+  scale = gtk_gl_area_get_buffer_scale (area);
+  gtk_gl_area_get_buffer_size (area, &w, &h);
 
   if (w == 0 || h == 0)
     return;
@@ -849,13 +897,15 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
        * compared to what GSK expects, so flip it back.
        */
       gtk_snapshot_save (snapshot);
-      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (0, gtk_widget_get_height (widget)));
-      gtk_snapshot_scale (snapshot, 1, -1);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT(0.0, gdk_texture_get_height (holder) / scale));
+      gtk_snapshot_scale (snapshot, 1.0 / scale, -1.0 / scale);
+      gtk_snapshot_set_snap (snapshot, GSK_RECT_SNAP_ROUND);
       gtk_snapshot_append_texture (snapshot,
                                    holder,
-                                   &GRAPHENE_RECT_INIT (0, 0,
-                                                        gtk_widget_get_width (widget),
-                                                        gtk_widget_get_height (widget)));
+                                   &GRAPHENE_RECT_INIT (0.0,
+                                                        0.0,
+                                                        gdk_texture_get_width (holder),
+                                                        gdk_texture_get_height (holder)));
       gtk_snapshot_restore (snapshot);
 
       g_object_unref (holder);
