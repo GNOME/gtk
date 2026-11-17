@@ -320,7 +320,7 @@ svg_element_setup (SvgElement     *element,
   if (svg_element_type_is_filter (type))
     element->filters = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
 
-  if (svg_element_type_is_text (type))
+  if (svg_element_type_is_text (type) || type == SVG_ELEMENT_LINK)
     element->text = array_new_with_clear_func (sizeof (TextNode), (GDestroyNotify) text_node_clear);
 
   if (svg_element_type_is_path (type))
@@ -1460,9 +1460,6 @@ svg_element_insert_after (SvgElement *element,
                           SvgElement *child,
                           SvgElement *sibling)
 {
-  g_assert ((svg_element_type_is_text_child (child->type) && svg_element_type_is_text (element->type)) ||
-            (!svg_element_type_is_text_child (child->type) &&
-              (svg_element_type_is_container (element->type) || element->type == SVG_ELEMENT_USE)));
   g_assert (sibling == NULL || sibling->parent == element);
 
   child->parent = element;
@@ -1496,25 +1493,13 @@ svg_element_insert_after (SvgElement *element,
                              child->css_node,
                              sibling ? sibling->css_node : NULL);
 
-  if (child->type == SVG_ELEMENT_TEXT_SPAN)
+  if (svg_element_holds_text_content (element))
     {
-      SvgElement *text_parent = NULL;
-
-      if (svg_element_type_is_text (element->type))
-        text_parent = element;
-      else if (element->parent &&
-               element->type == SVG_ELEMENT_LINK &&
-               svg_element_type_is_text (element->parent->type))
-        text_parent = element->parent;
-
-      if (text_parent)
-        {
-          TextNode node = {
-            .type = TEXT_NODE_SHAPE,
-            .shape = { .shape = child }
-          };
-          g_array_append_val (text_parent->text, node);
-        }
+      TextNode node = {
+        .type = TEXT_NODE_SHAPE,
+        .shape = { .shape = child }
+      };
+      g_array_append_val (element->text, node);
     }
 
   /* for lack of a better approach, assume the new shape has no deps */
@@ -3506,4 +3491,41 @@ svg_element_observe_color_stops (SvgElement *element)
                                                            svg_element_color_stop_observer_destroyed);
 
   return G_LIST_MODEL (element->color_stop_observer);
+}
+
+gboolean
+svg_element_holds_text_content (SvgElement *element)
+{
+  return svg_element_type_is_text (element->type) ||
+         (element->type == SVG_ELEMENT_LINK &&
+          svg_element_type_is_text (element->parent->type));
+}
+
+void
+svg_element_add_text_content (SvgElement *element,
+                              const char *text,
+                              size_t      len)
+{
+  TextNode node;
+
+  g_assert (element->text != NULL);
+
+  if (element->text->len > 0)
+    {
+      TextNode *last = &g_array_index (element->text, TextNode, element->text->len - 1);
+      if (last->type == TEXT_NODE_CHARACTERS)
+        {
+          GString *s = g_string_new (last->characters.text);
+          g_string_append_len (s, text, len);
+          g_free (last->characters.text);
+          last->characters.text = g_string_free (s, FALSE);
+          return;
+        }
+    }
+
+  node.type = TEXT_NODE_CHARACTERS;
+  node.characters.text = g_strndup (text, len);
+  node.characters.layouts = NULL;
+
+  g_array_append_val (element->text, node);
 }

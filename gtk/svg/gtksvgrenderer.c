@@ -3827,7 +3827,7 @@ paint_text (SvgElement            *self,
             PaintContext          *context,
             const graphene_rect_t *bounds)
 {
-  g_assert (svg_element_type_is_text (self->type));
+  g_assert (svg_element_holds_text_content (self));
 
   for (unsigned int i = 0; i < self->text->len; i++)
     {
@@ -3918,7 +3918,7 @@ static void
 pick_text (SvgElement   *self,
            PaintContext *context)
 {
-  g_assert (svg_element_type_is_text (self->type));
+  g_assert (svg_element_holds_text_content (self));
 
   for (unsigned int i = 0; i < self->text->len; i++)
     {

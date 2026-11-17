@@ -1,0 +1,13 @@
+<svg viewBox='0 0 400 200' xmlns="http://www.w3.org/2000/svg">
+  <style>
+    a {
+      text-decoration: underline;
+    }
+  </style>
+  <circle r="20" class="h"/>
+  <text x="40" y="40" font-size="40">
+    <a href="#wooly">ab<tspan>c</tspan></a>
+    <tspan y="40">def</tspan>
+    <a href="#wacky"><tspan>ghi</tspan></a>
+  </text>
+</svg>
