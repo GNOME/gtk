@@ -1012,7 +1012,7 @@ add_rect_row (GListStore            *store,
               const graphene_rect_t *rect)
 {
   add_text_row (store, label,
-                       "(%.2f, %.2f) to (%.2f, %.2f) - %.2f x %.2f",
+                       "(%.2f, %.2f) to (%.2f, %.2f) — %.2f x %.2f",
                        rect->origin.x,
                        rect->origin.y,
                        rect->origin.x + rect->size.width,
