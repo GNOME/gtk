@@ -182,6 +182,7 @@ gsk_isolation_node_replay (GskRenderNode   *node,
 
 static GskGpuRenderPass *
 gsk_isolation_node_occlusion (GskRenderNode   *node,
+                              GskNodeWalker   *walker,
                               GskGpuOcclusion *occlusion)
 {
   GskIsolationNode *self = (GskIsolationNode *) node;

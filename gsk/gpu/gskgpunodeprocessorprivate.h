@@ -2,10 +2,12 @@
 
 #include "gskgputypesprivate.h"
 #include "gsktypes.h"
+#include "gsknodewalkerprivate.h"
 
 G_BEGIN_DECLS
 
-void                    gsk_gpu_node_processor_process                  (GskGpuFrame                    *frame,
+void                    gsk_gpu_node_processor_process                  (GskNodeWalker                  *walker,
+                                                                         GskGpuFrame                    *frame,
                                                                          GskGpuImage                    *target,
                                                                          GdkColorState                  *target_color_state,
                                                                          cairo_region_t                 *clip,
@@ -18,7 +20,8 @@ GskGpuImage *           gsk_gpu_node_processor_convert_image            (GskGpuF
                                                                          GskGpuImage                    *image,
                                                                          GdkColorState                  *image_color_state);
 
-void                    gsk_gpu_node_processor_add_first_node_untracked (GskGpuRenderPass               *self,
+void                    gsk_gpu_node_processor_add_first_node_untracked (GskNodeWalker                  *walker,
+                                                                         GskGpuRenderPass               *self,
                                                                          GskRenderNode                  *node);
 
 G_END_DECLS

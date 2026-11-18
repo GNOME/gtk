@@ -167,6 +167,7 @@ gsk_subsurface_node_get_subsurface_for_frame (GskSubsurfaceNode *self,
 
 static GskGpuRenderPass *
 gsk_subsurface_node_occlusion (GskRenderNode   *node,
+                               GskNodeWalker   *walker,
                                GskGpuOcclusion *occlusion)
 {
   GskSubsurfaceNode *self = (GskSubsurfaceNode *) node;

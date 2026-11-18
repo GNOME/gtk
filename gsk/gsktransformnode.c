@@ -260,6 +260,7 @@ gsk_transform_node_render_opacity (GskRenderNode  *node,
 
 static GskGpuRenderPass *
 gsk_transform_node_occlusion (GskRenderNode   *node,
+                              GskNodeWalker   *walker,
                               GskGpuOcclusion *occlusion)
 {
   GskTransformNode *self = (GskTransformNode *) node;

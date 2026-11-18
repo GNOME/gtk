@@ -6,6 +6,7 @@
 #include "gdk/gdkmemoryformatprivate.h"
 #include "gdk/gdkcolorprivate.h"
 #include "gskgradientprivate.h"
+#include "gsknodewalkerprivate.h"
 #include "gpu/gskgputypesprivate.h"
 
 G_BEGIN_DECLS
@@ -95,6 +96,7 @@ struct _GskRenderNodeClass
   /* GPU renderer */
   GskGpuRenderPass *
                 (* occlusion)                           (GskRenderNode               *node,
+                                                         GskNodeWalker               *walker,
                                                          GskGpuOcclusion             *occlusion);
 };
 

@@ -91,6 +91,7 @@ gsk_color_node_replay (GskRenderNode   *node,
 
 static GskGpuRenderPass *
 gsk_color_node_occlusion (GskRenderNode   *node,
+                          GskNodeWalker   *walker,
                           GskGpuOcclusion *occlusion)
 {
   GskColorNode *self = (GskColorNode *) node;
