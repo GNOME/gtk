@@ -128,6 +128,7 @@ gsk_debug_node_replay (GskRenderNode   *node,
 
 static GskGpuRenderPass *
 gsk_debug_node_occlusion (GskRenderNode   *node,
+                          GskNodeWalker   *walker,
                           GskGpuOcclusion *occlusion)
 {
   GskDebugNode *self = (GskDebugNode *) node;

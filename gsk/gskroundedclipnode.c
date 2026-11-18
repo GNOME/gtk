@@ -163,6 +163,7 @@ gsk_rounded_clip_node_replay (GskRenderNode   *node,
 
 static GskGpuRenderPass *
 gsk_rounded_clip_node_occlusion (GskRenderNode   *node,
+                                 GskNodeWalker   *walker,
                                  GskGpuOcclusion *occlusion)
 {
   GskRoundedClipNode *self = (GskRoundedClipNode *) node;

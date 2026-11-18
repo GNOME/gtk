@@ -9,10 +9,12 @@
 #include "gskgputransformprivate.h"
 
 #include "gdk/gdkcolorprivate.h"
+#include "gsk/gsknodewalkerprivate.h"
 
 G_BEGIN_DECLS
 
-void                    gsk_gpu_occlusion_render_node                   (GskGpuFrame                    *frame,
+void                    gsk_gpu_occlusion_render_node                   (GskNodeWalker                  *walker,
+                                                                         GskGpuFrame                    *frame,
                                                                          GskGpuImage                    *target,
                                                                          GdkColorState                  *target_color_state,
                                                                          GskRenderPassType               pass_type,
@@ -47,8 +49,10 @@ GskGpuRenderPass *      gsk_gpu_occlusion_try_node_untracked            (GskGpuO
 /*** REMOVE ONCE REFACTORING DONE ***/
 
 GskGpuRenderPass *      gsk_render_node_default_occlusion               (GskRenderNode                 *self,
+                                                                         GskNodeWalker                 *walker,
                                                                          GskGpuOcclusion               *occlusion);
 GskGpuRenderPass *      gsk_container_node_occlusion                    (GskRenderNode                 *node,
+                                                                         GskNodeWalker                 *walker,
                                                                          GskGpuOcclusion               *occlusion);
 
 G_END_DECLS
