@@ -817,8 +817,6 @@ gdk_surface_finalize (GObject *object)
   GdkSurface *surface = GDK_SURFACE (object);
   GdkSurfacePrivate *priv = gdk_surface_get_instance_private (surface);
 
-  g_clear_handle_id (&surface->request_motion_id, g_source_remove);
-
   g_signal_handlers_disconnect_by_func (surface->display,
                                         seat_removed_cb, surface);
 
@@ -1524,19 +1522,6 @@ gdk_surface_freeze_updates (GdkSurface *surface)
     gdk_frame_clock_stop (surface->frame_clock);
 }
 
-static gboolean
-request_motion_cb (void *data)
-{
-  GdkSurface *surface = GDK_SURFACE (data);
-  GdkFrameClock *clock = gdk_surface_get_frame_clock (surface);
-
-  if (clock)
-    gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS);
-  surface->request_motion_id = 0;
-
-  return G_SOURCE_REMOVE;
-}
-
 
 /*
  * gdk_surface_thaw_updates:
@@ -1564,13 +1549,6 @@ gdk_surface_thaw_updates (GdkSurface *surface)
 
       if (surface->pending_phases)
         gdk_frame_clock_request_phase (frame_clock, surface->pending_phases);
-
-      if (surface->request_motion && surface->request_motion_id == 0)
-        {
-          surface->request_motion_id =
-            g_idle_add_full (GDK_PRIORITY_REDRAW + 20, request_motion_cb, surface, NULL);
-          gdk_source_set_static_name_by_id (surface->request_motion_id, "[gtk] request_motion_cb");
-        }
     }
 }
 
@@ -2329,11 +2307,20 @@ gdk_surface_flush_events (GdkFrameClock *clock,
   GdkSurface *surface = GDK_SURFACE (data);
 
   _gdk_event_queue_flush (surface->display);
-  gdk_surface_ensure_motion (surface);
   _gdk_display_pause_events (surface->display);
 
   gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS);
   surface->frame_clock_events_paused = TRUE;
+}
+
+static void
+gdk_surface_unpause_events (GdkSurface *surface)
+{
+  if (surface->frame_clock_events_paused)
+    {
+      _gdk_display_unpause_events (surface->display);
+      surface->frame_clock_events_paused = FALSE;
+    }
 }
 
 static void
@@ -2342,11 +2329,8 @@ gdk_surface_resume_events (GdkFrameClock *clock,
 {
   GdkSurface *surface = GDK_SURFACE (data);
 
-  if (surface->frame_clock_events_paused)
-    {
-      _gdk_display_unpause_events (surface->display);
-      surface->frame_clock_events_paused = FALSE;
-    }
+  gdk_surface_unpause_events (surface);
+  gdk_surface_ensure_motion (surface);
 }
 
 void
@@ -2382,12 +2366,14 @@ gdk_surface_set_frame_clock (GdkSurface     *surface,
 
       if (surface->update_freeze_count == 0)
         gdk_frame_clock_start (clock);
+
+      if (surface->request_motion)
+        gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS);
     }
 
   if (surface->frame_clock)
     {
-      if (surface->frame_clock_events_paused)
-        gdk_surface_resume_events (surface->frame_clock, G_OBJECT (surface));
+      gdk_surface_unpause_events (surface);
 
       g_signal_handlers_disconnect_by_func (G_OBJECT (surface->frame_clock),
                                             G_CALLBACK (gdk_surface_flush_events),
@@ -2914,8 +2900,11 @@ gdk_surface_handle_event (GdkEvent *event)
  * gdk_surface_request_motion:
  * @surface: a `GdkSurface`
  *
- * Request that the next frame cycle should deliver a motion
- * event for @surface.
+ * Request that a motion event be delivered for @surface.
+ *
+ * The motion event is delivered in the resume-events phase of the
+ * frame cycle. When called during a frame, that is right at the end
+ * of the frame, after painting; otherwise a cycle is scheduled.
  *
  * The motion event will be delivered if the pointer is over the
  * surface, regardless whether the pointer has moved or not. This
@@ -2924,7 +2913,13 @@ gdk_surface_handle_event (GdkEvent *event)
 void
 gdk_surface_request_motion (GdkSurface *surface)
 {
+  GdkFrameClock *frame_clock;
+
   surface->request_motion = TRUE;
+
+  frame_clock = gdk_surface_get_frame_clock (surface);
+  if (frame_clock)
+    gdk_frame_clock_request_phase (frame_clock, GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS);
 }
 
 /**
