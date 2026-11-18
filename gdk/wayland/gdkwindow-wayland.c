@@ -1758,6 +1758,13 @@ infer_edge_constraints (GdkWindowState state)
 static gboolean
 supports_native_edge_constraints (GdkWindowImplWayland *impl)
 {
+#ifdef HAVE_TOPLEVEL_STATE_CONSTRAINED
+  struct xdg_toplevel *xdg_toplevel = impl->display_server.xdg_toplevel;
+  if (xdg_toplevel && xdg_toplevel_get_version (xdg_toplevel) >=
+      XDG_TOPLEVEL_STATE_CONSTRAINED_LEFT_SINCE_VERSION)
+    return TRUE;
+#endif
+
   struct gtk_surface1 *gtk_surface = impl->display_server.gtk_surface;
   if (!gtk_surface)
     return FALSE;
@@ -1984,6 +1991,13 @@ xdg_toplevel_configure (void                *data,
   uint32_t *p;
   GdkWindowState pending_state = 0;
   gboolean suspended = FALSE;
+#ifdef HAVE_TOPLEVEL_STATE_CONSTRAINED
+  GdkWindowState resize_constraint_state =
+    (GDK_WINDOW_STATE_TOP_RESIZABLE |
+     GDK_WINDOW_STATE_RIGHT_RESIZABLE |
+     GDK_WINDOW_STATE_BOTTOM_RESIZABLE |
+     GDK_WINDOW_STATE_LEFT_RESIZABLE);
+#endif
 
   wl_array_for_each (p, states)
     {
@@ -2014,6 +2028,20 @@ xdg_toplevel_configure (void                *data,
         case XDG_TOPLEVEL_STATE_TILED_LEFT:
           pending_state |= (GDK_WINDOW_STATE_TILED | GDK_WINDOW_STATE_LEFT_TILED);
           break;
+#ifdef HAVE_TOPLEVEL_STATE_CONSTRAINED
+        case XDG_TOPLEVEL_STATE_CONSTRAINED_LEFT:
+          resize_constraint_state ^= GDK_WINDOW_STATE_LEFT_RESIZABLE;
+          break;
+        case XDG_TOPLEVEL_STATE_CONSTRAINED_RIGHT:
+          resize_constraint_state ^= GDK_WINDOW_STATE_RIGHT_RESIZABLE;
+          break;
+        case XDG_TOPLEVEL_STATE_CONSTRAINED_TOP:
+          resize_constraint_state ^= GDK_WINDOW_STATE_TOP_RESIZABLE;
+          break;
+        case XDG_TOPLEVEL_STATE_CONSTRAINED_BOTTOM:
+          resize_constraint_state ^= GDK_WINDOW_STATE_BOTTOM_RESIZABLE;
+          break;
+#endif
 #ifdef HAVE_TOPLEVEL_STATE_SUSPENDED
         case XDG_TOPLEVEL_STATE_SUSPENDED:
           suspended = TRUE;
@@ -2024,6 +2052,12 @@ xdg_toplevel_configure (void                *data,
           break;
         }
     }
+
+#ifdef HAVE_TOPLEVEL_STATE_CONSTRAINED
+  if (xdg_toplevel_get_version (xdg_toplevel) >=
+      XDG_TOPLEVEL_STATE_CONSTRAINED_LEFT_SINCE_VERSION)
+    pending_state |= resize_constraint_state;
+#endif
 
   gdk_wayland_window_handle_configure_toplevel (window, width, height,
                                                 pending_state, suspended);
