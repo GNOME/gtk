@@ -464,13 +464,19 @@ GtkCssValue *
 _gtk_css_array_value_parse (GtkCssParser *parser,
                             GtkCssValue  *(* parse_func) (GtkCssParser *parser))
 {
-  GtkCssValue *value, *result;
+  GtkCssValue *value;
   GtkCssValue *values[128];
   guint n_values = 0;
   guint i;
 
   do {
-    value = parse_func (parser);
+    if (G_UNLIKELY (n_values >= G_N_ELEMENTS (values)))
+      {
+        gtk_css_parser_error_value (parser, "Only %d elements in a css array are allowed", (int) G_N_ELEMENTS (values));
+        value = NULL;
+      }
+    else
+      value = parse_func (parser);
 
     if (value == NULL)
       {
@@ -480,14 +486,10 @@ _gtk_css_array_value_parse (GtkCssParser *parser,
         return NULL;
       }
 
-    values[n_values] = value;
-    n_values ++;
-    if (G_UNLIKELY (n_values > G_N_ELEMENTS (values)))
-      g_error ("Only %d elements in a css array are allowed", (int)G_N_ELEMENTS (values));
+    values[n_values++] = value;
   } while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
-  result = _gtk_css_array_value_new_from_array (values, n_values);
-  return result;
+  return _gtk_css_array_value_new_from_array (values, n_values);
 }
 
 GtkCssValue *
