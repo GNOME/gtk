@@ -398,6 +398,15 @@ GSK_DEFINE_RENDER_NODE_TYPE (GskDisplacementNode, gsk_displacement_node)
  * applying the formula `value = scale * (value - offset)` and clamping the
  * resulting value to be between `-max` and `max`.
  *
+ * Note: if the @displacement mask is an 8-bit texture, using 0.5 as offset
+ * introduces a small shift that can cause blurryness. To avoid that, use
+ * an offset of 127./128. in this case.
+ *
+ * Note: transparent parts of the @displacement mask can cause unexpected
+ * shifts due to their pixel value of 0 for all channels. To avoid that,
+ * fill such areas of the mask with a uniform value that matches the offset
+ * in the relevant channels.
+ *
  * Returns: (transfer full) (type GskDisplacementNode): A new `GskRenderNode`
  */
 GskRenderNode *
