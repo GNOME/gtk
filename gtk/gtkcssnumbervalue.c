@@ -1062,7 +1062,7 @@ gtk_css_number_value_multiply (GtkCssValue *value,
     case TYPE_ROUND:
       {
         GtkCssValue *a = gtk_css_number_value_multiply (value->calc.terms[0], factor);
-        GtkCssValue *b = value->calc.n_terms > 0
+        GtkCssValue *b = value->calc.n_terms > 1
                            ? gtk_css_number_value_multiply (value->calc.terms[1], factor)
                            : gtk_css_number_value_new (factor, GTK_CSS_NUMBER);
 
@@ -1668,7 +1668,7 @@ gtk_css_number_value_get (const GtkCssValue *value,
       {
         double a = gtk_css_number_value_get (terms[0], one_hundred_percent);
 
-        double b = terms[1] != NULL ? gtk_css_number_value_get (terms[1], one_hundred_percent) : 1;
+        double b = n_terms > 1 ? gtk_css_number_value_get (terms[1], one_hundred_percent) : 1;
 
         return _round (mode, a, b);
       }

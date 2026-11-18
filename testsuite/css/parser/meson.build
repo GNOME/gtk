@@ -526,6 +526,8 @@ test_data = [
   'rotate3d-crash.css',
   'rotate3d-crash.errors',
   'rotate3d-crash.ref.css',
+  'round-1arg.css',
+  'round-1arg.ref.css',
   'selector.css',
   'selector.ref.css',
   'selector-original.css',
