@@ -110,31 +110,11 @@ sample_image (guchar *image,
 }
 
 static void
-get_matrix (cairo_pattern_t *pattern,
-            cairo_surface_t *surface,
-            cairo_matrix_t  *out_matrix)
-{
-  cairo_matrix_t pattern_matrix, surface_matrix;
-
-  cairo_pattern_get_matrix (pattern, &pattern_matrix);
-  gdk_cairo_surface_get_device_matrix (surface, &surface_matrix);
-
-  DEBUG ("pattern: %g %g %g\n         %g %g %g\n",
-           pattern_matrix.xx, pattern_matrix.yx, pattern_matrix.x0,
-           pattern_matrix.yx, pattern_matrix.yy, pattern_matrix.y0);
-  DEBUG ("surface: %g %g %g\n         %g %g %g\n",
-           surface_matrix.xx, surface_matrix.yx, surface_matrix.x0,
-           surface_matrix.yx, surface_matrix.yy, surface_matrix.y0);
-
-  cairo_matrix_multiply (out_matrix, &pattern_matrix, &surface_matrix);
-}
-
-static void
 apply_displacement (GskDisplacementNode *self,
                     cairo_surface_t     *image_surface,
-                    cairo_pattern_t     *displacement_pattern)
+                    cairo_surface_t     *d_surface)
 {
-  cairo_surface_t *d_surface, *d_image, *i_image;
+  cairo_surface_t *d_image, *i_image;
   cairo_matrix_t d_matrix, i_matrix;
   guchar *d_data, *i_data;
   gsize x, y, d_width, d_height, d_stride, i_width, i_height, i_stride;
@@ -142,10 +122,9 @@ apply_displacement (GskDisplacementNode *self,
   float h, v;
   guint32* pixel_data;
 
-  cairo_pattern_get_surface (displacement_pattern, &d_surface);
   d_image = cairo_surface_map_to_image (d_surface, NULL);
   g_assert (cairo_image_surface_get_format (d_image) == CAIRO_FORMAT_ARGB32);
-  get_matrix (displacement_pattern, d_surface, &d_matrix);
+  gdk_cairo_surface_get_device_matrix (d_surface, &d_matrix);
   d_data = cairo_image_surface_get_data (d_image);
   d_width = cairo_image_surface_get_width (d_image);
   d_height = cairo_image_surface_get_height (d_image);
@@ -208,8 +187,7 @@ gsk_displacement_node_draw (GskRenderNode *node,
                             GskCairoData  *data)
 {
   GskDisplacementNode *self = (GskDisplacementNode *) node;
-  cairo_pattern_t *displacement;
-  cairo_surface_t *surface, *child_surface;
+  cairo_surface_t *displacement, *child;
   cairo_t *cr2;
   graphene_rect_t bounds, child_bounds;
 
@@ -227,29 +205,31 @@ gsk_displacement_node_draw (GskRenderNode *node,
   graphene_rect_inset (&child_bounds, - self->max.width, - self->max.height);
   if (!gsk_rect_intersection (&child_bounds, &self->child->bounds, &child_bounds))
     return;
+  if (!gsk_cairo_rect_snap (cr, &child_bounds, GSK_RECT_SNAP_GROW, &child_bounds))
+    return;
 
   if (!gsk_rect_intersection (&bounds, &self->displacement->bounds, &bounds))
     return;
+  if (!gsk_cairo_rect_snap (cr, &bounds, GSK_RECT_SNAP_GROW, &bounds))
+    return;
 
-  surface = gdk_cairo_create_similar_image (cr, CAIRO_FORMAT_ARGB32, &bounds);
-  cr2 = cairo_create (surface);
+  displacement = gdk_cairo_create_similar_image (cr, CAIRO_FORMAT_ARGB32, &bounds);
+  cr2 = cairo_create (displacement);
   gsk_render_node_draw_full (self->displacement, cr2, data);
-  displacement = cairo_pattern_create_for_surface (surface);
   cairo_destroy (cr2);
-  cairo_surface_destroy (surface);
 
-  child_surface = gdk_cairo_create_similar_image (cr, CAIRO_FORMAT_ARGB32, &child_bounds);
-  cr2 = cairo_create (child_surface);
+  child = gdk_cairo_create_similar_image (cr, CAIRO_FORMAT_ARGB32, &child_bounds);
+  cr2 = cairo_create (child);
   gsk_render_node_draw_full (self->child, cr2, data);
   cairo_destroy (cr2);
 
-  apply_displacement (self, child_surface, displacement);
+  apply_displacement (self, child, displacement);
 
-  cairo_set_source (cr, displacement);
+  cairo_set_source_surface (cr, displacement, 0, 0);
   cairo_paint (cr);
 
-  cairo_surface_destroy (child_surface);
-  cairo_pattern_destroy (displacement);
+  cairo_surface_destroy (child);
+  cairo_surface_destroy (displacement);
 }
 
 static void
@@ -417,6 +397,15 @@ GSK_DEFINE_RENDER_NODE_TYPE (GskDisplacementNode, gsk_displacement_node)
  * at every coordinate, converting its value into the given colorstate and
  * applying the formula `value = scale * (value - offset)` and clamping the
  * resulting value to be between `-max` and `max`.
+ *
+ * Note: if the @displacement mask is an 8-bit texture, using 0.5 as offset
+ * introduces a small shift that can cause blurryness. To avoid that, use
+ * an offset of 127./128. in this case.
+ *
+ * Note: transparent parts of the @displacement mask can cause unexpected
+ * shifts due to their pixel value of 0 for all channels. To avoid that,
+ * fill such areas of the mask with a uniform value that matches the offset
+ * in the relevant channels.
  *
  * Returns: (transfer full) (type GskDisplacementNode): A new `GskRenderNode`
  */
