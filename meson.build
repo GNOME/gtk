@@ -543,6 +543,7 @@ if wayland_enabled
 
   cdata.set('HAVE_XDG_ACTIVATION', wlprotocolsdep.version().version_compare('>=1.21'))
   cdata.set('HAVE_TOPLEVEL_STATE_SUSPENDED', wlprotocolsdep.version().version_compare('>=1.32'))
+  cdata.set('HAVE_TOPLEVEL_STATE_CONSTRAINED', wlprotocolsdep.version().version_compare('>=1.43'))
 
   wayland_pkgs = [
     'wayland-client', wayland_req,

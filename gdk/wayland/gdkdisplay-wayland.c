@@ -50,7 +50,9 @@
 #include "xdg-foreign-unstable-v2-client-protocol.h"
 #include "server-decoration-client-protocol.h"
 
-#ifdef HAVE_TOPLEVEL_STATE_SUSPENDED
+#if defined(HAVE_TOPLEVEL_STATE_CONSTRAINED)
+#define XDG_WM_BASE_VERSION      7
+#elif defined(HAVE_TOPLEVEL_STATE_SUSPENDED)
 #define XDG_WM_BASE_VERSION      6
 #else
 #define XDG_WM_BASE_VERSION      2
