@@ -2208,7 +2208,7 @@ gtk_snapshot_collect_displacement (GtkSnapshot      *snapshot,
                                     &state->data.displacement.scale,
                                     &state->data.displacement.offset);
 
-  g_object_unref (child_node);
+  gsk_render_node_unref (child_node);
 
   return node;
 }

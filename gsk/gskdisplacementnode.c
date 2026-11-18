@@ -78,7 +78,7 @@ get_channel (guint32         pixel,
 
   if (channel == GDK_COLOR_CHANNEL_ALPHA)
     return alpha;
-  
+
   if (alpha == 0.0f)
     return 0.0f;
 
@@ -209,31 +209,39 @@ gsk_displacement_node_draw (GskRenderNode *node,
 {
   GskDisplacementNode *self = (GskDisplacementNode *) node;
   cairo_pattern_t *displacement;
-  cairo_surface_t *child_surface;
-  cairo_t *child_cr;
+  cairo_surface_t *surface, *child_surface;
+  cairo_t *cr2;
   graphene_rect_t bounds, child_bounds;
 
   if (!gsk_cairo_rect_snap (cr, &node->bounds, self->snap, &bounds))
     return;
 
-  graphene_rect_inset (&child_bounds, - self->max.width, - self->max.height);
-  if (!gsk_rect_intersection (&bounds, &self->child->bounds, &child_bounds))
-    return;
-
-  /* clip so the push_group() creates a smaller surface */
   gdk_cairo_rect (cr, &bounds);
   cairo_clip (cr);
   if (gdk_cairo_is_all_clipped (cr))
     return;
 
-  cairo_push_group_with_content (cr, CAIRO_CONTENT_COLOR_ALPHA);
-  gsk_render_node_draw_full (self->displacement, cr, data);
-  displacement = cairo_pop_group (cr);
+  _graphene_rect_init_from_clip_extents (&bounds, cr);
+
+  child_bounds = bounds;
+  graphene_rect_inset (&child_bounds, - self->max.width, - self->max.height);
+  if (!gsk_rect_intersection (&child_bounds, &self->child->bounds, &child_bounds))
+    return;
+
+  if (!gsk_rect_intersection (&bounds, &self->displacement->bounds, &bounds))
+    return;
+
+  surface = gdk_cairo_create_similar_image (cr, CAIRO_FORMAT_ARGB32, &bounds);
+  cr2 = cairo_create (surface);
+  gsk_render_node_draw_full (self->displacement, cr2, data);
+  displacement = cairo_pattern_create_for_surface (surface);
+  cairo_destroy (cr2);
+  cairo_surface_destroy (surface);
 
   child_surface = gdk_cairo_create_similar_image (cr, CAIRO_FORMAT_ARGB32, &child_bounds);
-  child_cr = cairo_create (child_surface);
-  gsk_render_node_draw_full (self->child, child_cr, data);
-  cairo_destroy (child_cr);
+  cr2 = cairo_create (child_surface);
+  gsk_render_node_draw_full (self->child, cr2, data);
+  cairo_destroy (cr2);
 
   apply_displacement (self, child_surface, displacement);
 
