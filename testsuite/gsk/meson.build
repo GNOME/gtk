@@ -102,6 +102,7 @@ compare_render_tests = [
   'dihedral-f',
   'displacement',
   'displacement2',
+  'displacement3',
   'dmabuf-mipmap',
   'empty-blend',
   'empty-blur',
