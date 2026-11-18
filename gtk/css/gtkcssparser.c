@@ -550,17 +550,20 @@ gtk_css_parser_start_semicolon_block (GtkCssParser    *self,
 gboolean
 gtk_css_parser_end_block_prelude (GtkCssParser *self)
 {
+  size_t idx;
   GtkCssParserBlock *block;
 
   g_return_val_if_fail (gtk_css_parser_blocks_get_size (&self->blocks) > 0, FALSE);
 
-  block = gtk_css_parser_blocks_get_last (&self->blocks);
+  idx = gtk_css_parser_blocks_get_size (&self->blocks) - 1;
+  block = gtk_css_parser_blocks_index (&self->blocks, idx);
 
   if (block->alternative_token == GTK_CSS_TOKEN_EOF)
     return FALSE;
 
   gtk_css_parser_skip_until (self, GTK_CSS_TOKEN_EOF);
 
+  block = gtk_css_parser_blocks_index (&self->blocks, idx);
   if (gtk_css_token_is (&self->token, block->alternative_token))
     {
       if (gtk_css_token_is_preserved (&self->token, &block->end_token))
