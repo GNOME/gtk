@@ -1,0 +1,39 @@
+<svg
+        xmlns='http://www.w3.org/2000/svg'
+        xmlns:svg='http://www.w3.org/2000/svg'
+        width='200'
+        height='200'>
+  <circle
+          cx='10'
+          cy='10'
+          r='5'>
+  </circle>
+  <circle
+          style='filter: drop-shadow(1px 2px 3px 4px)'
+          cx='20'
+          cy='10'
+          r='5'>
+  </circle>
+  <circle
+          cx='30'
+          cy='10'
+          r='5'>
+  </circle>
+  <circle
+          cx='40'
+          cy='10'
+          r='5'>
+  </circle>
+  <circle
+          filter='drop-shadow(1px, 2px, 3px)'
+          cx='50'
+          cy='10'
+          r='5'>
+  </circle>
+  <circle
+          filter='drop-shadow(rgb(255,0,0), 1px, 2px, 3px)'
+          cx='60'
+          cy='10'
+          r='5'>
+  </circle>
+</svg>

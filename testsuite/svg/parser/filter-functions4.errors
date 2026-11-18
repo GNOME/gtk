@@ -1,0 +1,4 @@
+2.34 - 2.71: (circle / filter): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+4.34 - 4.100: (circle / filter): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+5.34 - 5.75: (circle / filter): GTK_SVG_ERROR_INVALID_ATTRIBUTE
+3.73 - 3.76: (circle / style): GTK_SVG_ERROR_INVALID_SYNTAX
