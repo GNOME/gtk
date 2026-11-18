@@ -55,6 +55,7 @@ test_data = [
   'filter-functions.svg',
   'filter-functions2.svg',
   'filter-functions3.svg',
+  'filter-functions4.svg',
   'filters.svg',
   'focus.svg',
   'fonts.svg',

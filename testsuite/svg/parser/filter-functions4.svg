@@ -1,0 +1,11 @@
+<svg width='200' height='200'>
+  <!-- drop-shadow() takes at most three lengths -->
+  <circle cx='10' cy='10' r='5' filter='drop-shadow(1px 2px 3px 4px)'/>
+  <circle cx='20' cy='10' r='5' style='filter: drop-shadow(1px 2px 3px 4px)'/>
+  <circle cx='30' cy='10' r='5' filter='drop-shadow(1px 2px 3px 4px) drop-shadow(1px 2px 3px 4px)'/>
+  <circle cx='40' cy='10' r='5' filter='drop-shadow(1px 2px 3px 4px red)'/>
+
+  <!-- three lengths are fine -->
+  <circle cx='50' cy='10' r='5' filter='drop-shadow(1px 2px 3px)'/>
+  <circle cx='60' cy='10' r='5' filter='drop-shadow(red 1px 2px 3px)'/>
+</svg>

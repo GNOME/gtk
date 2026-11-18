@@ -326,13 +326,17 @@ parse_drop_shadow_arg (GtkCssParser *parser,
         }
     }
 
-  if (!css_parser_parse_number_length (parser, 0, &num))
-    return 0;
-
-  for (i = 1; vals[i]; i++)
+  /* At most three lengths. Check before consuming the token,
+   * so the caller reports the extra length as a syntax error.
+   */
+  for (i = 1; i < 4 && vals[i]; i++)
     ;
 
-  g_assert (i < 4);
+  if (i == 4)
+    return 0;
+
+  if (!css_parser_parse_number_length (parser, 0, &num))
+    return 0;
 
   vals[i] = svg_number_new_full (num.unit, num.value);
   return 1;
