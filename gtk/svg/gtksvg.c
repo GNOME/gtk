@@ -240,6 +240,14 @@ extern int64_t time_base;
  * to be animated with `<animate>`.
  *
  *
+ * # On untrusted data
+ *
+ * Note that GtkSvg is an-process parser for a complex format and is
+ * written in C. It was specifically created to support animated icons
+ * and theme resources, not for general content. If you need to load SVG
+ * data from untrusted sources, we recommend using frameworks that were
+ * designed to handle such data, like glycin.
+ *
  * Since: 4.22
  */
 
