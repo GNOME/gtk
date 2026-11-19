@@ -137,6 +137,12 @@ gsk_node_walker_end_node (GskNodeWalker *self)
     self->replay_pos--;
 }
 
+gboolean
+gsk_node_walker_is_partial_node (GskNodeWalker *self)
+{
+  return self->replay_pos == gsk_node_stack_get_size (&self->node_stack);
+}
+
 GskRenderNode *
 gsk_node_walker_get_copy_node (GskNodeWalker *self,
                                gsize          depth,

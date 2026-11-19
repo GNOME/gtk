@@ -23,6 +23,8 @@ gboolean                gsk_node_walker_start_node                      (GskNode
                                                                          gsize                   pos) G_GNUC_WARN_UNUSED_RESULT;
 void                    gsk_node_walker_end_node                        (GskNodeWalker          *self);
 
+gboolean                gsk_node_walker_is_partial_node                 (GskNodeWalker          *self);
+
 GskRenderNode *         gsk_node_walker_get_copy_node                   (GskNodeWalker          *self,
                                                                          gsize                   depth,
                                                                          gsize                  *out_pos);
