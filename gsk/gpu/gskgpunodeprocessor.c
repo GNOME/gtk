@@ -170,6 +170,28 @@ static GskGpuImage *    gsk_gpu_get_node_as_image                       (GskNode
                                                                          graphene_rect_t                *out_bounds,
                                                                          GskGpuSampler                  *out_sampler);
 
+static gboolean G_GNUC_WARN_UNUSED_RESULT
+gsk_gpu_start_node (GskNodeWalker *walker,
+                    GskGpuFrame   *frame,
+                    GskRenderNode *node,
+                    gsize          pos)
+{
+  if (!gsk_node_walker_start_node (walker, node, pos))
+    return FALSE;
+
+  gsk_gpu_frame_start_node (frame, walker);
+
+  return TRUE;
+}
+
+static void
+gsk_gpu_end_node (GskNodeWalker *walker,
+                  GskGpuFrame   *frame)
+{
+  gsk_gpu_frame_end_node (frame);
+  gsk_node_walker_end_node (walker);
+}
+
 static GskGpuImage *
 create_offscreen_image (GskGpuFrame     *frame,
                         gboolean         with_mipmap,
@@ -430,12 +452,12 @@ gsk_gpu_node_processor_add_node (GskNodeWalker       *walker,
                                  GskRenderNode       *node,
                                  gsize                pos)
 {
-  if (!gsk_gpu_frame_start_node (self->frame, node, pos))
+  if (!gsk_gpu_start_node (walker, self->frame, node, pos))
     return;
 
   gsk_gpu_node_processor_add_node_untracked (walker, self, node);
 
-  gsk_gpu_frame_end_node (self->frame);
+  gsk_gpu_end_node (walker, self->frame);
 }
 
 static GskGpuImage *
@@ -589,7 +611,7 @@ gsk_gpu_get_child_as_image (GskNodeWalker         *walker,
 {
   GskGpuImage *result;
 
-  if (!gsk_gpu_frame_start_node (frame, child, pos))
+  if (!gsk_gpu_start_node (walker, frame, child, pos))
     return NULL;
 
   result = gsk_gpu_get_node_as_image (walker,
@@ -601,7 +623,7 @@ gsk_gpu_get_child_as_image (GskNodeWalker         *walker,
                                       child,
                                       out_bounds,
                                       out_sampler);
-  gsk_gpu_frame_end_node (frame);
+  gsk_gpu_end_node (walker, frame);
 
   return result;
 }
@@ -680,7 +702,7 @@ gsk_gpu_node_processor_get_node_as_image (GskNodeWalker         *walker,
 {
   GskGpuImage *result;
 
-  if (!gsk_gpu_frame_start_node (self->frame, node, pos))
+  if (!gsk_gpu_start_node (walker, self->frame, node, pos))
     return NULL;
 
   result = gsk_gpu_node_processor_get_node_as_image_untracked (walker,
@@ -691,7 +713,7 @@ gsk_gpu_node_processor_get_node_as_image (GskNodeWalker         *walker,
                                                                out_bounds,
                                                                out_sampler);
 
-  gsk_gpu_frame_end_node (self->frame);
+  gsk_gpu_end_node (walker, self->frame);
 
   return result;
 }
@@ -1176,7 +1198,7 @@ gsk_gpu_node_processor_add_opacity_node (GskNodeWalker    *walker,
 
   child = gsk_opacity_node_get_child (node);
 
-  if (!gsk_gpu_frame_start_node (self->frame, child, 0))
+  if (!gsk_gpu_start_node (walker, self->frame, child, 0))
     return;
 
   if (gsk_render_node_clears_background (child))
@@ -1184,7 +1206,7 @@ gsk_gpu_node_processor_add_opacity_node (GskNodeWalker    *walker,
   else
     gsk_gpu_node_processor_add_node_untracked (walker, self, child);
 
-  gsk_gpu_frame_end_node (self->frame);
+  gsk_gpu_end_node (walker, self->frame);
 
   gsk_gpu_render_pass_pop_opacity (self, &storage);
 }
@@ -2547,7 +2569,7 @@ gsk_gpu_node_processor_add_shadow_node_slow (GskNodeWalker    *walker,
   if (!gsk_gpu_render_pass_get_clip_bounds (self, &clip))
     return;
 
-  if (!gsk_gpu_frame_start_node (self->frame, child, 0))
+  if (!gsk_gpu_start_node (walker, self->frame, child, 0))
     return;
 
   for (i = 0; i < n_shadows; i++)
@@ -2643,7 +2665,7 @@ gsk_gpu_node_processor_add_shadow_node_slow (GskNodeWalker    *walker,
     }
 
   gsk_gpu_node_processor_add_node_untracked (walker, self, child);
-  gsk_gpu_frame_end_node (self->frame);
+  gsk_gpu_end_node (walker, self->frame);
 }
 
 static void
@@ -4571,10 +4593,10 @@ gsk_gpu_node_processor_add_isolation_node (GskNodeWalker    *walker,
       if (gsk_render_node_get_copy_mode (child) != GSK_COPY_NONE ||
           gsk_render_node_clears_background (child))
         {
-          if (!gsk_gpu_frame_start_node (self->frame, child, 0))
+          if (!gsk_gpu_start_node (walker, self->frame, child, 0))
             return;
           gsk_gpu_node_processor_add_with_offscreen (walker, self, child);
-          gsk_gpu_frame_end_node (self->frame);
+          gsk_gpu_end_node (walker, self->frame);
           return;
         }
     }
