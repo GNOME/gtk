@@ -372,6 +372,7 @@ gdk_wayland_display_init_gl (GdkDisplay *display,
 
 static gboolean
 find_eglconfig_for_window (GdkWindow  *window,
+                           gboolean    use_es,
                            EGLConfig  *egl_config_out,
                            EGLint     *min_swap_interval_out,
                            GError    **error)
@@ -388,6 +389,9 @@ find_eglconfig_for_window (GdkWindow  *window,
 
   attrs[i++] = EGL_SURFACE_TYPE;
   attrs[i++] = EGL_WINDOW_BIT;
+
+  attrs[i++] = EGL_RENDERABLE_TYPE;
+  attrs[i++] = use_es ? EGL_OPENGL_ES2_BIT : EGL_OPENGL_BIT;
 
   attrs[i++] = EGL_COLOR_BUFFER_TYPE;
   attrs[i++] = EGL_RGB_BUFFER;
@@ -464,6 +468,7 @@ gdk_wayland_window_create_gl_context (GdkWindow     *window,
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GdkWaylandGLContext *context;
   EGLConfig config;
+  gboolean use_es;
 
   if (!gdk_wayland_display_init_gl (display, share))
     {
@@ -481,7 +486,10 @@ gdk_wayland_window_create_gl_context (GdkWindow     *window,
       return NULL;
     }
 
-  if (!find_eglconfig_for_window (window, &config,
+  use_es = (_gdk_gl_flags & GDK_GL_GLES) != 0 ||
+           (share != NULL && gdk_gl_context_get_use_es (share));
+
+  if (!find_eglconfig_for_window (window, use_es, &config,
                                   &display_wayland->egl_min_swap_interval,
                                   error))
     return NULL;
