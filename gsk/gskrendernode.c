@@ -40,6 +40,7 @@
 #include "gskcontainernodeprivate.h"
 #include "gskcopypasteutilsprivate.h"
 #include "gskdebugprivate.h"
+#include "gskisolationnodeprivate.h"
 #include "gskrectprivate.h"
 #include "gskrendererprivate.h"
 #include "gskrendernodeparserprivate.h"
@@ -953,6 +954,16 @@ gboolean
 gsk_render_node_is_bilevel_opacity (const GskRenderNode *node)
 {
   return node->bilevel_opacity;
+}
+
+gboolean
+gsk_render_node_isolates_copies (const GskRenderNode *node)
+{
+  /* handcoded so far, it doesn't seem worth a flag */
+  if (gsk_render_node_get_node_type (node) != GSK_ISOLATION_NODE)
+    return FALSE;
+
+  return gsk_isolation_node_get_isolations (node) & GSK_ISOLATION_COPY_PASTE ? TRUE : FALSE;
 }
 
 gboolean

@@ -148,6 +148,7 @@ GdkMemoryDepth  gsk_render_node_get_preferred_depth     (const GskRenderNode    
 gboolean        gsk_render_node_is_hdr                  (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_is_fully_opaque         (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_is_bilevel_opacity      (const GskRenderNode         *node) G_GNUC_PURE;
+gboolean        gsk_render_node_isolates_copies         (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_isolates_background     (const GskRenderNode         *node) G_GNUC_PURE;
 gboolean        gsk_render_node_clears_background       (const GskRenderNode         *node) G_GNUC_PURE;
 GskCopyMode     gsk_render_node_get_copy_mode           (const GskRenderNode         *node) G_GNUC_PURE;

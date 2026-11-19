@@ -69,6 +69,7 @@
 #include "gskmasknode.h"
 #include "gskopacitynode.h"
 #include "gskoutsetshadownodeprivate.h"
+#include "gskpastenode.h"
 #include "gskpath.h"
 #include "gskradialgradientnodeprivate.h"
 #include "gskrectprivate.h"
@@ -4368,6 +4369,53 @@ gsk_gpu_node_processor_add_paste_node (GskNodeWalker    *walker,
                                        GskGpuRenderPass *self,
                                        GskRenderNode    *node)
 {
+  GskNodeWalker *replay;
+  GskRenderNode *copy;
+  gsize start_pos, copy_pos;
+  GskTransform *transform;
+  GskGpuRenderPassTransformStorage transform_storage;
+  GskGpuRenderPassClipStorage clip_storage;
+  graphene_rect_t snapped_clip;
+
+  copy = gsk_node_walker_get_copy_node (walker, gsk_paste_node_get_depth (node), &copy_pos);
+  if (copy == NULL)
+    return;
+
+  if (!gsk_gpu_render_pass_snap_rect (self,
+                                      &node->bounds,
+                                      gsk_paste_node_get_snap (node),
+                                      &snapped_clip))
+    return;
+
+  start_pos = gsk_node_walker_get_replay_start (walker, copy_pos, &transform);
+  if (start_pos == copy_pos)
+    return;
+
+  replay = gsk_node_walker_new_replay (walker, start_pos, copy_pos);
+  gsk_gpu_render_pass_push_clip_rect (self, &snapped_clip, &clip_storage);
+  if (transform != NULL)
+    {
+      gsk_gpu_render_pass_push_transform (self,
+                                          transform,
+                                          NULL,
+                                          NULL,
+                                          &transform_storage);
+    }
+
+  if (!gsk_gpu_render_pass_is_all_clipped (self))
+    {
+      gsk_gpu_node_processor_add_node_untracked (replay,
+                                                 self,
+                                                 gsk_node_walker_get_node (replay, 0));
+    }
+
+  if (transform != NULL)
+    {
+      gsk_gpu_render_pass_pop_transform (self, &transform_storage);
+      gsk_transform_unref (transform);
+    }
+  gsk_gpu_render_pass_pop_clip_rect (self, &clip_storage);
+  gsk_node_walker_free (replay);
 }
 
 static gboolean
