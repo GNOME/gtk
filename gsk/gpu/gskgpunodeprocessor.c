@@ -1015,6 +1015,15 @@ gsk_gpu_node_processor_add_clip_node (GskNodeWalker    *walker,
                                       GskGpuRenderPass *self,
                                       GskRenderNode    *node)
 {
+  if (gsk_node_walker_is_partial_node (walker))
+    {
+      gsk_gpu_node_processor_add_node (walker,
+                                       self,
+                                       gsk_clip_node_get_child (node),
+                                       0);
+      return;
+    }
+
   gsk_gpu_node_processor_add_node_clipped (walker,
                                            self,
                                            gsk_clip_node_get_child (node),
@@ -1031,6 +1040,15 @@ gsk_gpu_node_processor_add_rounded_clip_node (GskNodeWalker    *walker,
   GskGpuRenderPassClipStorage storage;
   GskRoundedRect clip;
   GskRenderNode *child;
+
+  if (gsk_node_walker_is_partial_node (walker))
+    {
+      gsk_gpu_node_processor_add_node (walker,
+                                       self,
+                                       gsk_rounded_clip_node_get_child (node),
+                                       0);
+      return;
+    }
 
   child = gsk_rounded_clip_node_get_child (node);
   clip = *gsk_rounded_clip_node_get_clip (node);
@@ -4003,6 +4021,15 @@ gsk_gpu_node_processor_add_fill_node (GskNodeWalker    *walker,
   GdkColor cache_color;
   const GdkColor *color;
 
+  if (gsk_node_walker_is_partial_node (walker))
+    {
+      gsk_gpu_node_processor_add_node (walker,
+                                       self,
+                                       gsk_fill_node_get_child (node),
+                                       0);
+      return;
+    }
+
   if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clip_bounds))
     return;
 
@@ -4076,6 +4103,21 @@ gsk_gpu_get_fill_node_as_image (GskNodeWalker         *walker,
   const GdkColor *color;
 
   child = gsk_fill_node_get_child (node);
+
+  if (gsk_node_walker_is_partial_node (walker))
+    {
+      return gsk_gpu_get_child_as_image (walker,
+                                         frame,
+                                         flags,
+                                         ccs,
+                                         clip_bounds,
+                                         scale,
+                                         child,
+                                         0,
+                                         out_bounds,
+                                         out_sampler);
+    }
+
   if (GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE &&
       gdk_color_is_opaque (color = gsk_color_node_get_gdk_color (child)))
     {
@@ -4139,6 +4181,15 @@ gsk_gpu_node_processor_add_stroke_node (GskNodeWalker    *walker,
   GskGpuCache *cache;
   GdkColor cache_color;
   const GdkColor *color;
+
+  if (gsk_node_walker_is_partial_node (walker))
+    {
+      gsk_gpu_node_processor_add_node (walker,
+                                       self,
+                                       gsk_stroke_node_get_child (node),
+                                       0);
+      return;
+    }
 
   if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clip_bounds))
     return;
@@ -4213,6 +4264,21 @@ gsk_gpu_get_stroke_node_as_image (GskNodeWalker         *walker,
   const GdkColor *color;
 
   child = gsk_stroke_node_get_child (node);
+
+  if (gsk_node_walker_is_partial_node (walker))
+    {
+      return gsk_gpu_get_child_as_image (walker,
+                                         frame,
+                                         flags,
+                                         ccs,
+                                         clip_bounds,
+                                         scale,
+                                         child,
+                                         0,
+                                         out_bounds,
+                                         out_sampler);
+    }
+
   if (GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE &&
       gdk_color_is_opaque (color = gsk_color_node_get_gdk_color (child)))
     {
@@ -4955,7 +5021,8 @@ gsk_gpu_node_processor_add_node_untracked (GskNodeWalker    *walker,
 {
   GskRenderNodeType node_type;
 
-  if (!gsk_gpu_render_pass_in_clip_fast (self, &node->bounds))
+  if (!gsk_node_walker_is_partial_node (walker) &&
+      !gsk_gpu_render_pass_in_clip_fast (self, &node->bounds))
     return;
 
   node_type = gsk_render_node_get_node_type (node);
