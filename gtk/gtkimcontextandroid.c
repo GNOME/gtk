@@ -84,6 +84,7 @@ typedef struct _GtkIMContextAndroid
   jobject context;
   GtkWidget *client_widget;
   gboolean focused;
+  gboolean had_ime;
   GtkInputPurpose input_purpose;
   GtkInputHints input_hints;
   jstring preedit;
@@ -355,7 +356,7 @@ gtk_im_context_android_get_surface (GtkIMContextAndroid *self)
 }
 
 static void
-gtk_im_context_android_update_ime_keyboard (GtkIMContextAndroid *self)
+gtk_im_context_android_attach_input_connection (GtkIMContextAndroid *self)
 {
   GdkAndroidSurface *surface = gtk_im_context_android_get_surface (self);
   if (!surface || !surface->surface)
@@ -365,9 +366,20 @@ gtk_im_context_android_update_ime_keyboard (GtkIMContextAndroid *self)
   (*env)->CallVoidMethod (env, surface->surface,
                           gdk_android_get_java_cache ()->surface.set_active_im_context,
                           self->context);
+}
+
+static void
+gtk_im_context_android_request_ime_visibility (GtkIMContextAndroid *self, gboolean visible)
+{
+  GdkAndroidSurface *surface = gtk_im_context_android_get_surface (self);
+  if (!surface || !surface->surface)
+    return;
+
+  JNIEnv *env = gdk_android_display_get_env (gdk_surface_get_display ((GdkSurface *)surface));
   (*env)->CallVoidMethod (env, surface->surface,
                           gdk_android_get_java_cache ()->surface.set_ime_keyboard_state,
-                          self->focused);
+                          visible);
+  self->had_ime = visible;
 }
 
 static void
@@ -383,7 +395,10 @@ gtk_im_context_android_set_client_widget (GtkIMContext *context,
   if (widget != NULL)
     {
       g_object_add_weak_pointer ((GObject *)self->client_widget, (gpointer *)&self->client_widget);
-      gtk_im_context_android_update_ime_keyboard (self);
+      if (self->focused)
+        gtk_im_context_android_attach_input_connection (self);
+      // Maybe we want to catch calls to activate_osk without an attached surface
+      // and do them here?
     }
 
   if (GTK_IM_CONTEXT_CLASS (gtk_im_context_android_parent_class)->set_client_widget)
@@ -459,7 +474,7 @@ gtk_im_context_android_focus_in (GtkIMContext *context)
 
   GtkIMContextAndroid *self = GTK_IM_CONTEXT_ANDROID (context);
   self->focused = TRUE;
-  gtk_im_context_android_update_ime_keyboard (self);
+  gtk_im_context_android_attach_input_connection (self);
 
   if (GTK_IM_CONTEXT_CLASS (gtk_im_context_android_parent_class)->focus_in)
     GTK_IM_CONTEXT_CLASS (gtk_im_context_android_parent_class)->focus_in (context);
@@ -472,7 +487,9 @@ gtk_im_context_android_focus_out (GtkIMContext *context)
 
   GtkIMContextAndroid *self = GTK_IM_CONTEXT_ANDROID (context);
   self->focused = FALSE;
-  gtk_im_context_android_update_ime_keyboard (self);
+  if (self->had_ime)
+    gtk_im_context_android_request_ime_visibility (self, FALSE);
+  g_assert (self->had_ime == FALSE);
 
   if (GTK_IM_CONTEXT_CLASS (gtk_im_context_android_parent_class)->focus_out)
     GTK_IM_CONTEXT_CLASS (gtk_im_context_android_parent_class)->focus_out (context);
@@ -483,7 +500,8 @@ gtk_im_context_activate_osk_keyboard (GtkIMContext *context,
                                       GdkEvent     *event)
 {
   GtkIMContextAndroid *self = (GtkIMContextAndroid *)context;
-  gtk_im_context_android_update_ime_keyboard (self);
+  if (self->focused)
+    gtk_im_context_android_request_ime_visibility (self, TRUE);
   return self->focused;
 }
 
@@ -512,6 +530,7 @@ gtk_im_context_android_init (GtkIMContextAndroid *self)
   GTK_DEBUG (MODULES, "gtk_im_context_android_init");
 
   self->focused = FALSE;
+  self->had_ime = FALSE;
   self->input_purpose = GTK_INPUT_PURPOSE_FREE_FORM;
   self->input_hints = GTK_INPUT_HINT_NONE;
 
