@@ -43,6 +43,26 @@ gsk_node_walker_free (GskNodeWalker *self)
   g_free (self);
 }
 
+gsize
+gsk_node_walker_get_n_nodes (GskNodeWalker *self)
+{
+  return gsk_node_stack_get_size (&self->node_stack);
+}
+
+GskRenderNode *
+gsk_node_walker_get_node (GskNodeWalker *self,
+                          gsize          depth)
+{
+  return gsk_node_stack_get (&self->node_stack, depth)->node;
+}
+
+gsize
+gsk_node_walker_get_pos (GskNodeWalker *self,
+                         gsize          depth)
+{
+  return gsk_node_stack_get (&self->node_stack, depth)->pos;
+}
+
 gboolean
 gsk_node_walker_start_node (GskNodeWalker *self,
                             GskRenderNode *node,

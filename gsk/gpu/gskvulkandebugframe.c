@@ -348,13 +348,18 @@ gsk_vulkan_debug_frame_alloc_op (GskGpuFrame         *frame,
 
 static void
 gsk_vulkan_debug_frame_start_node (GskGpuFrame   *frame,
-                                   GskRenderNode *node,
-                                   gsize          pos)
+                                   GskNodeWalker *walker)
 {
   GskVulkanDebugFrame *self = GSK_VULKAN_DEBUG_FRAME (frame);
   GskVulkanDebugEntry *entry;
+  GskRenderNode *node;
+  gsize depth, pos;
 
-  GSK_GPU_FRAME_CLASS (gsk_vulkan_debug_frame_parent_class)->start_node (frame, node, pos);
+  GSK_GPU_FRAME_CLASS (gsk_vulkan_debug_frame_parent_class)->start_node (frame, walker);
+
+  depth = gsk_node_walker_get_n_nodes (walker);
+  node = gsk_node_walker_get_node (walker, depth);
+  pos = gsk_node_walker_get_pos (walker, depth);
 
   if (self->debug_current == NO_ITEM)
     {

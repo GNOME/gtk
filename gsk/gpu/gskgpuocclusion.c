@@ -307,12 +307,15 @@ gsk_gpu_occlusion_try_node (GskGpuOcclusion *self,
 {
   GskGpuRenderPass *result;
 
-  if (!gsk_gpu_frame_start_node (self->frame, node, pos))
+  if (!gsk_node_walker_start_node (self->walker, node, pos))
     return NULL;
+
+  gsk_gpu_frame_start_node (self->frame, self->walker);
 
   result = gsk_gpu_occlusion_try_node_untracked (self, node);
   
   gsk_gpu_frame_end_node (self->frame);
+  gsk_node_walker_end_node (self->walker);
 
   return result;
 }

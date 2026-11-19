@@ -59,8 +59,6 @@ struct _GskGpuFramePrivate
   GskGpuBuffer *storage_buffer;
   guchar *storage_buffer_data;
   gsize storage_buffer_used;
-
-  GskNodeWalker *node_walker;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GskGpuFrame, gsk_gpu_frame, G_TYPE_OBJECT)
@@ -76,8 +74,6 @@ gsk_gpu_frame_default_cleanup (GskGpuFrame *self)
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   GskGpuOp *op;
   gsize i;
-
-  g_assert (priv->node_walker == NULL);
 
   priv->n_globals = 0;
 
@@ -166,8 +162,7 @@ gsk_gpu_frame_default_alloc_op (GskGpuFrame         *self,
 
 static void
 gsk_gpu_frame_default_start_node (GskGpuFrame   *self,
-                                  GskRenderNode *node,
-                                  gsize          pos)
+                                  GskNodeWalker *walker)
 {
 }
 
@@ -199,7 +194,6 @@ gsk_gpu_frame_finalize (GObject *object)
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
 
   gsk_gpu_ops_clear (&priv->ops);
-  g_assert (priv->node_walker == NULL);
 
   g_clear_object (&priv->vertex_buffer);
   g_clear_object (&priv->globals_buffer);
@@ -789,18 +783,18 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   GskRenderPassType pass_type = texture ? GSK_RENDER_PASS_EXPORT : GSK_RENDER_PASS_PRESENT;
+  GskNodeWalker *walker;
 
   priv->timestamp = timestamp;
   gsk_gpu_cache_set_time (gsk_gpu_device_get_cache (priv->device), timestamp);
 
-  g_assert (priv->node_walker == NULL);
-  priv->node_walker = gsk_node_walker_new (node);
-  GSK_GPU_FRAME_GET_CLASS (self)->start_node (self, node, 0);
+  walker = gsk_node_walker_new (node);
+  GSK_GPU_FRAME_GET_CLASS (self)->start_node (self, walker);
 
-  gsk_gpu_node_processor_process (self, target, target_color_state, clip, node, viewport, pass_type);
+  gsk_gpu_node_processor_process (walker, self, target, target_color_state, clip, node, viewport, pass_type);
 
   GSK_GPU_FRAME_GET_CLASS (self)->end_node (self);
-  g_clear_pointer (&priv->node_walker, gsk_node_walker_free);
+  gsk_node_walker_free (walker);
 
   if (texture)
     gsk_gpu_download_op (self, target, target_color_state, texture);
@@ -955,31 +949,18 @@ gsk_gpu_frame_download_texture (GskGpuFrame           *self,
 /*<private>
  * gsk_gpu_frame_start_node:
  * @self: the frame
- * @node: the rendernode to track
- * @pos: the position in the parent node
+ * @walker: the walker describing the current node
  *
- * Starts rendering the given node, which is the child of
- * the currently rendered node at the given position.
+ * Starts rendering the given node. This must be called whenever
+ * a child node starts rendering.
  *
  * To end rendering that node, call gsk_gpu_frame_end_node().
- *
- * Returns: true if the node should be rendered.
  **/
-gboolean
+void
 gsk_gpu_frame_start_node (GskGpuFrame   *self,
-                          GskRenderNode *node,
-                          gsize          pos)
+                          GskNodeWalker *walker)
 {
-  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
-
-  g_assert (priv->node_walker);
-
-  if (!gsk_node_walker_start_node (priv->node_walker, node, pos))
-    return FALSE;
-
-  GSK_GPU_FRAME_GET_CLASS (self)->start_node (self, node, pos);
-
-  return TRUE;
+  GSK_GPU_FRAME_GET_CLASS (self)->start_node (self, walker);
 }
 
 /*<private>
@@ -991,10 +972,6 @@ gsk_gpu_frame_start_node (GskGpuFrame   *self,
 void
 gsk_gpu_frame_end_node (GskGpuFrame *self)
 {
-  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
-
-  gsk_node_walker_end_node (priv->node_walker);
-
   GSK_GPU_FRAME_GET_CLASS (self)->end_node (self);
 }
 
