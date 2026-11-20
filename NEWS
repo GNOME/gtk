@@ -1,3 +1,106 @@
+Overview of Changes in 4.25.1, 19-11-2026
+=========================================
+
+* The blur implementation in GSK has received major performance work
+
+* GtkGLArea uses snapping to work better under fractional scaling
+
+* GskTextureScaleNode can do bicubic scaling
+
+* Text handling in GtkSvg has been improved
+
+* Performance improvements in list views, accessibility, actions,
+  expressions, text rendering,...
+
+* Bugs fixed:
+  - GNOME/gtksourceview#433 macOS: Number key in the press-and-hold accent menu
+    inserts the digit instead of selecting the accent (João Sacramento)
+  - #6057 GtkTextView causes queue_allocate during snapshot (Sergey Bugaev)
+  - #6687 Wayland GLArea render to physical pixels or some option to force 100%
+    scaling
+  - #7135 GDK: Handle mouse buttons 8 and 9 on macOS (Felix Häcker)
+  - #7489 Should a gl surface actual size be `area * (integer) scale` or `area *
+    surface.scale_factor`
+  - #7989 With no line-wrapping, clicking on empty space does not always
+    horizontally scroll view (Christian Hergert)
+  - #8467 Make cairo blur work with fractional radii (Matthias Clasen)
+  - #8520 Out-of-bounds reads and integer overflows in GTK CSS tokenizer (Josh
+    Aas)
+  - #8537 macOS: Press-and-hold accent menu inserts the accented letter without
+    replacing the original one (João Sacramento)
+  - #8542 GTK list item manager bug in section-boundary handling (Christian
+    Hergert)
+  - #8545 Hover state not updated anymore by kinetic scrolling (Corey Berla)
+  - #8551 Loading the view when entering a folder "blocks" the mouse's first
+    single-click on item directly under cursor (Corey Berla)
+  - #8552 a11y: Reading Action.NActions on a widget without actions aborts the
+    application (regression from 5a6802cae5) (Christian Hergert)
+  - #8562 Low Severity : GtkSvg: drop-shadow() with four lengths overflows a
+    stack array in svg_filter_functions_parse_css() (Matthias Clasen)
+  - !6334 Fix GtkTextView causing queue_allocate during snapshot (Sergey Bugaev)
+  - !8503 GLArea: allow fractional scaling (alex2772)
+  - !10012 build: Replace sassc with grass (Matthias Clasen)
+  - !10390 Add GtkWidgetAllocationDetails (Benjamin Otte)
+  - !10436 Make large blurs fast (Benjamin Otte)
+  - !10598 listitemmanager: Reuse widgets of deleted items (Corey Berla)
+  - !10602 Revert "gtkimcontextwayland: Issue commit after show_input_panel
+    request" (Guido Günther)
+  - !10621 win32: Self-virtualize the texture/ARGB cursor chokepoint via STCCS
+    (Dimitriy Ryazantcev)
+  - !10636 Add GSK_SCALING_FILTER_BICUBIC (Benjamin Otte)
+  - !10640 macos: Only show window after the first frame (Felix Häcker)
+  - !10660 csstokenizer: Don't read past the end of input after url( (Josh Aas)
+  - !10662 gsk: Fix a leak in the glyph cache (Matthias Clasen)
+  - !10663 vulkan: report the buffer size without allocation padding (Christian
+    Hergert)
+  - !10665 Correctness fixes around scrollables in GTK (Christian Hergert)
+  - !10666 text: fix accessible text offsets for UTF-8 (Christian Hergert)
+  - !10667 macos: Keep main loop running during window animations (Felix Häcker)
+  - !10669 gtk/flattenlistmodel: use RBTree more efficiently (Christian Hergert)
+  - !10671 css: Fix a double unref in filter url parsing (Josh Aas)
+  - !10672 a11y: index accessible widget children (Christian Hergert)
+  - !10673 gsk: Don't bother with inkless glyphs (Matthias Clasen)
+  - !10675 Misc. small things (Matthias Clasen)
+  - !10677 gtk/expression: speed up watch closures and property expressions
+    (Christian Hergert)
+  - !10678 gtk/listbase: preserve fractional adjustment values (Christian
+    Hergert)
+  - !10684 Fix fallout from shadow node refactoring (Benjamin Otte)
+  - !10685 various frame pacing fixes (Christian Hergert)
+  - !10686 cursor blink frame rate reduction (Christian Hergert)
+  - !10687 gtk-demo: Add blur in the fishbowl (Matthias Clasen)
+  - !10688 gtk4-demo: Handle blur better in filter paintable (Matthias Clasen)
+  - !10691 gpu: Don't run occlusion passes if told not to (Benjamin Otte)
+  - !10692 Mark gtkinit.c introspectable (Sergey Bugaev)
+  - !10695 wayland: Support button-placement setting (Yves Auxier)
+  - !10697 gtk: defer action notifications while reparenting (Christian Hergert)
+  - !10698 Update Georgian translation
+  - !10701 csstokenizer: Avoid signed overflow when reading numbers (Josh Aas)
+  - !10705 Fix refcounting fallout in GtkAllocationDetails (Benjamin Otte)
+  - !10709 Update Azerbaijani translation
+  - !10710 docs: Add some relevant env vars (Matthias Clasen)
+  - !10711 Add some svg blur tests (Matthias Clasen)
+  - !10712 gtk4-demo: Add a shadowed icon to the fishbowl (Matthias Clasen)
+  - !10716 svg: Avoid some nonsense (Matthias Clasen)
+  - !10718 some GtkExpression correctness fixes (Christian Hergert)
+  - !10720 cups: Fix task ownership in store callback (Merlijn Sebrechts)
+  - !10722 ime/android: Don't show IME in on_focus (Florian "sp1rit"​)
+  - !10724 Fix reading Action.NActions (Christian Hergert)
+  - !10725 gdk: Avoid a tautological condition (Matthias Clasen)
+  - !10726 GdkTexture and GskTextureNode fixes (Christian Hergert)
+  - !10728 svg: Fix text bounding boxes (Matthias Clasen)
+  - !10730 Update Azerbaijani translation
+  - !10731 svg: Clean up handling of links in text (Matthias Clasen)
+  - !10738 snapshot: Fix displacement nodes (Matthias Clasen)
+  - !10740 gsk: Follow-up fixes (Matthias Clasen)
+  - !10741 svg: Mention glycin in the docs (Matthias Clasen)
+  - !10742 svg: Bound the drop-shadow() length slots (Matthias Clasen)
+  - !10748 gsk: Make displacement nodes keep clip separate (Matthias Clasen)
+
+* Translation updates:
+  - Azerbaijani (Nicat Xalid)
+  - Georgian (Ekaterine Papava)
+
 Overview of Changes in 4.25.0, 05-11-2026
 =========================================
 
