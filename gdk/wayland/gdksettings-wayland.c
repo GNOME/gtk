@@ -310,6 +310,7 @@ static TranslationEntry translations[] = {
   { FALSE, "org.freedesktop.appearance", "contrast", "gtk-interface-contrast", G_TYPE_ENUM, { .i = 0 } },
   { FALSE, "org.freedesktop.appearance", "reduced-motion", "gtk-interface-reduced-motion", G_TYPE_ENUM, { .i = 0 } },
   { FALSE, "org.freedesktop.appearance", "accent-color", "gtk-accent-color", G_TYPE_NONE, { .rgba = (GdkRGBA) { 0, 0, 0, 1 } } },
+  { FALSE, "org.freedesktop.appearance", "button-placement", "gtk-decoration-layout", G_TYPE_NONE, { .s = "menu:close" } },
   /* Note, this setting doesn't exist, the portal and gsd fake it */
   { FALSE, "org.gnome.fontconfig", "serial", "gtk-fontconfig-timestamp", G_TYPE_NONE, { .i = 0 } },
 };
@@ -382,6 +383,29 @@ apply_portal_setting (TranslationEntry *entry,
           entry->fallback.rgba.green = g;
           entry->fallback.rgba.blue = b;
           entry->fallback.rgba.alpha = 1;
+          break;
+        }
+      if (strcmp (entry->key, "button-placement") == 0)
+        {
+          GStrv leading;
+          GStrv trailing;
+          char *leading_str;
+          char *trailing_str;
+          char *layout;
+
+          g_variant_get (value, "(^as^as)", &leading, &trailing);
+
+          leading_str = g_strjoinv (",", leading);
+          trailing_str = g_strjoinv (",", trailing);
+          layout = g_strconcat (leading_str, ":", trailing_str, NULL);
+
+          entry->fallback.s = g_intern_string (layout);
+
+          g_free (layout);
+          g_free (trailing_str);
+          g_free (leading_str);
+          g_strfreev (trailing);
+          g_strfreev (leading);
           break;
         }
       if (strcmp (entry->key, "antialiasing") == 0 ||
@@ -576,6 +600,8 @@ set_value_from_entry (GdkDisplay       *display,
             g_value_set_int (value, display_wayland->xft_settings.dpi);
           else if (g_str_equal (entry->setting, "gtk-accent-color"))
             g_value_set_boxed (value, &entry->fallback.rgba);
+          else if (g_str_equal (entry->setting, "gtk-decoration-layout"))
+            g_value_set_string (value, entry->fallback.s);
           else
             g_assert_not_reached ();
           break;
