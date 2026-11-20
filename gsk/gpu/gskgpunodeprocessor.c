@@ -4469,9 +4469,41 @@ gsk_gpu_node_processor_add_paste_node (GskNodeWalker    *walker,
 
   if (!gsk_gpu_render_pass_is_all_clipped (self))
     {
-      gsk_gpu_node_processor_add_node_untracked (replay,
-                                                 self,
-                                                 gsk_node_walker_get_node (replay, 0));
+      GskRenderNode *child = gsk_node_walker_get_node (replay, 0);
+      if (gsk_render_node_clears_background (child))
+        {
+          GskGpuImage *image;
+          graphene_rect_t tex_rect;
+          GskGpuSampler tex_sampler;
+          graphene_rect_t bounds;
+
+          /* can't use add_with_offscreen() here because it clips to bounds */
+          if (!gsk_rect_snap_to_grid_grow (&node->bounds, &self->scale, &self->offset, &bounds))
+            return;
+
+          image = gsk_gpu_node_processor_get_node_as_image_untracked (replay,
+                                                                      self,
+                                                                      0,
+                                                                      &bounds,
+                                                                      node,
+                                                                      &tex_rect,
+                                                                      &tex_sampler);
+          if (image == NULL)
+            return;
+
+          gsk_gpu_node_processor_image_op (self,
+                                           image,
+                                           self->ccs,
+                                           tex_sampler,
+                                           &bounds,
+                                           &tex_rect);
+
+          g_object_unref (image);
+        }
+      else
+        {
+          gsk_gpu_node_processor_add_node_untracked (replay, self, child);
+        }
     }
 
   if (transform != NULL)
