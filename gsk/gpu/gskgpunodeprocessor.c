@@ -485,15 +485,18 @@ gsk_gpu_get_node_as_image_via_offscreen (GskNodeWalker         *walker,
                                        out_bounds))
         return NULL;
 
-      if (!gsk_rect_intersection (out_bounds, &node->bounds, out_bounds))
-        return NULL;
+      if (!gsk_node_walker_is_partial_node (walker))
+        {
+          if (!gsk_rect_intersection (out_bounds, &node->bounds, out_bounds))
+            return NULL;
 
-      if (!gsk_rect_snap_to_grid_grow (out_bounds,
-                                       scale,
-                                       &GRAPHENE_POINT_INIT (- clip_bounds->origin.x,
-                                                             - clip_bounds->origin.y),
-                                       out_bounds))
-        return NULL;
+          if (!gsk_rect_snap_to_grid_grow (out_bounds,
+                                           scale,
+                                           &GRAPHENE_POINT_INIT (- clip_bounds->origin.x,
+                                                                 - clip_bounds->origin.y),
+                                           out_bounds))
+            return NULL;
+        }
 
       if (gsk_rect_contains_rect (out_bounds, clip_bounds))
         *out_sampler = GSK_GPU_SAMPLER_DEFAULT;
@@ -4478,14 +4481,14 @@ gsk_gpu_node_processor_add_paste_node (GskNodeWalker    *walker,
           graphene_rect_t bounds;
 
           /* can't use add_with_offscreen() here because it clips to bounds */
-          if (!gsk_rect_snap_to_grid_grow (&node->bounds, &self->scale, &self->offset, &bounds))
+          if (!gsk_gpu_render_pass_get_clip_bounds (self, &bounds))
             return;
 
           image = gsk_gpu_node_processor_get_node_as_image_untracked (replay,
                                                                       self,
                                                                       0,
                                                                       &bounds,
-                                                                      node,
+                                                                      child,
                                                                       &tex_rect,
                                                                       &tex_sampler);
           if (image == NULL)
