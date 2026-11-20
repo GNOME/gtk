@@ -983,6 +983,25 @@ gsk_render_node_contains_paste_node (const GskRenderNode *node)
   return node->contains_paste_node;
 }
 
+gboolean
+gsk_render_node_contains_copy_paste_node (const GskRenderNode *node)
+{
+  return node->contains_copy_paste_node;
+}
+
+/* TRUE if diffing the node with itself can add to the diff, because it
+ * pastes what is drawn below it somewhere else, or pastes a copy made
+ * outside of it.
+ *
+ * A copy pasted back onto the same pixels (GSK_COPY_SAME_PIXEL) can't:
+ * if those pixels changed below it, they are already in the diff.
+ */
+gboolean
+gsk_render_node_needs_diff_with_self (const GskRenderNode *node)
+{
+  return node->copy_mode == GSK_COPY_ANY || node->contains_paste_node;
+}
+
 /*<private>
  * gsk_render_node_needs_blending:
  * @node: the node

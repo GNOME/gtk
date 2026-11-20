@@ -245,6 +245,7 @@ gsk_gl_shader_node_new (GskGLShader           *shader,
           node->preferred_depth = gdk_memory_depth_merge (node->preferred_depth,
                                                           gsk_render_node_get_preferred_depth (children[i]));
           node->contains_subsurface_node |= gsk_render_node_contains_subsurface_node (children[i]);
+          node->contains_copy_paste_node |= gsk_render_node_contains_copy_paste_node (children[i]);
           node->contains_paste_node |= gsk_render_node_contains_paste_node (children[i]);
         }
     }

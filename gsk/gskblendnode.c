@@ -277,6 +277,8 @@ gsk_blend_node_new2 (GskRenderNode *bottom,
   node->isolates_background = TRUE;
   node->contains_subsurface_node = gsk_render_node_contains_subsurface_node (bottom) ||
                                    gsk_render_node_contains_subsurface_node (top);
+  node->contains_copy_paste_node = gsk_render_node_contains_copy_paste_node (bottom) ||
+                                   gsk_render_node_contains_copy_paste_node (top);
   node->contains_paste_node = gsk_render_node_contains_paste_node (bottom) ||
                               gsk_render_node_contains_paste_node (top);
 
