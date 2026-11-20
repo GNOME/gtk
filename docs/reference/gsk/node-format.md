@@ -428,7 +428,7 @@ Creates a node like `gsk_debug_node_new()` with the given properties.
 
 | property     | syntax           | default                | printed     |
 | ------------ | ---------------- | ---------------------- | ----------- |
-| bounds       | `<rect>`         | 50                     | always      |
+| clip         | `<rect>`         | 50                     | always      |
 | snap         | `<snap>`         | none                   | non-default |
 | child        | `<node>`         | color { }              | always      |
 | displacement | `<node>`         | color { }              | always      |

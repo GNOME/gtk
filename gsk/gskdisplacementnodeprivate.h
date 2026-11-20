@@ -27,7 +27,7 @@ typedef struct _GskDisplacementNode                GskDisplacementNode;
 #define GSK_TYPE_DISPLACEMENT_NODE (gsk_displacement_node_get_type())
 
 GType                   gsk_displacement_node_get_type          (void);
-GskRenderNode *         gsk_displacement_node_new               (const graphene_rect_t    *bounds,
+GskRenderNode *         gsk_displacement_node_new               (const graphene_rect_t    *clip,
                                                                  GskRectSnap               snap,
                                                                  GskRenderNode            *child,
                                                                  GskRenderNode            *displacement,
@@ -42,6 +42,7 @@ const GdkColorChannel * gsk_displacement_node_get_channels      (const GskRender
 const graphene_size_t * gsk_displacement_node_get_max           (const GskRenderNode      *node) G_GNUC_PURE;
 const graphene_size_t * gsk_displacement_node_get_scale         (const GskRenderNode      *node) G_GNUC_PURE;
 const graphene_point_t *gsk_displacement_node_get_offset        (const GskRenderNode      *node) G_GNUC_PURE;
+const graphene_rect_t  *gsk_displacement_node_get_clip          (const GskRenderNode      *node) G_GNUC_PURE;
 
 G_END_DECLS
 

@@ -1693,6 +1693,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         const graphene_point_t *p;
         const GdkColorChannel *channels;
 
+        add_rect_row (store, "Clip", gsk_displacement_node_get_clip (node));
         add_snap_row (store, "Snap", gsk_displacement_node_get_snap (node));
 
         s = gsk_displacement_node_get_max (node);

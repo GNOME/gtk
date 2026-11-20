@@ -46,6 +46,7 @@ test_data = [
   'filter-blur-edgemode.svg',
   'filter-blur-uneven.svg',
   'filter-displacement.svg',
+  'filter-displacement2.svg',
   'filter-color-matrix.svg',
   'filter-color-matrix2.svg',
   'filter-combined.svg',
