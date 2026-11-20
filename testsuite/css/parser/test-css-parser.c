@@ -118,6 +118,45 @@ parsing_error_cb (GtkCssProvider *provider,
 }
 
 static void
+ignore_parsing_error (GtkCssProvider *provider,
+                      GtkCssSection  *section,
+                      const GError   *error,
+                      gpointer        user_data)
+{
+}
+
+/* Parses the file again from a copy without the NUL that
+ * g_file_load_bytes() puts after the data, so that a read past the
+ * end of the input fails in a sanitizer build. The copy has no file,
+ * so relative URLs and imports don't resolve, and the result is
+ * thrown away. */
+static void
+parse_exact_size_copy (const char *css_file)
+{
+  GtkCssProvider *provider;
+  char *contents;
+  gsize length;
+  GBytes *bytes;
+  GError *error = NULL;
+
+  g_file_get_contents (css_file, &contents, &length, &error);
+  g_assert_no_error (error);
+
+  bytes = g_bytes_new_take (g_memdup2 (contents, length), length);
+  g_free (contents);
+
+  provider = gtk_css_provider_new ();
+  g_signal_connect (provider,
+                    "parsing-error",
+                    G_CALLBACK (ignore_parsing_error),
+                    NULL);
+  gtk_css_provider_load_from_bytes (provider, bytes);
+
+  g_bytes_unref (bytes);
+  g_object_unref (provider);
+}
+
+static void
 parse_css_file (GFile *file, gboolean generate)
 {
   GtkCssProvider *provider;
@@ -147,6 +186,8 @@ parse_css_file (GFile *file, gboolean generate)
       g_print ("%s", css);
       goto out;
     }
+
+  parse_exact_size_copy (css_file);
 
   reference_file = test_get_reference_file (css_file);
 

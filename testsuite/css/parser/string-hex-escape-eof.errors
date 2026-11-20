@@ -1,0 +1,2 @@
+string-hex-escape-eof.css:2:3-20: error: GTK_CSS_PARSER_WARNING_SYNTAX
+string-hex-escape-eof.css:1:3-2:20: error: GTK_CSS_PARSER_WARNING_SYNTAX

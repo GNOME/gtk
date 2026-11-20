@@ -1,0 +1,11 @@
+/* This file and utf8-invalid-in-string.ref.css are intentionally not
+ * valid UTF-8. The byte 0xE9 in "caf" starts a 3-byte UTF-8 sequence,
+ * but the closing quote follows it instead of continuation bytes. Make
+ * sure your editor doesn't convert them to UTF-8 when saving. */
+a {
+  font-family: "café";
+}
+
+b {
+  color: inherit;
+}

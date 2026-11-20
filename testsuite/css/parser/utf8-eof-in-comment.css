@@ -1,0 +1,5 @@
+/* This file is intentionally not valid UTF-8. It ends with the byte
+ * 0xE2, which starts a 3-byte UTF-8 sequence, partway through a
+ * comment. Make sure your editor doesn't convert it to UTF-8 when
+ * saving. */
+/*â
