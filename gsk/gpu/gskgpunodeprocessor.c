@@ -4767,7 +4767,10 @@ gsk_gpu_node_processor_add_container_node (GskNodeWalker    *walker,
 
   children = gsk_render_node_get_children (node, &n_children);
 
-  if (node->fully_opaque && !gsk_container_node_is_disjoint (node) && n_children > 0)
+  if (node->fully_opaque &&
+      !gsk_node_walker_is_partial_node (walker) &&
+      !gsk_container_node_is_disjoint (node) &&
+      n_children > 0)
     {
       graphene_rect_t opaque;
 
