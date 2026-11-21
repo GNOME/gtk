@@ -49,6 +49,14 @@ path_builder_add_ellipse (GskPathBuilder *builder,
   gsk_path_builder_close    (builder);
 }
 
+GskPath *
+path_reverse (GskPath *path)
+{
+  GskPathBuilder *builder = gsk_path_builder_new ();
+  gsk_path_builder_add_reverse_path (builder, path);
+  return gsk_path_builder_free_to_path (builder);
+}
+
 /* }}} */
 /* {{{ Path transformation */
 
