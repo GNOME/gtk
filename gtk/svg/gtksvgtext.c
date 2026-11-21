@@ -848,7 +848,6 @@ apply_pos_to_chunk (TextContext *ctx,
 static void
 end_chunk (TextContext *ctx)
 {
-  int width, height;
   double dx = 0;
   double dy = 0;
   gboolean in_chunk;
@@ -868,7 +867,6 @@ end_chunk (TextContext *ctx)
   g_assert (ctx->chunk_layout < node->characters.layouts->len);
   chunk = &g_array_index (node->characters.layouts, TextLayout, ctx->chunk_layout);
 
-  pango_layout_get_size (chunk->layout, &width, &height);
   switch (chunk->anchor)
     {
     case TEXT_ANCHOR_START:
