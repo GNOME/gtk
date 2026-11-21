@@ -21,6 +21,9 @@ void                    gsk_repeat_node_compute_rect_for_pad    (const graphene_
                                                                  graphene_rect_t        *result);
 void                    gsk_repeat_node_compute_rect_for_reflect(const graphene_rect_t  *draw_bounds,
                                                                  const graphene_rect_t  *child_bounds,
-                                                                 graphene_rect_t        *child_rect,
+                                                                 graphene_rect_t        *child_rect);
+void                    gsk_repeat_node_place_rect_for_reflect  (const graphene_rect_t  *draw_bounds,
+                                                                 const graphene_rect_t  *child_bounds,
+                                                                 const graphene_rect_t  *child_rect,
                                                                  graphene_point_t       *pos);
 G_END_DECLS

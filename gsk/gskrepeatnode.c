@@ -330,6 +330,96 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
 }
 
 /*<private>
+ * gsk_repeat_node_place_rect_for_reflect:
+ * @draw_bounds: the area that should be drawn
+ * @child_bounds: the bounds of the child
+ * @child_rect: the part of the child that is drawn.
+ * @pos: (out caller-allocates): where to place the top left of the child rect
+ *
+ * Computes where to place the child rect so that when rendering it into the
+ * passed in draw bounds with REFLECT it will produce the correct output.
+ *
+ * The @child_rect must be at least as large as the result from
+ * gsk_repeat_node_compute_rect_for_reflect() (it may be snapped to grow) but
+ * must be contained in @child_bounds.
+ **/
+void
+gsk_repeat_node_place_rect_for_reflect (const graphene_rect_t *draw_bounds,
+                                        const graphene_rect_t *child_bounds,
+                                        const graphene_rect_t *child_rect,
+                                        graphene_point_t      *pos)
+{
+  float tile_left, tile_right, tile_top, tile_bottom;
+
+  tile_left = (draw_bounds->origin.x - child_bounds->origin.x) / child_bounds->size.width;
+  tile_right = (draw_bounds->origin.x + draw_bounds->size.width - child_bounds->origin.x) / child_bounds->size.width;
+  tile_top = (draw_bounds->origin.y - child_bounds->origin.y) / child_bounds->size.height;
+  tile_bottom = (draw_bounds->origin.y + draw_bounds->size.height - child_bounds->origin.y) / child_bounds->size.height;
+
+  if (draw_bounds->size.width >= child_bounds->size.width)
+    {
+      /* the tile is fully contained at least once */
+      pos->x = child_rect->origin.x;
+    }
+  else if (ceilf (tile_left) <= floorf (tile_right))
+    {
+      /* one side of the tile gets reflected */
+      pos->x = child_bounds->origin.x + ceilf (tile_left) * child_bounds->size.width;
+
+      /* ...normal | mirrored... */
+      if (((int) ceilf (tile_left)) % 2)
+        pos->x -= child_rect->size.width;
+    }
+  else
+    {
+      /* a middle part of the tile is visible */
+      float steps = floorf (tile_left);
+      if ((int) steps % 2)
+        {
+#if 0
+          pos->x = child_bounds->origin.x + (steps - 1) * child_bounds->size.width;
+          pos->x -= (child_bounds->origin.x - child_rect->origin.x)
+          pos->x += 2 * (child_bounds->origin.x + child_bounds->size.width - child_rect->origin.x - child_rect->size.width)
+#endif
+
+          pos->x = 2 * child_bounds->origin.x + (steps + 1) * child_bounds->size.width - child_rect->origin.x - 2 * child_rect->size.width;
+        }
+      else
+        {
+          pos->x = child_rect->origin.x + steps * child_bounds->size.width;
+        }
+    }
+  
+  if (draw_bounds->size.height >= child_bounds->size.height)
+    {
+      /* the tile is fully contained at least once */
+      pos->y = child_rect->origin.y;
+    }
+  else if (ceilf (tile_top) <= floorf (tile_bottom))
+    {
+      /* one side of the tile gets reflected */
+      pos->y = child_bounds->origin.y + ceilf (tile_top) * child_bounds->size.height;
+
+      /* ...normal | mirrored... */
+      if (((int) ceilf (tile_top)) % 2)
+        pos->y -= child_rect->size.height;
+    }
+  else
+    {
+      /* a middle part of the tile is visible */
+      float steps = floorf (tile_top);
+      if ((int) steps % 2)
+        {
+          pos->y = 2 * child_bounds->origin.y + (steps + 1) * child_bounds->size.height - child_rect->origin.y - 2 * child_rect->size.height;
+        }
+      else
+        {
+          pos->y = child_rect->origin.y + steps * child_bounds->size.height;
+        }
+    }
+}
+
+/*<private>
  * gsk_repeat_node_compute_rect_for_reflect:
  * @draw_bounds: the area that should be drawn
  * @child_bounds: the bounds of the child
@@ -337,14 +427,16 @@ gsk_repeat_node_draw_repeat (GskRenderNode *node,
  * @pos: (out caller-allocates): where to place the top left of the child rect
  *
  * Computes the part of the child bounds that need to be rendered into an offscreen
- * and where to place that so that when rendering it into the passed in draw bounds
- * with REFLECT it will produce the correct output.
+ * so that when rendering it into the passed in draw bounds with REFLECT it will
+ * produce the correct output.
+ *
+ * To figure out where to place child_rect, potentially after snapping it first,
+ * use gsk_repeat_node_place_rect_for_reflect().
  **/
 void
 gsk_repeat_node_compute_rect_for_reflect (const graphene_rect_t *draw_bounds,
                                           const graphene_rect_t *child_bounds,
-                                          graphene_rect_t       *child_rect,
-                                          graphene_point_t      *pos)
+                                          graphene_rect_t       *child_rect)
 {
   float tile_left, tile_right, tile_top, tile_bottom;
 
@@ -358,7 +450,6 @@ gsk_repeat_node_compute_rect_for_reflect (const graphene_rect_t *draw_bounds,
       /* the tile is fully contained at least once */
       child_rect->origin.x = child_bounds->origin.x;
       child_rect->size.width = child_bounds->size.width;
-      pos->x = child_rect->origin.x;
     }
   else if (ceilf (tile_left) <= floorf (tile_right))
     {
@@ -368,13 +459,11 @@ gsk_repeat_node_compute_rect_for_reflect (const graphene_rect_t *draw_bounds,
         {
           /* ...normal | mirrored... */
           child_rect->origin.x = child_bounds->origin.x + child_bounds->size.width - child_rect->size.width;
-          pos->x = child_bounds->origin.x + ceilf (tile_left) * child_bounds->size.width - child_rect->size.width;
         }
       else
         {
           /* ...mirrored | normal... */
           child_rect->origin.x = child_bounds->origin.x;
-          pos->x = child_rect->origin.x + ceilf (tile_left) * child_bounds->size.width;
         }
     }
   else
@@ -383,11 +472,9 @@ gsk_repeat_node_compute_rect_for_reflect (const graphene_rect_t *draw_bounds,
       float steps = floorf (tile_left);
       child_rect->size.width = draw_bounds->size.width;
       child_rect->origin.x = child_bounds->origin.x + (tile_left - steps) * child_bounds->size.width;
-      pos->x = child_rect->origin.x + steps * child_bounds->size.width;
       if ((int) steps % 2)
         {
           child_rect->origin.x = child_bounds->origin.x + (1 - tile_left + steps) * child_bounds->size.width - child_rect->size.width;
-          pos->x -= child_rect->size.width;
         }
     }
   
@@ -396,7 +483,6 @@ gsk_repeat_node_compute_rect_for_reflect (const graphene_rect_t *draw_bounds,
       /* the tile is fully contained at least once */
       child_rect->origin.y = child_bounds->origin.y;
       child_rect->size.height = child_bounds->size.height;
-      pos->y = child_rect->origin.y;
     }
   else if (ceilf (tile_top) <= floorf (tile_bottom))
     {
@@ -406,13 +492,11 @@ gsk_repeat_node_compute_rect_for_reflect (const graphene_rect_t *draw_bounds,
         {
           /* ...normal | mirrored... */
           child_rect->origin.y = child_bounds->origin.y + child_bounds->size.height - child_rect->size.height;
-          pos->y = child_bounds->origin.y + ceilf (tile_top) * child_bounds->size.height - child_rect->size.height;
         }
       else
         {
           /* ...mirrored | normal... */
           child_rect->origin.y = child_bounds->origin.y;
-          pos->y = child_rect->origin.y + ceilf (tile_top) * child_bounds->size.height;
         }
     }
   else
@@ -421,11 +505,9 @@ gsk_repeat_node_compute_rect_for_reflect (const graphene_rect_t *draw_bounds,
       float steps = floorf (tile_top);
       child_rect->size.height = draw_bounds->size.height;
       child_rect->origin.y = child_bounds->origin.y + (tile_top - steps) * child_bounds->size.height;
-      pos->y = child_rect->origin.y + steps * child_bounds->size.height;
       if ((int) steps % 2)
         {
           child_rect->origin.y = child_bounds->origin.y + (1 - tile_top + steps) * child_bounds->size.height - child_rect->size.height;
-          pos->y -= child_rect->size.height;
         }
     }
 }
@@ -450,18 +532,16 @@ gsk_repeat_node_draw_reflect (GskRenderNode *node,
 
   gsk_repeat_node_compute_rect_for_reflect (&clip_bounds,
                                             &child_bounds,
-                                            &draw_bounds,
-                                            &draw_pos);
+                                            &draw_bounds);
 
   if (!gsk_cairo_rect_snap (cr, &draw_bounds, GSK_RECT_SNAP_GROW, &snapped))
     return;
-
   if (gsk_rect_contains_rect (&child_bounds, &snapped))
-    {
-      draw_pos.x += snapped.origin.x - draw_bounds.origin.x;
-      draw_pos.y += snapped.origin.y - draw_bounds.origin.y;
-      draw_bounds = snapped;
-    }
+    draw_bounds = snapped;
+  gsk_repeat_node_place_rect_for_reflect (&clip_bounds,
+                                          &child_bounds,
+                                          &draw_bounds,
+                                          &draw_pos);
 
   gsk_repeat_node_draw_tiled (cr,
                               data,

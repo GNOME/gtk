@@ -3601,8 +3601,7 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuRenderPass *self,
 
       gsk_repeat_node_compute_rect_for_reflect (&bounds,
                                                 &child_bounds,
-                                                &clipped_child_bounds,
-                                                &pos);
+                                                &clipped_child_bounds);
       if (!gsk_gpu_render_pass_snap_rect (self,
                                           &clipped_child_bounds,
                                           GSK_RECT_SNAP_GROW,
@@ -3610,11 +3609,11 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuRenderPass *self,
         return;
 
       if (gsk_rect_contains_rect (&child_bounds, &snapped_child_bounds))
-        {
-          pos.x += snapped_child_bounds.origin.x - clipped_child_bounds.origin.x;
-          pos.y += snapped_child_bounds.origin.y - clipped_child_bounds.origin.y;
-          clipped_child_bounds = snapped_child_bounds;
-        }
+        clipped_child_bounds = snapped_child_bounds;
+      gsk_repeat_node_place_rect_for_reflect (&bounds,
+                                              &child_bounds,
+                                              &clipped_child_bounds,
+                                              &pos);
 
       image = gsk_gpu_node_processor_get_node_as_image (self,
                                                         GSK_GPU_AS_IMAGE_EXACT_SIZE,
@@ -3849,16 +3848,15 @@ gsk_gpu_node_processor_get_repeat_node_as_image (GskGpuFrame           *frame,
 
           gsk_repeat_node_compute_rect_for_reflect (clip_bounds,
                                                     &child_bounds,
-                                                    &clipped_child_bounds,
-                                                    &pos);
+                                                    &clipped_child_bounds);
           if (!gsk_rect_snap_to_grid_grow (&clipped_child_bounds, scale, &clip_bounds->origin, &snapped_child_bounds))
             return NULL;
           if (gsk_rect_contains_rect (&child_bounds, &snapped_child_bounds))
-            {
-              pos.x += snapped_child_bounds.origin.x - clipped_child_bounds.origin.x;
-              pos.y += snapped_child_bounds.origin.y - clipped_child_bounds.origin.y;
-              clipped_child_bounds = snapped_child_bounds;
-            }
+            clipped_child_bounds = snapped_child_bounds;
+          gsk_repeat_node_place_rect_for_reflect (clip_bounds,
+                                                  &child_bounds,
+                                                  &clipped_child_bounds,
+                                                  &pos);
 
           result = gsk_gpu_get_child_as_image (frame,
                                                flags | GSK_GPU_AS_IMAGE_EXACT_SIZE,
