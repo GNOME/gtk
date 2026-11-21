@@ -2658,6 +2658,9 @@ text_cb (GMarkupParseContext  *context,
   if (!data->current_shape)
     return;
 
+  if (data->skip.to)
+    return;
+
   if (svg_element_holds_text_content (data->current_shape))
     svg_element_add_text_content (data->current_shape, text, len);
   else if (data->text.collect)
