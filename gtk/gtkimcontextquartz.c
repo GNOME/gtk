@@ -199,6 +199,84 @@ quartz_get_preedit_string (GtkIMContext *context,
     *cursor_pos = qc->cursor_index;
 }
 
+/* Number of UTF-16 code units needed for @c */
+static int
+utf16_len (gunichar c)
+{
+  return c > 0xFFFF ? 2 : 1;
+}
+
+static void
+update_cursor_pos (GtkIMContext *context,
+                   GdkSurface   *surface)
+{
+  char *text;
+  int cursor_index, anchor_index;
+  guint cursor_pos = 0;
+
+  if (gtk_im_context_get_surrounding_with_selection (context, &text, &cursor_index, &anchor_index))
+    {
+      const char *p;
+
+      for (p = text; p < text + cursor_index && *p; p = g_utf8_next_char (p))
+        cursor_pos += utf16_len (g_utf8_get_char (p));
+
+      cursor_pos += 1;
+      g_free (text);
+    }
+
+  g_object_set_data (G_OBJECT (surface), TIC_CURSOR_POS, GUINT_TO_POINTER (cursor_pos));
+}
+
+/* Delete the text the input method asked to replace, given in UTF-16
+ * code units relative to the cursor. */
+static void
+delete_replaced_text (GtkIMContext *context,
+                      int           offset16,
+                      int           len16)
+{
+  char *text;
+  int cursor_index, anchor_index;
+  const char *start, *end;
+  int offset = 0, n_chars = 0, units;
+
+  if (!gtk_im_context_get_surrounding_with_selection (context, &text, &cursor_index, &anchor_index))
+    return;
+
+  start = text + cursor_index;
+  units = 0;
+  while (units < -offset16 && start > text)
+    {
+      start = g_utf8_prev_char (start);
+      units += utf16_len (g_utf8_get_char (start));
+      offset--;
+    }
+  while (units < offset16 && *start)
+    {
+      units += utf16_len (g_utf8_get_char (start));
+      start = g_utf8_next_char (start);
+      offset++;
+    }
+
+  if (units != ABS (offset16))
+    goto out;
+
+  end = start;
+  units = 0;
+  while (units < len16 && *end)
+    {
+      units += utf16_len (g_utf8_get_char (end));
+      end = g_utf8_next_char (end);
+      n_chars++;
+    }
+
+  if (units == len16)
+    gtk_im_context_delete_surrounding (context, offset, n_chars);
+
+out:
+  g_free (text);
+}
+
 static gboolean
 output_result (GtkIMContext *context,
                GdkSurface *surface)
@@ -211,7 +289,13 @@ output_result (GtkIMContext *context,
   marked_str = g_strdup (g_object_get_data (G_OBJECT (surface), TIC_MARKED_TEXT));
   if (fixed_str)
     {
+      int replace_len = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (surface), TIC_REPLACE_LEN));
+
       GTK_DEBUG (MODULES, "tic-insert-text: %s", fixed_str);
+      if (replace_len > 0)
+        delete_replaced_text (context,
+                              GPOINTER_TO_INT (g_object_get_data (G_OBJECT (surface), TIC_REPLACE_OFFSET)),
+                              replace_len);
       g_clear_pointer (&qc->preedit_str, g_free);
       g_object_set_data (G_OBJECT (surface), TIC_INSERT_TEXT, NULL);
       g_signal_emit_by_name (context, "commit", fixed_str);
@@ -243,9 +327,22 @@ output_result (GtkIMContext *context,
     }
   if (!fixed_str && !marked_str)
     {
+      unsigned int filtered =
+           GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (surface),
+                                                GIC_FILTER_KEY));
+
       if (qc->preedit_str && strlen (qc->preedit_str) > 0)
         retval = TRUE;
+      /* The input method consumed the key without producing text yet,
+       * e.g. a digit choosing an entry in the press-and-hold accent menu
+       * (the accented letter is committed afterwards). The event must not
+       * be handled again.
+       */
+      else if (filtered == GIC_FILTER_FILTERED)
+        retval = TRUE;
     }
+  g_object_set_data (G_OBJECT (surface), TIC_REPLACE_OFFSET, NULL);
+  g_object_set_data (G_OBJECT (surface), TIC_REPLACE_LEN, NULL);
   g_free (fixed_str);
   g_free (marked_str);
   return retval;
@@ -294,10 +391,18 @@ quartz_filter_keypress (GtkIMContext *context,
   if (etype == NSEventTypeKeyDown)
     {
       NSView *nsview = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (client_surface));
+      update_cursor_pos (context, client_surface);
       g_object_set_data (G_OBJECT (client_surface),
                          TIC_IN_KEY_DOWN,
                          GUINT_TO_POINTER (TRUE));
       [nsview keyDown: nsevent];
+    }
+  else
+    {
+      /* Only key down events go through the input method */
+      g_object_set_data (G_OBJECT (client_surface),
+                         GIC_FILTER_KEY,
+                         GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
     }
   /* JIS_Eisu || JIS_Kana */
   if (keycode == 102 || keycode == 104)
@@ -401,7 +506,13 @@ quartz_focus_out (GtkIMContext *context)
   GTK_DEBUG (MODULES, "quartz_focus_out");
 
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
+  GdkSurface *surface;
+
   qc->focused = FALSE;
+
+  surface = surface_from_widget (context);
+  if (GDK_IS_MACOS_SURFACE (surface))
+    g_object_set_data (G_OBJECT (surface), TIC_CURSOR_POS, NULL);
 
   /* Commit any partially built strings or it'll mess up other widgets in the window */
   discard_preedit (context);

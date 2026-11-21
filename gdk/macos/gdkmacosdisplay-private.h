@@ -35,6 +35,13 @@ G_BEGIN_DECLS
 #define TIC_SELECTED_LEN     "tic-selected-len"
 #define TIC_INSERT_TEXT      "tic-insert-text"
 #define TIC_IN_KEY_DOWN      "tic-in-key-down"
+/* Cursor position in the surrounding text, in UTF-16 units, plus one
+ * (0 = unknown). Set by GtkIMContextQuartz, advanced by -insertText:. */
+#define TIC_CURSOR_POS       "tic-cursor-pos"
+/* Text to replace before committing TIC_INSERT_TEXT, in UTF-16 units
+ * relative to the cursor (e.g. press-and-hold accent menu). */
+#define TIC_REPLACE_OFFSET   "tic-replace-offset"
+#define TIC_REPLACE_LEN      "tic-replace-len"
 
 /* GtkIMContext */
 #define GIC_CURSOR_RECT      "gic-cursor-rect"
