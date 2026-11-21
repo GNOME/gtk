@@ -1,0 +1,18 @@
+<svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+  <path id="wave" d="M 20,80 Q 150,10 280,80" fill="none" stroke="black"/>
+
+  <text font-size="20" fill="black">
+    <!-- Applies a curved underline to the entire path -->
+    <textPath href="#wave" text-decoration="underline">
+      Text with a
+      <!-- Overrides decoration for a specific word -->
+      <tspan dy="-6 6" text-decoration="line-through" fill="green">custom</tspan>
+    </textPath>
+      decoration.
+  </text>
+  <text font-size="20" fill="red">
+    <textPath href="#wave" side="right">
+      right side
+    </textPath>
+  </text>
+</svg>

@@ -36,6 +36,7 @@
 #include "gtksvgtextdecorationprivate.h"
 #include "gtksvgelementtypeprivate.h"
 #include "gtksvgelementinternal.h"
+#include "gtksvgpathprivate.h"
 
 #include <hb-ot.h>
 
@@ -116,10 +117,14 @@ typedef struct
   gboolean trailing;
   double x0, y0;
   double x, y;
+  double dx, dy;
   double baseline_shift;
   SvgElement *chunk_shape;
   unsigned int chunk_node;
   unsigned int chunk_layout;
+  GskPath *path;
+  GskPathMeasure *path_measure;
+  double path_offset;
 } TextContext;
 
 static char *
@@ -835,10 +840,37 @@ apply_pos_to_chunk (TextContext *ctx,
 
               if (*in_chunk)
                 {
-                  layout->x0 += dx;
-                  layout->y0 += dy;
-                  layout->x = layout->x0 + layout->origin.x;
-                  layout->y = layout->y0 + layout->origin.y;
+                  if (ctx->path_measure != NULL)
+                    {
+                      float offset = ctx->path_offset + layout->x0 + dx;
+                      GskPathPoint point;
+
+                      if (0 <= offset && offset <= gsk_path_measure_get_length (ctx->path_measure) &&
+                          gsk_path_measure_get_point (ctx->path_measure, offset, &point))
+                        {
+                          graphene_point_t position;
+                          double s, c;
+
+                          gsk_path_point_get_position (&point, ctx->path, &position);
+                          layout->r = gsk_path_point_get_rotation (&point, ctx->path, GSK_PATH_TO_END);
+                          _sincos (DEG_TO_RAD (layout->r), &s, &c);
+                          layout->x0 = position.x;
+                          layout->y0 = position.y;
+                          layout->x = layout->x0 + layout->origin.x * c - layout->origin.y * s;
+                          layout->y = layout->y0 + layout->origin.x * s + layout->origin.y * c;
+                        }
+                      else
+                        {
+                          layout->hidden = TRUE;
+                        }
+                    }
+                  else
+                    {
+                      layout->x0 += dx;
+                      layout->y0 += dy;
+                      layout->x = layout->x0 + layout->origin.x;
+                      layout->y = layout->y0 + layout->origin.y;
+                    }
                 }
             }
         }
@@ -962,6 +994,51 @@ do_generate_layouts (SvgElement            *self,
   text_ctx->baseline_shift += svg_element_get_baseline_shift (self, context);
   text_ctx->space = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_SPACE));
 
+  if (self->type == SVG_ELEMENT_TEXT_PATH)
+    {
+      SvgValue *value = svg_element_get_current_value (self, SVG_PROPERTY_TEXT_PATH);
+      SvgValue *href = svg_element_get_current_value (self, SVG_PROPERTY_HREF);
+      SvgValue *side = svg_element_get_current_value (self, SVG_PROPERTY_TEXT_PATH_SIDE);
+      GskPath *path = NULL;
+
+      end_chunk (text_ctx);
+
+      g_assert (text_ctx->path == NULL);
+
+      if (!svg_value_equal (value, svg_path_new_none ()) &&
+          !gsk_path_is_empty (svg_path_get_gsk (value)))
+        {
+          path = gsk_path_ref (svg_path_get_gsk (value));
+        }
+      else if (!svg_value_equal (href, svg_href_new_none ()))
+        {
+          SvgElement *shape = svg_href_get_shape (href);
+          if (shape && svg_element_type_is_path (shape->type))
+            path = svg_element_get_current_path (shape, viewport);
+        }
+
+      if (path == NULL)
+        return;
+
+      if (svg_enum_get (side) == TEXT_PATH_SIDE_RIGHT)
+        {
+          text_ctx->path = path_reverse (path);
+          gsk_path_unref (path);
+        }
+      else
+        {
+          text_ctx->path = path;
+        }
+
+      text_ctx->path_measure = gsk_path_measure_new (text_ctx->path);
+      text_ctx->path_offset = svg_number_get (svg_element_get_current_value (self, SVG_PROPERTY_TEXT_PATH_OFFSET), gsk_path_measure_get_length (text_ctx->path_measure));
+
+      text_ctx->x = 0;
+      text_ctx->y = 0;
+      text_ctx->x0 = 0;
+      text_ctx->y0 = 0;
+    }
+
   for (unsigned int i = 0; i < self->text->len; i++)
     {
       TextNode *node = &g_array_index (self->text, TextNode, i);
@@ -985,6 +1062,15 @@ do_generate_layouts (SvgElement            *self,
 
             lang = svg_language_get (svg_element_get_current_value (self, SVG_PROPERTY_LANG), 0);
             text = text_chomp (node->characters.text, text_ctx);
+            if (text_ctx->path != NULL)
+              {
+                char *p;
+
+                /* no multiline textPath */
+                while ((p = strchr (text, '\n')) != NULL)
+                  *p = ' ';
+              }
+
             lines = g_strsplit (text, "\n", 0);
             g_free (text);
 
@@ -1009,7 +1095,7 @@ do_generate_layouts (SvgElement            *self,
                 text = lines[l];
 
                 attrs_len = g_utf8_strlen (text, -1) + 1;
-                attrs = g_newa (PangoLogAttr, attrs_len);
+                attrs = g_new (PangoLogAttr, attrs_len);
                 pango_get_log_attrs (text, strlen (text), -1, lang, attrs, attrs_len);
 
                 ch = text;
@@ -1033,8 +1119,7 @@ do_generate_layouts (SvgElement            *self,
                       }
                     if (pos.has_dx)
                       {
-                        text_ctx->x0 += pos.dx;
-                        text_ctx->x += pos.dx;
+                        text_ctx->dx += pos.dx;
                       }
                     if (pos.has_y)
                       {
@@ -1043,15 +1128,14 @@ do_generate_layouts (SvgElement            *self,
                       }
                     if (pos.has_dy)
                       {
-                        text_ctx->y0 += pos.dy;
-                        text_ctx->y += pos.dy;
+                        text_ctx->dy += pos.dy;
                       }
 
                     if (*ch == '\0')
                       break;
 
                     advance_text_offset (&offset, 1);
-                    if (starts_layout (&offset))
+                    if (starts_layout (&offset) || text_ctx->path != NULL)
                       {
                         do
                           {
@@ -1070,8 +1154,8 @@ do_generate_layouts (SvgElement            *self,
                       }
 
                     layout0.layout = text_create_layout (self, context, the_text, len, text_ctx->wmode, &layout0.origin, &layout0.bounds, &is_vertical, &layout0.r);
-                    layout0.origin.y += text_ctx->baseline_shift;
-                    layout0.x0 = text_ctx->x;
+                    layout0.origin.y += text_ctx->baseline_shift + text_ctx->dy;
+                    layout0.x0 = text_ctx->x + text_ctx->dx;
                     layout0.y0 = text_ctx->y;
                     layout0.anchor = anchor;
                     g_array_append_val (node->characters.layouts, layout0);
@@ -1089,6 +1173,8 @@ do_generate_layouts (SvgElement            *self,
                       }
                   }
                 while (*ch);
+
+                g_free (attrs);
               }
 
             g_strfreev (lines);
@@ -1097,6 +1183,22 @@ do_generate_layouts (SvgElement            *self,
         default:
           g_assert_not_reached ();
         }
+    }
+
+  if (self->type == SVG_ELEMENT_TEXT_PATH)
+    {
+      GskPathPoint point;
+      graphene_point_t position;
+
+      end_chunk (text_ctx);
+
+      gsk_path_get_end_point (text_ctx->path, &point);
+      gsk_path_point_get_position (&point, text_ctx->path, &position);
+      text_ctx->x = text_ctx->x0 = position.x;
+      text_ctx->y = text_ctx->y0 = position.y;
+
+      g_clear_pointer (&text_ctx->path_measure, gsk_path_measure_unref);
+      g_clear_pointer (&text_ctx->path, gsk_path_unref);
     }
 
   text_ctx->baseline_shift = baseline_shift;

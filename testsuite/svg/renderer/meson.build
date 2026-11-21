@@ -179,6 +179,7 @@ test_data = [
   'text-links.svg',
   'text-multiple-coordinates.svg',
   'text-newline.svg',
+  'text-path.svg',
   'text-stroke-gradient.svg',
   'text-text-03-b.svg',
   'text-text-10-t.svg',
