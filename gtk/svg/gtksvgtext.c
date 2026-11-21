@@ -982,8 +982,7 @@ do_generate_layouts (SvgElement            *self,
             unsigned int text_idx;
             PangoLanguage *lang;
 
-            g_assert (node->characters.layouts == NULL);
-            node->characters.layouts = array_new_with_clear_func (sizeof (TextLayout), (GDestroyNotify) text_layout_clear);
+            g_assert (node->characters.layouts != NULL);
 
             lang = svg_language_get (svg_element_get_current_value (self, SVG_PROPERTY_LANG), 0);
             text = text_chomp (node->characters.text, text_ctx);
@@ -1160,7 +1159,7 @@ generate_layouts (SvgElement            *shape,
     {
       TextNode *node = &g_array_index (shape->text, TextNode, i);
       if (node->type == TEXT_NODE_CHARACTERS)
-        g_assert (node->characters.layouts == NULL);
+        g_assert (node->characters.layouts != NULL && node->characters.layouts->len == 0);
     }
 
   wmode = svg_enum_get (svg_element_get_current_value (shape, SVG_PROPERTY_WRITING_MODE));
@@ -1210,7 +1209,7 @@ clear_layouts (SvgElement *shape)
           clear_layouts (node->shape.shape);
           break;
         case TEXT_NODE_CHARACTERS:
-          g_clear_pointer (&node->characters.layouts, g_array_unref);
+          g_array_set_size (node->characters.layouts, 0);
           break;
         default:
           g_assert_not_reached ();

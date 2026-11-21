@@ -3060,7 +3060,7 @@ svg_element_clone (SvgElement        *element,
             case TEXT_NODE_CHARACTERS:
               tn.type = TEXT_NODE_CHARACTERS;
               tn.characters.text = g_strdup (t->characters.text);
-              tn.characters.layouts = NULL;
+              tn.characters.layouts = array_new_with_clear_func (sizeof (TextLayout), (GDestroyNotify) text_layout_clear);
               break;
             case TEXT_NODE_SHAPE:
               tn.type = TEXT_NODE_SHAPE;
@@ -3525,7 +3525,7 @@ svg_element_add_text_content (SvgElement *element,
 
   node.type = TEXT_NODE_CHARACTERS;
   node.characters.text = g_strndup (text, len);
-  node.characters.layouts = NULL;
+  node.characters.layouts = array_new_with_clear_func (sizeof (TextLayout), (GDestroyNotify) text_layout_clear);
 
   g_array_append_val (element->text, node);
 }
