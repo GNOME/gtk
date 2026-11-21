@@ -835,10 +835,10 @@ apply_pos_to_chunk (TextContext *ctx,
 
               if (*in_chunk)
                 {
-                  layout->x += dx;
-                  layout->y += dy;
                   layout->x0 += dx;
                   layout->y0 += dy;
+                  layout->x = layout->x0 + layout->origin.x;
+                  layout->y = layout->y0 + layout->origin.y;
                 }
             }
         }
@@ -870,7 +870,7 @@ end_chunk (TextContext *ctx)
   switch (chunk->anchor)
     {
     case TEXT_ANCHOR_START:
-      return;
+      break;
     case TEXT_ANCHOR_MIDDLE:
       if (svg_writing_mode_is_vertical (ctx->wmode))
         dy = - (ctx->y - chunk->y0) / 2;
@@ -972,7 +972,6 @@ do_generate_layouts (SvgElement            *self,
           break;
         case TEXT_NODE_CHARACTERS:
           {
-            graphene_point_t origin;
             char *text;
             GStrv lines;
             const char *ch;
@@ -1070,11 +1069,10 @@ do_generate_layouts (SvgElement            *self,
                         ch = &the_text[len];
                       }
 
-                    layout0.layout = text_create_layout (self, context, the_text, len, text_ctx->wmode, &origin, &layout0.bounds, &is_vertical, &layout0.r);
+                    layout0.layout = text_create_layout (self, context, the_text, len, text_ctx->wmode, &layout0.origin, &layout0.bounds, &is_vertical, &layout0.r);
+                    layout0.origin.y += text_ctx->baseline_shift;
                     layout0.x0 = text_ctx->x;
                     layout0.y0 = text_ctx->y;
-                    layout0.x = text_ctx->x + origin.x;
-                    layout0.y = text_ctx->y + origin.y + text_ctx->baseline_shift;
                     layout0.anchor = anchor;
                     g_array_append_val (node->characters.layouts, layout0);
 

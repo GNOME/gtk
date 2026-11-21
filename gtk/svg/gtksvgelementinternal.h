@@ -48,6 +48,7 @@ typedef struct
   double x0, y0;
   TextAnchor anchor;
   graphene_rect_t bounds;
+  graphene_point_t origin;
 } TextLayout;
 
 void text_layout_clear (TextLayout *self);
