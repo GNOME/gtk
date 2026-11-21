@@ -70,6 +70,9 @@ SvgValue *   svg_image_rendering_new         (ImageRendering        value);
 SvgValue *   svg_pointer_events_new          (PointerEvents         value);
 SvgValue *   svg_white_space_new             (WhiteSpace            value);
 SvgValue *   svg_baseline_shift_new          (BaselineShift         value);
+SvgValue *   svg_text_path_method_new        (TextPathMethod        value);
+SvgValue *   svg_text_path_spacing_new       (TextPathSpacing       value);
+SvgValue *   svg_text_path_side_new          (TextPathSide          value);
 
 unsigned int svg_enum_get (const SvgValue *value);
 
@@ -113,6 +116,9 @@ SvgValue *   svg_image_rendering_parse         (GtkCssParser     *parser);
 SvgValue *   svg_pointer_events_parse          (GtkCssParser     *parser);
 SvgValue *   svg_white_space_parse             (GtkCssParser     *parser);
 SvgValue *   svg_baseline_shift_parse          (GtkCssParser     *parser);
+SvgValue *   svg_text_path_method_parse        (GtkCssParser     *parser);
+SvgValue *   svg_text_path_spacing_parse       (GtkCssParser     *parser);
+SvgValue *   svg_text_path_side_parse          (GtkCssParser     *parser);
 
 SvgValue *   svg_fill_rule_try_parse               (GtkCssParser     *parser);
 SvgValue *   svg_mask_type_try_parse               (GtkCssParser     *parser);
@@ -154,5 +160,8 @@ SvgValue *   svg_image_rendering_try_parse         (GtkCssParser     *parser);
 SvgValue *   svg_pointer_events_try_parse          (GtkCssParser     *parser);
 SvgValue *   svg_white_space_try_parse             (GtkCssParser     *parser);
 SvgValue *   svg_baseline_shift_try_parse          (GtkCssParser     *parser);
+SvgValue *   svg_text_path_method_try_parse        (GtkCssParser     *parser);
+SvgValue *   svg_text_path_spacing_try_parse       (GtkCssParser     *parser);
+SvgValue *   svg_text_path_side_try_parse          (GtkCssParser     *parser);
 
 G_END_DECLS

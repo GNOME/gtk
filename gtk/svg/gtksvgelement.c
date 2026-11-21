@@ -847,6 +847,7 @@ svg_element_get_path (SvgElement            *element,
     case SVG_ELEMENT_MARKER:
     case SVG_ELEMENT_TEXT:
     case SVG_ELEMENT_TEXT_SPAN:
+    case SVG_ELEMENT_TEXT_PATH:
     case SVG_ELEMENT_SVG:
     case SVG_ELEMENT_IMAGE:
     case SVG_ELEMENT_FILTER:
@@ -949,6 +950,7 @@ svg_element_get_current_path (SvgElement            *element,
         case SVG_ELEMENT_MARKER:
         case SVG_ELEMENT_TEXT:
         case SVG_ELEMENT_TEXT_SPAN:
+        case SVG_ELEMENT_TEXT_PATH:
         case SVG_ELEMENT_SVG:
         case SVG_ELEMENT_IMAGE:
         case SVG_ELEMENT_FILTER:
@@ -1022,6 +1024,7 @@ svg_element_get_current_path (SvgElement            *element,
         case SVG_ELEMENT_MARKER:
         case SVG_ELEMENT_TEXT:
         case SVG_ELEMENT_TEXT_SPAN:
+        case SVG_ELEMENT_TEXT_PATH:
         case SVG_ELEMENT_SVG:
         case SVG_ELEMENT_IMAGE:
         case SVG_ELEMENT_FILTER:
@@ -1209,6 +1212,7 @@ svg_element_get_current_bounds (SvgElement            *element,
       break;
     case SVG_ELEMENT_TEXT:
     case SVG_ELEMENT_TEXT_SPAN:
+    case SVG_ELEMENT_TEXT_PATH:
       {
         SvgElement *elt = element;
         while (svg_element_get_element_type (elt) != SVG_ELEMENT_TEXT)
@@ -1398,6 +1402,7 @@ svg_element_get_current_stroke_bounds (SvgElement            *element,
       break;
     case SVG_ELEMENT_TEXT:
     case SVG_ELEMENT_TEXT_SPAN:
+    case SVG_ELEMENT_TEXT_PATH:
       if (!element->valid_bounds)
         g_critical ("No valid bounds for text");
       graphene_rect_init_from_rect (&b, &element->bounds);
@@ -3060,7 +3065,7 @@ svg_element_clone (SvgElement        *element,
             case TEXT_NODE_CHARACTERS:
               tn.type = TEXT_NODE_CHARACTERS;
               tn.characters.text = g_strdup (t->characters.text);
-              tn.characters.layouts = NULL;
+              tn.characters.layouts = array_new_with_clear_func (sizeof (TextLayout), (GDestroyNotify) text_layout_clear);
               break;
             case TEXT_NODE_SHAPE:
               tn.type = TEXT_NODE_SHAPE;
@@ -3525,7 +3530,7 @@ svg_element_add_text_content (SvgElement *element,
 
   node.type = TEXT_NODE_CHARACTERS;
   node.characters.text = g_strndup (text, len);
-  node.characters.layouts = NULL;
+  node.characters.layouts = array_new_with_clear_func (sizeof (TextLayout), (GDestroyNotify) text_layout_clear);
 
   g_array_append_val (element->text, node);
 }

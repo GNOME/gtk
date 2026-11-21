@@ -35,8 +35,8 @@ void svg_snapshot_push_fill (GtkSnapshot *snapshot,
                              GskPath     *path,
                              GskFillRule  rule);
 
+void path_builder_add_ellipse (GskPathBuilder *builder,
+                               double cx, double cy,
+                               double rx, double ry);
 
-void
-path_builder_add_ellipse (GskPathBuilder *builder,
-                          double cx, double cy,
-                          double rx, double ry);
+GskPath *path_reverse (GskPath *path);

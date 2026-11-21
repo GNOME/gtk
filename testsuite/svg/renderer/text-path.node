@@ -1,0 +1,435 @@
+stroke {
+  child: color {
+    bounds: 19.5 9.5 261 71;
+    color: rgb(0,0,0);
+  }
+  path: "M 20 80 Q 150 10, 280 80";
+  line-width: 1;
+  line-cap: butt;
+  line-join: miter;
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,0,0);
+  }
+  mask: transform {
+    transform: translate(13.3626, 67.6734) rotate(331.699);
+    child: fill {
+      child: color {
+        bounds: 0 15 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 15 L 10 15 L 10 16 L 0 16 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,0,0);
+  }
+  mask: transform {
+    transform: translate(23.3067, 62.5158) rotate(333.486);
+    child: fill {
+      child: color {
+        bounds: 0 15 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 15 L 10 15 L 10 16 L 0 16 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,0,0);
+  }
+  mask: transform {
+    transform: translate(33.2696, 57.7427) rotate(335.331);
+    child: fill {
+      child: color {
+        bounds: 0 15 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 15 L 10 15 L 10 16 L 0 16 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,0,0);
+  }
+  mask: transform {
+    transform: translate(43.2513, 53.3558) rotate(337.232);
+    child: fill {
+      child: color {
+        bounds: 0 15 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 15 L 10 15 L 10 16 L 0 16 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,0,0);
+  }
+  mask: transform {
+    transform: translate(53.2513, 49.3566) rotate(339.187);
+    child: fill {
+      child: color {
+        bounds: 0 15 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 15 L 10 15 L 10 16 L 0 16 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,0,0);
+  }
+  mask: transform {
+    transform: translate(63.2691, 45.7469) rotate(341.194);
+    child: fill {
+      child: color {
+        bounds: 0 15 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 15 L 10 15 L 10 16 L 0 16 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,0,0);
+  }
+  mask: transform {
+    transform: translate(73.304, 42.5282) rotate(343.25);
+    child: fill {
+      child: color {
+        bounds: 0 15 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 15 L 10 15 L 10 16 L 0 16 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,0,0);
+  }
+  mask: transform {
+    transform: translate(83.3548, 39.7022) rotate(345.352);
+    child: fill {
+      child: color {
+        bounds: 0 15 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 15 L 10 15 L 10 16 L 0 16 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,0,0);
+  }
+  mask: transform {
+    transform: translate(93.4201, 37.2706) rotate(347.494);
+    child: fill {
+      child: color {
+        bounds: 0 15 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 15 L 10 15 L 10 16 L 0 16 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,0,0);
+  }
+  mask: transform {
+    transform: translate(103.498, 35.2348) rotate(349.673);
+    child: fill {
+      child: color {
+        bounds: 0 15 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 15 L 10 15 L 10 16 L 0 16 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,0,0);
+  }
+  mask: transform {
+    transform: translate(113.588, 33.5961) rotate(351.883);
+    child: fill {
+      child: color {
+        bounds: 0 15 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 15 L 10 15 L 10 16 L 0 16 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,0,0);
+  }
+  mask: transform {
+    transform: translate(123.686, 32.3556) rotate(354.116);
+    child: fill {
+      child: color {
+        bounds: 0 15 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 15 L 10 15 L 10 16 L 0 16 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,0,0);
+  }
+  mask: transform {
+    transform: translate(133.411, 25.5264) rotate(356.369);
+    child: fill {
+      child: color {
+        bounds: 0 15 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 15 L 10 15 L 10 16 L 0 16 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,128,0);
+  }
+  mask: transform {
+    transform: translate(133.411, 25.5264) rotate(356.369);
+    child: fill {
+      child: color {
+        bounds: 0 7 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 7 L 10 7 L 10 8 L 0 8 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,0,0);
+  }
+  mask: transform {
+    transform: translate(143.9, 31.0729) rotate(358.632);
+    child: fill {
+      child: color {
+        bounds: 0 15 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 15 L 10 15 L 10 16 L 0 16 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,128,0);
+  }
+  mask: transform {
+    transform: translate(143.9, 31.0729) rotate(358.632);
+    child: fill {
+      child: color {
+        bounds: 0 7 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 7 L 10 7 L 10 8 L 0 8 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,0,0);
+  }
+  mask: transform {
+    transform: translate(154.01, 31.0315) rotate(0.899457);
+    child: fill {
+      child: color {
+        bounds: 0 15 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 15 L 10 15 L 10 16 L 0 16 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,128,0);
+  }
+  mask: transform {
+    transform: translate(154.01, 31.0315) rotate(0.899457);
+    child: fill {
+      child: color {
+        bounds: 0 7 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 7 L 10 7 L 10 8 L 0 8 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,0,0);
+  }
+  mask: transform {
+    transform: translate(164.12, 31.3903) rotate(3.16424);
+    child: fill {
+      child: color {
+        bounds: 0 15 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 15 L 10 15 L 10 16 L 0 16 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,128,0);
+  }
+  mask: transform {
+    transform: translate(164.12, 31.3903) rotate(3.16424);
+    child: fill {
+      child: color {
+        bounds: 0 7 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 7 L 10 7 L 10 8 L 0 8 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,0,0);
+  }
+  mask: transform {
+    transform: translate(174.225, 32.1489) rotate(5.41918);
+    child: fill {
+      child: color {
+        bounds: 0 15 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 15 L 10 15 L 10 16 L 0 16 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,128,0);
+  }
+  mask: transform {
+    transform: translate(174.225, 32.1489) rotate(5.41918);
+    child: fill {
+      child: color {
+        bounds: 0 7 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 7 L 10 7 L 10 8 L 0 8 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,0,0);
+  }
+  mask: transform {
+    transform: translate(184.325, 33.3069) rotate(7.65742);
+    child: fill {
+      child: color {
+        bounds: 0 15 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 15 L 10 15 L 10 16 L 0 16 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,128,0);
+  }
+  mask: transform {
+    transform: translate(184.325, 33.3069) rotate(7.65742);
+    child: fill {
+      child: color {
+        bounds: 0 7 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 7 L 10 7 L 10 8 L 0 8 Z";
+      fill-rule: winding;
+    }
+  }
+}
+mask {
+  source: color {
+    bounds: 20 31.0298 380 48.9702;
+    color: rgb(0,0,0);
+  }
+  mask: transform {
+    transform: translate(194.417, 34.8634) rotate(9.8724);
+    child: fill {
+      child: color {
+        bounds: 0 15 10 1;
+        color: rgb(0,0,0);
+      }
+      path: "M 0 15 L 10 15 L 10 16 L 0 16 Z";
+      fill-rule: winding;
+    }
+  }
+}

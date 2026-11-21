@@ -285,6 +285,12 @@ parse_offset (GtkCssParser *parser)
 }
 
 static SvgValue *
+parse_text_path_offset (GtkCssParser *parser)
+{
+  return svg_number_parse (parser, -DBL_MAX, DBL_MAX, SVG_PARSE_NUMBER|SVG_PARSE_PERCENTAGE|SVG_PARSE_LENGTH);
+}
+
+static SvgValue *
 parse_ref_x (GtkCssParser *parser)
 {
   if (gtk_css_parser_try_ident (parser, "left"))
@@ -540,7 +546,7 @@ typedef struct
   (BIT (SVG_ELEMENT_CIRCLE) | BIT (SVG_ELEMENT_ELLIPSE) | BIT (SVG_ELEMENT_IMAGE) | \
    BIT (SVG_ELEMENT_LINE) | BIT (SVG_ELEMENT_PATH) | BIT (SVG_ELEMENT_POLYGON) | \
    BIT (SVG_ELEMENT_POLYLINE) | BIT (SVG_ELEMENT_RECT) | BIT (SVG_ELEMENT_TEXT) | \
-   BIT (SVG_ELEMENT_TEXT_SPAN) | \
+   BIT (SVG_ELEMENT_TEXT_PATH) | BIT (SVG_ELEMENT_TEXT_SPAN) | \
    BIT (SVG_ELEMENT_CLIP_PATH) | BIT (SVG_ELEMENT_DEFS) | BIT (SVG_ELEMENT_GROUP) | \
    BIT (SVG_ELEMENT_MARKER) | BIT (SVG_ELEMENT_MASK) | BIT (SVG_ELEMENT_PATTERN) | \
    BIT (SVG_ELEMENT_SVG) | BIT (SVG_ELEMENT_SYMBOL) | \
@@ -553,7 +559,8 @@ typedef struct
    BIT (SVG_ELEMENT_PATH) | BIT (SVG_ELEMENT_POLYGON) | BIT (SVG_ELEMENT_POLYLINE) | \
    BIT (SVG_ELEMENT_RECT))
 
-#define ELEMENT_TEXTS (BIT (SVG_ELEMENT_TEXT) | BIT (SVG_ELEMENT_TEXT_SPAN))
+#define ELEMENT_TEXTS \
+  (BIT (SVG_ELEMENT_TEXT) | BIT (SVG_ELEMENT_TEXT_SPAN) | BIT (SVG_ELEMENT_TEXT_PATH))
 
 #define ELEMENT_GRAPHICS (ELEMENT_SHAPES | ELEMENT_TEXTS | BIT (SVG_ELEMENT_IMAGE))
 
@@ -778,7 +785,8 @@ static SvgPropertyInfo shape_attrs[] = {
   },
   [SVG_PROPERTY_HREF] = {
     .flags = SVG_PROPERTY_IS_DISCRETE | SVG_PROPERTY_NO_CSS,
-    .applies_to = ELEMENT_GRAPHICS_REF | ELEMENT_PAINT_SERVERS | BIT (SVG_ELEMENT_LINK),
+    .applies_to = ELEMENT_GRAPHICS_REF | ELEMENT_PAINT_SERVERS | BIT (SVG_ELEMENT_LINK) |
+                  BIT (SVG_ELEMENT_TEXT_PATH),
     .parse_presentation = parse_href,
   },
   [SVG_PROPERTY_OVERFLOW] = {
@@ -1007,6 +1015,32 @@ static SvgPropertyInfo shape_attrs[] = {
     .flags = SVG_PROPERTY_IS_INHERITED | SVG_PROPERTY_IS_DISCRETE,
     .applies_to = ELEMENT_ANY,
     .parse_value = svg_text_decoration_parse,
+  },
+  [SVG_PROPERTY_TEXT_PATH] = {
+    .flags = SVG_PROPERTY_IS_INHERITED,
+    .applies_to = BIT (SVG_ELEMENT_TEXT_PATH),
+    .parse_value = svg_path_parse,
+    .parse_presentation = parse_path,
+  },
+  [SVG_PROPERTY_TEXT_PATH_OFFSET] = {
+    .flags = SVG_PROPERTY_IS_INHERITED,
+    .applies_to = BIT (SVG_ELEMENT_TEXT_PATH),
+    .parse_value = parse_text_path_offset,
+  },
+  [SVG_PROPERTY_TEXT_PATH_METHOD] = {
+    .flags = SVG_PROPERTY_IS_INHERITED | SVG_PROPERTY_IS_DISCRETE,
+    .applies_to = BIT (SVG_ELEMENT_TEXT_PATH),
+    .parse_value = svg_text_path_method_parse,
+  },
+  [SVG_PROPERTY_TEXT_PATH_SPACING] = {
+    .flags = SVG_PROPERTY_IS_INHERITED | SVG_PROPERTY_IS_DISCRETE,
+    .applies_to = BIT (SVG_ELEMENT_TEXT_PATH),
+    .parse_value = svg_text_path_spacing_parse,
+  },
+  [SVG_PROPERTY_TEXT_PATH_SIDE] = {
+    .flags = SVG_PROPERTY_IS_INHERITED | SVG_PROPERTY_IS_DISCRETE,
+    .applies_to = BIT (SVG_ELEMENT_TEXT_PATH),
+    .parse_value = svg_text_path_side_parse,
   },
   [SVG_PROPERTY_REQUIRED_EXTENSIONS] = {
     .flags = SVG_PROPERTY_IS_DISCRETE | SVG_PROPERTY_NO_CSS,
@@ -1349,6 +1383,11 @@ shape_attrs_init_default_values (void)
   shape_attrs[SVG_PROPERTY_BASELINE_SHIFT].initial_value = svg_number_new (0);
   shape_attrs[SVG_PROPERTY_LETTER_SPACING].initial_value = svg_number_new (0);
   shape_attrs[SVG_PROPERTY_TEXT_DECORATION].initial_value = svg_text_decoration_new (TEXT_DECORATION_NONE);
+  shape_attrs[SVG_PROPERTY_TEXT_PATH].initial_value = svg_path_new_none ();
+  shape_attrs[SVG_PROPERTY_TEXT_PATH_OFFSET].initial_value = svg_number_new (0);
+  shape_attrs[SVG_PROPERTY_TEXT_PATH_METHOD].initial_value = svg_text_path_method_new (TEXT_PATH_METHOD_ALIGN);
+  shape_attrs[SVG_PROPERTY_TEXT_PATH_SPACING].initial_value = svg_text_path_spacing_new (TEXT_PATH_SPACING_AUTO);
+  shape_attrs[SVG_PROPERTY_TEXT_PATH_SIDE].initial_value = svg_text_path_side_new (TEXT_PATH_SIDE_LEFT);
   shape_attrs[SVG_PROPERTY_POINTS].initial_value = svg_numbers_new_none ();
   shape_attrs[SVG_PROPERTY_SPREAD_METHOD].initial_value = svg_spread_method_new (GSK_REPEAT_PAD);
   shape_attrs[SVG_PROPERTY_CONTENT_UNITS].initial_value = svg_coord_units_new (COORD_UNITS_OBJECT_BOUNDING_BOX);
@@ -1557,8 +1596,8 @@ static SvgPropertyLookup shape_attr_lookups[] = {
   { "mix-blend-mode", ELEMENT_CONTAINERS | ELEMENT_GRAPHICS | ELEMENT_GRAPHICS_REF, 0, SVG_PROPERTY_BLEND_MODE },
   { "isolation", ELEMENT_CONTAINERS | ELEMENT_GRAPHICS | ELEMENT_GRAPHICS_REF, 0, SVG_PROPERTY_ISOLATION },
   { "pathLength", ELEMENT_SHAPES, 0, SVG_PROPERTY_PATH_LENGTH },
-  { "href", ELEMENT_GRAPHICS_REF | ELEMENT_PAINT_SERVERS | BIT (SVG_ELEMENT_LINK), 0, SVG_PROPERTY_HREF },
-  { "xlink:href", ELEMENT_GRAPHICS_REF | ELEMENT_PAINT_SERVERS | BIT (SVG_ELEMENT_LINK), 0, SVG_PROPERTY_HREF },
+  { "href", ELEMENT_GRAPHICS_REF | ELEMENT_PAINT_SERVERS | BIT (SVG_ELEMENT_LINK) | BIT (SVG_ELEMENT_TEXT_PATH), 0, SVG_PROPERTY_HREF },
+  { "xlink:href", ELEMENT_GRAPHICS_REF | ELEMENT_PAINT_SERVERS | BIT (SVG_ELEMENT_LINK) | BIT (SVG_ELEMENT_TEXT_PATH), 0, SVG_PROPERTY_HREF },
   { "overflow", ELEMENT_ANY, 0, SVG_PROPERTY_OVERFLOW },
   { "vector-effect", ELEMENT_GRAPHICS | BIT (SVG_ELEMENT_USE), 0, SVG_PROPERTY_VECTOR_EFFECT },
   { "d", BIT (SVG_ELEMENT_PATH), 0, SVG_PROPERTY_PATH },
@@ -1621,6 +1660,11 @@ static SvgPropertyLookup shape_attr_lookups[] = {
   { "baseline-shift", ELEMENT_ANY, 0, SVG_PROPERTY_BASELINE_SHIFT },
   { "letter-spacing", ELEMENT_ANY, 0, SVG_PROPERTY_LETTER_SPACING },
   { "text-decoration", ELEMENT_ANY, 0, SVG_PROPERTY_TEXT_DECORATION },
+  { "path", ELEMENT_ANY, 0, SVG_PROPERTY_TEXT_PATH },
+  { "startOffset", ELEMENT_ANY, 0, SVG_PROPERTY_TEXT_PATH_OFFSET },
+  { "method", ELEMENT_ANY, 0, SVG_PROPERTY_TEXT_PATH_METHOD },
+  { "spacing", ELEMENT_ANY, 0, SVG_PROPERTY_TEXT_PATH_SPACING },
+  { "side", ELEMENT_ANY, 0, SVG_PROPERTY_TEXT_PATH_SIDE },
   { "requiredExtensions", ELEMENT_ANY, 0, SVG_PROPERTY_REQUIRED_EXTENSIONS },
   { "systemLanguage", ELEMENT_ANY, 0, SVG_PROPERTY_SYSTEM_LANGUAGE },
   { "pointer-events", ELEMENT_CONTAINERS | ELEMENT_GRAPHICS | BIT (SVG_ELEMENT_USE), 0, SVG_PROPERTY_POINTER_EVENTS },
