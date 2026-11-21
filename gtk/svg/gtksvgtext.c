@@ -789,13 +789,17 @@ get_text_position (TextOffset            *offsets,
 }
 
 static gboolean
-starts_chunk (TextOffset *offsets)
+starts_layout (TextOffset *offsets)
 {
   while (offsets)
     {
       if (offsets->idx < svg_numbers_get_length (svg_element_get_current_value (offsets->elt, SVG_PROPERTY_TEXT_X)))
         return TRUE;
       if (offsets->idx < svg_numbers_get_length (svg_element_get_current_value (offsets->elt, SVG_PROPERTY_TEXT_Y)))
+        return TRUE;
+      if (offsets->idx < svg_numbers_get_length (svg_element_get_current_value (offsets->elt, SVG_PROPERTY_TEXT_DX)))
+        return TRUE;
+      if (offsets->idx < svg_numbers_get_length (svg_element_get_current_value (offsets->elt, SVG_PROPERTY_TEXT_DY)))
         return TRUE;
 
       offsets = offsets->next;
@@ -1051,7 +1055,7 @@ do_generate_layouts (SvgElement            *self,
                       break;
 
                     advance_text_offset (&offset, 1);
-                    if (starts_chunk (&offset))
+                    if (starts_layout (&offset))
                       {
                         do
                           {
