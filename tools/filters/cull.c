@@ -160,10 +160,6 @@ cull_node (GskRenderReplay *replay,
     case GSK_CONTAINER_NODE:
     case GSK_OPACITY_NODE:
     case GSK_COLOR_MATRIX_NODE:
-    case GSK_REPEAT_NODE:
-    case GSK_SHADOW_NODE:
-    case GSK_BLUR_NODE:
-    case GSK_DISPLACEMENT_NODE:
     case GSK_BLEND_NODE:
     case GSK_CROSS_FADE_NODE:
     case GSK_MASK_NODE:
@@ -173,6 +169,14 @@ cull_node (GskRenderReplay *replay,
     case GSK_ISOLATION_NODE:
     case GSK_COMPONENT_TRANSFER_NODE:
       return gsk_render_replay_default (replay, node);
+
+    case GSK_REPEAT_NODE:
+    case GSK_SHADOW_NODE:
+    case GSK_BLUR_NODE:
+    case GSK_DISPLACEMENT_NODE:
+      /* can be done smarter, but they grow their children,
+       * so clips don't apply there */
+      return gsk_render_node_ref (node);
 
     case GSK_NOT_A_RENDER_NODE:
     default:
