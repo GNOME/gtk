@@ -3804,6 +3804,9 @@ paint_text_layout (SvgElement            *self,
 {
   SvgValue *decoration = svg_element_get_current_value (self, SVG_PROPERTY_TEXT_DECORATION);
 
+  if (layout->hidden)
+    return;
+
   if (context->op == CLIPPING)
     {
       SvgValue *paint = svg_paint_new_black ();

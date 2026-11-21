@@ -44,6 +44,7 @@ typedef enum
 typedef struct
 {
   PangoLayout *layout;
+  gboolean hidden;
   double x, y, r;
   double x0, y0;
   TextAnchor anchor;
