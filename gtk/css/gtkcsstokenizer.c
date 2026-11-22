@@ -509,12 +509,12 @@ gtk_css_token_init_string (GtkCssToken     *token,
     case GTK_CSS_TOKEN_URL:
       if (string->len < G_N_ELEMENTS (token->string.buf))
         {
-          g_strlcpy (token->string.buf, string->str, G_N_ELEMENTS (token->string.buf));
+          memcpy (token->string.buf, string->str, string->len + 1);
           token->string.string = token->string.buf;
         }
       else
         {
-          token->string.string = g_strdup (string->str);
+          token->string.string = g_memdup2 (string->str, string->len + 1);
         }
       break;
     default:
@@ -735,6 +735,9 @@ utf8_next_char_bounded (const char *data,
 {
   gsize i, len;
 
+  if (!is_multibyte (*data))
+    return data + 1;
+
   len = MIN ((gsize) g_utf8_skip[*(const guchar *) data], (gsize) (end - data));
 
   for (i = 1; i < len && (data[i] & 0xc0) == 0x80; i++)
@@ -919,27 +922,43 @@ gtk_css_tokenizer_read_escape (GtkCssTokenizer *tokenizer)
   return value;
 }
 
+static inline const char *
+scan_name (const char *data,
+           const char *end,
+           gsize      *n_characters)
+{
+  gsize n = 0;
+
+  while (data < end && is_name (*data))
+    {
+      data = utf8_next_char_bounded (data, end);
+      n++;
+    }
+
+  *n_characters = n;
+  return data;
+}
+
 static void
 gtk_css_tokenizer_read_name (GtkCssTokenizer *tokenizer)
 {
   g_string_set_size (tokenizer->name_buffer, 0);
 
   do {
-      if (*tokenizer->data == '\\')
+      gsize n_characters;
+      const char *data;
+
+      data = scan_name (tokenizer->data, tokenizer->end, &n_characters);
+      if (data > tokenizer->data)
         {
-          if (gtk_css_tokenizer_has_valid_escape (tokenizer))
-            {
-              gunichar value = gtk_css_tokenizer_read_escape (tokenizer);
-              g_string_append_unichar (tokenizer->name_buffer, value);
-            }
-          else
-            {
-              break;
-            }
+          g_string_append_len (tokenizer->name_buffer, tokenizer->data, data - tokenizer->data);
+          gtk_css_tokenizer_consume (tokenizer, data - tokenizer->data, n_characters);
         }
-      else if (is_name (*tokenizer->data))
+
+      if (gtk_css_tokenizer_has_valid_escape (tokenizer))
         {
-          gtk_css_tokenizer_consume_char (tokenizer, tokenizer->name_buffer);
+          gunichar value = gtk_css_tokenizer_read_escape (tokenizer);
+          g_string_append_unichar (tokenizer->name_buffer, value);
         }
       else
         {
