@@ -455,7 +455,7 @@ gsk_renderer_render (GskRenderer          *renderer,
 
   clip = cairo_region_copy (region);
 
-  if (renderer_class->supports_offload && gdk_has_feature (GDK_FEATURE_OFFLOAD))
+  if (renderer_class->supports_offload && root && gdk_has_feature (GDK_FEATURE_OFFLOAD))
     offload = gsk_offload_new (priv->surface, root, clip);
   else
     offload = NULL;
