@@ -1,0 +1,3 @@
+a { margin-left: clamp(none, 1em, 1px); }
+b { margin-left: clamp(1px, 1em, none); }
+c { margin-left: clamp(none, 1em, none); }
