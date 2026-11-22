@@ -172,21 +172,18 @@ surface_render_cb (GdkSurface     *surface,
       gdk_profiler_add_mark (before_snapshot, (before_render - before_snapshot), "Widget snapshot", "");
     }
 
-  if (root != NULL)
-    {
-      root = gtk_inspector_prepare_render (widget,
-                                           renderer,
-                                           surface,
-                                           region,
-                                           root,
-                                           widget->priv->render_node);
+  root = gtk_inspector_prepare_render (widget,
+                                       renderer,
+                                       surface,
+                                       region,
+                                       root,
+                                       widget->priv->render_node);
 
-      gsk_renderer_render (renderer, root, region);
+  gsk_renderer_render (renderer, root, region);
 
-      gsk_render_node_unref (root);
+  g_clear_pointer (&root, gsk_render_node_unref);
 
-      gdk_profiler_end_mark (before_render, "Widget render", "");
-    }
+  gdk_profiler_end_mark (before_render, "Widget render", "");
 
   return TRUE;
 }

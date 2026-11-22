@@ -4,6 +4,7 @@
 
 #include "gskgpubufferprivate.h"
 #include "gskgpucacheprivate.h"
+#include "gskgpuclearopprivate.h"
 #include "gskgpudeviceprivate.h"
 #include "gskgpudownloadopprivate.h"
 #include "gskgpuglobalsopprivate.h"
@@ -11,6 +12,7 @@
 #include "gskgpunodeprocessorprivate.h"
 #include "gskgpuopprivate.h"
 #include "gskgpurendererprivate.h"
+#include "gskgpurenderpassprivate.h"
 #include "gskgpuuploadopprivate.h"
 #include "gskgpuutilsprivate.h"
 
@@ -19,6 +21,7 @@
 #include "gsknodewalkerprivate.h"
 #include "gskrendererprivate.h"
 
+#include "gdk/gdkcairoprivate.h"
 #include "gdk/gdkdmabufdownloaderprivate.h"
 #include "gdk/gdkdmabuftextureprivate.h"
 #include "gdk/gdkdrawcontextprivate.h"
@@ -772,6 +775,58 @@ gsk_gpu_frame_wait (GskGpuFrame *self)
 }
 
 static void
+gsk_gpu_frame_clear (GskGpuFrame            *self,
+                     GskGpuImage            *target,
+                     GdkColorState          *target_color_state,
+                     cairo_region_t         *clip,
+                     const graphene_rect_t  *viewport,
+                     GskRenderPassType       pass_type)
+{
+  GskGpuRenderPass *pass;
+  cairo_rectangle_int_t extents;
+  gsize i;
+
+  cairo_region_get_extents (clip, &extents);
+
+  if (gdk_cairo_region_is_rectangle (clip))
+    {
+      pass = gsk_gpu_render_pass_new (self,
+                                      target,
+                                      target_color_state,
+                                      pass_type,
+                                      GSK_GPU_LOAD_OP_CLEAR,
+                                      (float[4]) { 0, 0, 0, 0},
+                                      &extents,
+                                      viewport);
+      gsk_gpu_render_pass_free (pass);
+    }
+  else
+    {
+      pass = gsk_gpu_render_pass_new (self,
+                                      target,
+                                      target_color_state,
+                                      pass_type,
+                                      GSK_GPU_LOAD_OP_LOAD,
+                                      NULL,
+                                      &extents,
+                                      viewport);
+
+      for (i = 0; i < cairo_region_num_rectangles (clip); i++)
+        {
+          cairo_rectangle_int_t rect;
+
+          cairo_region_get_rectangle (clip, i, &rect);
+
+          gsk_gpu_clear_op (self, &rect, (float[4]) { 0, 0, 0, 0});
+        }
+
+      gsk_gpu_render_pass_free (pass);
+    }
+
+  cairo_region_destroy (clip);
+}
+
+static void
 gsk_gpu_frame_record (GskGpuFrame            *self,
                       gint64                  timestamp,
                       GskGpuImage            *target,
@@ -783,18 +838,26 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   GskRenderPassType pass_type = texture ? GSK_RENDER_PASS_EXPORT : GSK_RENDER_PASS_PRESENT;
-  GskNodeWalker *walker;
 
   priv->timestamp = timestamp;
   gsk_gpu_cache_set_time (gsk_gpu_device_get_cache (priv->device), timestamp);
 
-  walker = gsk_node_walker_new (node);
-  GSK_GPU_FRAME_GET_CLASS (self)->start_node (self, walker);
+  if (node)
+    {
+      GskNodeWalker *walker;
 
-  gsk_gpu_node_processor_process (walker, self, target, target_color_state, clip, node, viewport, pass_type);
+      walker = gsk_node_walker_new (node);
+      GSK_GPU_FRAME_GET_CLASS (self)->start_node (self, walker);
 
-  GSK_GPU_FRAME_GET_CLASS (self)->end_node (self);
-  gsk_node_walker_free (walker);
+      gsk_gpu_node_processor_process (walker, self, target, target_color_state, clip, node, viewport, pass_type);
+
+      GSK_GPU_FRAME_GET_CLASS (self)->end_node (self);
+      gsk_node_walker_free (walker);
+    }
+  else
+    {
+      gsk_gpu_frame_clear (self, target, target_color_state, clip, viewport, pass_type);
+    }
 
   if (texture)
     gsk_gpu_download_op (self, target, target_color_state, texture);
@@ -852,7 +915,7 @@ gsk_gpu_frame_render (GskGpuFrame            *self,
 {
   GskRenderPassType pass_type = texture ? GSK_RENDER_PASS_EXPORT : GSK_RENDER_PASS_PRESENT;
 
-  if (!gsk_gpu_frame_should_optimize (self, GSK_GPU_OPTIMIZE_COPY_PASTE))
+  if (!gsk_gpu_frame_should_optimize (self, GSK_GPU_OPTIMIZE_COPY_PASTE) && node)
     node = gsk_render_node_replace_copy_paste (gsk_render_node_ref (node));
 
   gsk_gpu_frame_cleanup (self);
@@ -861,7 +924,7 @@ gsk_gpu_frame_render (GskGpuFrame            *self,
 
   gsk_gpu_frame_submit (self, pass_type);
 
-  if (!gsk_gpu_frame_should_optimize (self, GSK_GPU_OPTIMIZE_COPY_PASTE))
+  if (!gsk_gpu_frame_should_optimize (self, GSK_GPU_OPTIMIZE_COPY_PASTE) && node)
     gsk_render_node_unref (node);
 }
 

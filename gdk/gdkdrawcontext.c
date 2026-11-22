@@ -514,7 +514,7 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
 
   gdk_surface_set_content (priv->surface, node);
 
-  if (gsk_render_node_get_opaque_rect (node, &opaque))
+  if (node && gsk_render_node_get_opaque_rect (node, &opaque))
     gdk_surface_set_opaque_rect (priv->surface, &opaque);
   else
     gdk_surface_set_opaque_rect (priv->surface, NULL);

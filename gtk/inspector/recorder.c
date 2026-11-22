@@ -532,23 +532,37 @@ show_render_node (GtkInspectorRecorder *recorder,
 
   if (strcmp (gtk_stack_get_visible_child_name (GTK_STACK (recorder->recording_data_stack)), "frame_data") == 0)
     {
-      draw_node = gsk_render_node_replace_copy_paste (gsk_render_node_ref (node));
-      wrapper = gtk_inspector_node_wrapper_new (node, profile_node, draw_node, "Root");
+      if (node)
+        {
+          draw_node = gsk_render_node_replace_copy_paste (gsk_render_node_ref (node));
+          wrapper = gtk_inspector_node_wrapper_new (node, profile_node, draw_node, "Root");
 
-      g_list_store_splice (recorder->render_node_root_model,
-                           0, g_list_model_get_n_items (G_LIST_MODEL (recorder->render_node_root_model)),
-                           (gpointer[1]) { wrapper },
-                           1);
+          g_list_store_splice (recorder->render_node_root_model,
+                               0, g_list_model_get_n_items (G_LIST_MODEL (recorder->render_node_root_model)),
+                               (gpointer[1]) { wrapper },
+                               1);
 
-      g_object_unref (wrapper);
-      gsk_render_node_unref (draw_node);
+          g_object_unref (wrapper);
+          gsk_render_node_unref (draw_node);
+        }
+      else
+        {
+          g_list_store_remove_all (recorder->render_node_root_model);
+        }
     }
   else
     {
-      gsk_render_node_get_bounds (node, &bounds);
-      paintable = gtk_render_node_paintable_new (node, &bounds);
-      gtk_picture_set_paintable (GTK_PICTURE (recorder->event_view), paintable);
-      g_object_unref (paintable);
+      if (node)
+        {
+          gsk_render_node_get_bounds (node, &bounds);
+          paintable = gtk_render_node_paintable_new (node, &bounds);
+          gtk_picture_set_paintable (GTK_PICTURE (recorder->event_view), paintable);
+          g_object_unref (paintable);
+        }
+      else
+        {
+          gtk_picture_set_paintable (GTK_PICTURE (recorder->event_view), NULL);
+        }
     }
 }
 
@@ -2226,10 +2240,12 @@ event_properties_list_selection_changed (GtkSelectionModel *model,
   prop = gtk_single_selection_get_selected_item (recorder->event_properties_selection);
 
   if (prop == NULL)
-    return;
+    {
+      show_render_node (recorder, NULL, NULL);
+      return;
+    }
 
-  if (prop->node)
-    show_render_node (recorder, prop->node, NULL);
+  show_render_node (recorder, prop->node, NULL);
 }
 
 static void
@@ -2862,9 +2878,13 @@ gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
           char *filename;
           static int counter = 0;
 
-          filename = g_strdup_printf ("gtk-frame%d.node", counter++);
-          gsk_render_node_write_to_file (node, filename, NULL);
-          g_free (filename);
+          if (node)
+            {
+              filename = g_strdup_printf ("gtk-frame%d.node", counter);
+              gsk_render_node_write_to_file (node, filename, NULL);
+              g_free (filename);
+            }
+          counter++;
         }
     }
 }

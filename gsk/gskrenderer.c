@@ -416,7 +416,8 @@ gsk_renderer_render_texture (GskRenderer           *renderer,
 /**
  * gsk_renderer_render:
  * @renderer: a realized renderer
- * @root: the render node to render
+ * @root: the render node to render. Since 4.26 `NULL` is also accepted for
+ *   full transparency
  * @region: (nullable): the `cairo_region_t` that must be redrawn or `NULL`
  *   for the whole surface
  *
@@ -445,7 +446,7 @@ gsk_renderer_render (GskRenderer          *renderer,
 
   g_return_if_fail (GSK_IS_RENDERER (renderer));
   g_return_if_fail (priv->is_realized);
-  g_return_if_fail (GSK_IS_RENDER_NODE (root));
+  g_return_if_fail (root == NULL || GSK_IS_RENDER_NODE (root));
 
   if (priv->surface == NULL)
     return;
@@ -459,7 +460,7 @@ gsk_renderer_render (GskRenderer          *renderer,
   else
     offload = NULL;
 
-  if (region == NULL || priv->prev_node == NULL || GSK_RENDERER_DEBUG_CHECK (renderer, FULL_REDRAW))
+  if (region == NULL || root == NULL || priv->prev_node == NULL || GSK_RENDERER_DEBUG_CHECK (renderer, FULL_REDRAW))
     {
       cairo_region_union_rectangle (clip,
                                     &(GdkRectangle) {
@@ -478,7 +479,8 @@ gsk_renderer_render (GskRenderer          *renderer,
   g_clear_pointer (&priv->prev_node, gsk_render_node_unref);
   cairo_region_destroy (clip);
   g_clear_pointer (&offload, gsk_offload_free);
-  priv->prev_node = gsk_render_node_ref (root);
+  if (root)
+    priv->prev_node = gsk_render_node_ref (root);
 }
 
 static GType
