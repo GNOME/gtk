@@ -75,7 +75,7 @@ AakAAAEAAAAAAsQCDAAMAAAhIwsBIwMzGwEzGwEzAipfamVemFxrZGZnaF4Bm/5lAgz+aAGY/mgB\
 mAAAAQAAAAAB2QIMAAsAAAETIycHIxMDMxc3MwEktWGDhV+5r19+fl4BD/7xyckBCwEBvr4A\
 ");
   glyphs: 47 14, 80 17, 71 6, 74 4, 77 4, 85 6, 70 11, 83 7;
-  offset: 92.5 130;
+  offset: 95.5 130;
 }
 rounded-clip {
   clip: 100 180 60 60 / 30;
@@ -87,7 +87,7 @@ rounded-clip {
 text {
   font: "SVGFreeSansASCII 20px";
   glyphs: 47 14, 86 11, 77 4, 77 10, 71 6, 74 4, 77 4, 85 6, 70 11, 83 7;
-  offset: 88.5 280;
+  offset: 91.5 280;
 }
 rounded-clip {
   clip: 300 30 60 60 / 30;
@@ -106,7 +106,7 @@ rounded-clip {
 text {
   font: "SVGFreeSansASCII 20px";
   glyphs: 47 14, 80 11, 79 11, 14 7, 70 11, "x", 74 4, "s", 85 6, 70 11, 79 11, 85 12, 71 6, 74 4, 77 4, 85 6, 70 11, 83 7;
-  offset: 249 130;
+  offset: 252 130;
 }
 rounded-clip {
   clip: 300 180 60 60 / 30;
@@ -118,7 +118,7 @@ rounded-clip {
 text {
   font: "SVGFreeSansASCII 20px";
   glyphs: 47 14, 86 11, 77 4, 77 10, 88 14, 74 4, 85 6, 73 17, "s", 78 17, 66 11, 77 4, 77 10, 83 7, 70 11, 72 11, 74 4, 80 11, 79 17, 71 6, 74 4, 77 4, 85 6, 70 11, 83 7;
-  offset: 211.5 280;
+  offset: 214.5 280;
 }
 text {
   font: "SVGFreeSansASCII 32px";

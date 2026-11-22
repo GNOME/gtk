@@ -10,7 +10,7 @@ clip {
     }
     mask {
       source: color {
-        bounds: 40 26 120 14;
+        bounds: 40 26 110 14;
         color: rgb(0,0,0);
       }
       mask: transform {
@@ -27,7 +27,7 @@ clip {
     }
     mask {
       source: color {
-        bounds: 40 26 120 14;
+        bounds: 40 26 110 14;
         color: rgb(0,0,0);
       }
       mask: transform {
@@ -44,7 +44,7 @@ clip {
     }
     mask {
       source: color {
-        bounds: 40 26 120 14;
+        bounds: 40 26 110 14;
         color: rgb(0,0,0);
       }
       mask: transform {

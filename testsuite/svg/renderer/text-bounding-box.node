@@ -1,8 +1,8 @@
 clip {
-  clip: 80.5 71 239 49;
+  clip: 87 71 226 49;
   child: container {
     color {
-      bounds: 80.5 71 239 49;
+      bounds: 87 71 226 49;
       color: rgb(255,0,0);
     }
     text {
@@ -44,7 +44,7 @@ Ab6+AAABAAD/JgHeAgwAEAAAATMDDgEjIic1FjMyPwEDMxMBhFrpFkUsHxkbES0SJLFZhgIM/YY5\
 Mw1LBiheAg7+aAA=\
 ");
       glyphs: 56 45, 66 27, "v", 90 37, 53 29, 70 27, "x", 85 13;
-      offset: 80.5 110;
+      offset: 87 110;
     }
   }
 }

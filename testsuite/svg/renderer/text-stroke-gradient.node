@@ -2,7 +2,7 @@ mask {
   source: transform {
     transform: scale(1, 1.5);
     child: linear-gradient {
-      bounds: 20 15 459 69;
+      bounds: 20 15 440 69;
       start: 10 10;
       end: 440 10;
       stops: 0 rgb(0,0,255), 1 rgb(0,255,0);
@@ -84,7 +84,7 @@ mask {
   source: transform {
     transform: scale(1, 1.5);
     child: linear-gradient {
-      bounds: 20 116 470 55;
+      bounds: 20 116 455 55;
       start: 10 10;
       end: 440 10;
       stops: 0 rgb(0,0,255), 1 rgb(0,255,0);

@@ -1,5 +1,5 @@
 displacement {
-  clip: 56.6 66.1 286.8 58.8;
+  clip: 64.4 66.1 271.2 58.8;
   child: text {
     color: rgb(0,119,204);
     font: "SVGFreeSansASCII 48px" url("data:font/ttf;base64,\
@@ -39,10 +39,10 @@ Ab6+AAABAAD/JgHeAgwAEAAAATMDDgEjIic1FjMyPwEDMxMBhFrpFkUsHxkbES0SJLFZhgIM/YY5\
 Mw1LBiheAg7+aAA=\
 ");
     glyphs: 56 45, 66 27, "v", 90 37, 53 29, 70 27, "x", 85 13;
-    offset: 80.5 110;
+    offset: 87 110;
   }
   displacement: turbulence {
-    bounds: 56.6 66.1 286.8 58.8;
+    bounds: 64.4 66.1 271.2 58.8;
     color-state: srgb-linear;
     frequency: 0.02 0.05;
     octaves: 2;

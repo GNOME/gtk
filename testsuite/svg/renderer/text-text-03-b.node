@@ -145,7 +145,7 @@ roibeYtmCPySB4tmendpiAhz94OjB2qMe56LswgODg73j/htFSAKjGwVIQoO\
 }
 mask {
   source: color {
-    bounds: 224 81 139 36;
+    bounds: 224 81 128 36;
     color: rgb(0,0,255);
   }
   mask: transform {
@@ -174,7 +174,7 @@ text {
 }
 mask {
   source: color {
-    bounds: 39 118 181 36;
+    bounds: 39 118 170 36;
     color: rgb(255,0,255);
   }
   mask: transform {
@@ -191,7 +191,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 1 171 374 36;
+    bounds: 1 171 363 36;
     color: rgb(0,0,0);
   }
   mask: transform {

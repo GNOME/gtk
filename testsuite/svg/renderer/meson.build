@@ -180,6 +180,7 @@ test_data = [
   'text-multiple-coordinates.svg',
   'text-newline.svg',
   'text-path.svg',
+  'text-rotate.svg',
   'text-stroke-gradient.svg',
   'text-text-03-b.svg',
   'text-text-10-t.svg',
