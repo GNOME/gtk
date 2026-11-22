@@ -10,11 +10,11 @@ stroke {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,0,0);
   }
   mask: transform {
-    transform: translate(13.3626, 67.6734) rotate(331.699);
+    transform: translate(24.7782, 77.4744) rotate(332.586) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 15 10 1;
@@ -27,11 +27,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,0,0);
   }
   mask: transform {
-    transform: translate(23.3067, 62.5158) rotate(333.486);
+    transform: translate(34.3347, 72.7069) rotate(334.402) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 15 10 1;
@@ -44,11 +44,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,0,0);
   }
   mask: transform {
-    transform: translate(33.2696, 57.7427) rotate(335.331);
+    transform: translate(43.8911, 68.3176) rotate(336.274) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 15 10 1;
@@ -61,11 +61,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,0,0);
   }
   mask: transform {
-    transform: translate(43.2513, 53.3558) rotate(337.232);
+    transform: translate(53.4476, 64.3067) rotate(338.202) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 15 10 1;
@@ -78,11 +78,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,0,0);
   }
   mask: transform {
-    transform: translate(53.2513, 49.3566) rotate(339.187);
+    transform: translate(63.004, 60.674) rotate(340.184) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 15 10 1;
@@ -95,11 +95,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,0,0);
   }
   mask: transform {
-    transform: translate(63.2691, 45.7469) rotate(341.194);
+    transform: translate(72.5605, 57.4196) rotate(342.216) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 15 10 1;
@@ -112,11 +112,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,0,0);
   }
   mask: transform {
-    transform: translate(73.304, 42.5282) rotate(343.25);
+    transform: translate(82.117, 54.5434) rotate(344.295) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 15 10 1;
@@ -129,11 +129,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,0,0);
   }
   mask: transform {
-    transform: translate(83.3548, 39.7022) rotate(345.352);
+    transform: translate(91.6734, 52.0455) rotate(346.418) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 15 10 1;
@@ -146,11 +146,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,0,0);
   }
   mask: transform {
-    transform: translate(93.4201, 37.2706) rotate(347.494);
+    transform: translate(101.23, 49.9259) rotate(348.58) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 15 10 1;
@@ -163,11 +163,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,0,0);
   }
   mask: transform {
-    transform: translate(103.498, 35.2348) rotate(349.673);
+    transform: translate(110.786, 48.1846) rotate(350.774) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 15 10 1;
@@ -180,11 +180,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,0,0);
   }
   mask: transform {
-    transform: translate(113.588, 33.5961) rotate(351.883);
+    transform: translate(120.343, 46.8216) rotate(352.997) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 15 10 1;
@@ -197,11 +197,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,0,0);
   }
   mask: transform {
-    transform: translate(123.686, 32.3556) rotate(354.116);
+    transform: translate(129.899, 45.8368) rotate(355.241) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 15 10 1;
@@ -214,11 +214,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,0,0);
   }
   mask: transform {
-    transform: translate(133.411, 25.5264) rotate(356.369);
+    transform: translate(139.456, 45.2303) rotate(357.499) translate(-5, -20);
     child: fill {
       child: color {
         bounds: 0 15 10 1;
@@ -231,11 +231,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,128,0);
   }
   mask: transform {
-    transform: translate(133.411, 25.5264) rotate(356.369);
+    transform: translate(139.456, 45.2303) rotate(357.499) translate(-5, -20);
     child: fill {
       child: color {
         bounds: 0 7 10 1;
@@ -248,11 +248,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,0,0);
   }
   mask: transform {
-    transform: translate(143.9, 31.0729) rotate(358.632);
+    transform: translate(149.012, 45.002) rotate(359.766) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 15 10 1;
@@ -265,11 +265,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,128,0);
   }
   mask: transform {
-    transform: translate(143.9, 31.0729) rotate(358.632);
+    transform: translate(149.012, 45.002) rotate(359.766) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 7 10 1;
@@ -282,11 +282,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,0,0);
   }
   mask: transform {
-    transform: translate(154.01, 31.0315) rotate(0.899457);
+    transform: translate(158.569, 45.1521) rotate(2.03264) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 15 10 1;
@@ -299,11 +299,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,128,0);
   }
   mask: transform {
-    transform: translate(154.01, 31.0315) rotate(0.899457);
+    transform: translate(158.569, 45.1521) rotate(2.03264) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 7 10 1;
@@ -316,11 +316,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,0,0);
   }
   mask: transform {
-    transform: translate(164.12, 31.3903) rotate(3.16424);
+    transform: translate(168.125, 45.6804) rotate(4.29338) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 15 10 1;
@@ -333,11 +333,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,128,0);
   }
   mask: transform {
-    transform: translate(164.12, 31.3903) rotate(3.16424);
+    transform: translate(168.125, 45.6804) rotate(4.29338) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 7 10 1;
@@ -350,11 +350,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,0,0);
   }
   mask: transform {
-    transform: translate(174.225, 32.1489) rotate(5.41918);
+    transform: translate(177.682, 46.5869) rotate(6.54081) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 15 10 1;
@@ -367,11 +367,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,128,0);
   }
   mask: transform {
-    transform: translate(174.225, 32.1489) rotate(5.41918);
+    transform: translate(177.682, 46.5869) rotate(6.54081) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 7 10 1;
@@ -384,11 +384,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,0,0);
   }
   mask: transform {
-    transform: translate(184.325, 33.3069) rotate(7.65742);
+    transform: translate(187.238, 47.8718) rotate(8.76821) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 15 10 1;
@@ -401,11 +401,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,128,0);
   }
   mask: transform {
-    transform: translate(184.325, 33.3069) rotate(7.65742);
+    transform: translate(187.238, 47.8718) rotate(8.76821) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 7 10 1;
@@ -418,11 +418,11 @@ mask {
 }
 mask {
   source: color {
-    bounds: 13.3626 25.5264 376.637 56.147;
+    bounds: 19.7782 25.2303 370.222 54.7697;
     color: rgb(0,0,0);
   }
   mask: transform {
-    transform: translate(194.417, 34.8634) rotate(9.8724);
+    transform: translate(196.794, 49.5349) rotate(10.9692) translate(-5, -14);
     child: fill {
       child: color {
         bounds: 0 15 10 1;

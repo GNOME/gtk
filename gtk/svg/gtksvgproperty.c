@@ -986,6 +986,11 @@ static SvgPropertyInfo shape_attrs[] = {
     .applies_to = ELEMENT_TEXTS,
     .parse_value = parse_multiple_numbers,
   },
+  [SVG_PROPERTY_TEXT_ROTATE] = {
+    .flags = SVG_PROPERTY_NO_CSS,
+    .applies_to = ELEMENT_TEXTS,
+    .parse_value = parse_multiple_numbers,
+  },
   [SVG_PROPERTY_UNICODE_BIDI] = {
     .flags = SVG_PROPERTY_IS_DISCRETE,
     .applies_to = ELEMENT_ANY,
@@ -1377,6 +1382,7 @@ shape_attrs_init_default_values (void)
   shape_attrs[SVG_PROPERTY_TEXT_Y].initial_value = svg_numbers_new1 (0);
   shape_attrs[SVG_PROPERTY_TEXT_DX].initial_value = svg_numbers_new_none ();
   shape_attrs[SVG_PROPERTY_TEXT_DY].initial_value = svg_numbers_new_none ();
+  shape_attrs[SVG_PROPERTY_TEXT_ROTATE].initial_value = svg_numbers_new_none ();
   shape_attrs[SVG_PROPERTY_UNICODE_BIDI].initial_value = svg_unicode_bidi_new (UNICODE_BIDI_NORMAL);
   shape_attrs[SVG_PROPERTY_DIRECTION].initial_value = svg_direction_new (PANGO_DIRECTION_LTR);
   shape_attrs[SVG_PROPERTY_WRITING_MODE].initial_value = svg_writing_mode_new (WRITING_MODE_HORIZONTAL_TB);
@@ -1654,6 +1660,7 @@ static SvgPropertyLookup shape_attr_lookups[] = {
   { "y", ELEMENT_TEXTS, 0, SVG_PROPERTY_TEXT_Y },
   { "dx", ELEMENT_TEXTS, 0, SVG_PROPERTY_TEXT_DX },
   { "dy", ELEMENT_TEXTS, 0, SVG_PROPERTY_TEXT_DY },
+  { "rotate", ELEMENT_TEXTS, 0, SVG_PROPERTY_TEXT_ROTATE },
   { "unicode-bidi", ELEMENT_ANY, 0, SVG_PROPERTY_UNICODE_BIDI },
   { "direction", ELEMENT_ANY, 0, SVG_PROPERTY_DIRECTION },
   { "writing-mode", ELEMENT_ANY, 0, SVG_PROPERTY_WRITING_MODE },

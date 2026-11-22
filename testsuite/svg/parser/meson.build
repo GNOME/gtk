@@ -120,6 +120,7 @@ test_data = [
   'text-fonts-02-t.svg',
   'text-invalid.svg',
   'text-multiple-coordinates.svg',
+  'text-rotate.svg',
   'text-text-03-b.svg',
   'text-text-10-t.svg',
   'text-vertical.svg',

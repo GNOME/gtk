@@ -119,6 +119,7 @@ typedef struct
   double x0, y0;
   double x, y;
   double dx, dy;
+  double r;
   double baseline_shift;
   SvgElement *chunk_shape;
   unsigned int chunk_node;
@@ -697,8 +698,8 @@ advance_text_offset (TextOffset   *offsets,
 
 typedef struct
 {
-  gboolean has_x, has_y, has_dx, has_dy;
-  double x, y, dx, dy;
+  gboolean has_x, has_y, has_dx, has_dy, has_r;
+  double x, y, dx, dy, r;
 } TextPosition;
 
 static void
@@ -746,8 +747,17 @@ get_text_position (TextOffset            *offsets,
               pos->has_dy = TRUE;
             }
         }
+      if (!pos->has_r)
+        {
+          SvgValue *v = svg_element_get_current_value (offsets->elt, SVG_PROPERTY_TEXT_ROTATE);
+          if (svg_numbers_get_length (v) > 0)
+            {
+              pos->r = svg_numbers_get (v, MIN (offsets->idx, svg_numbers_get_length (v) - 1), 1);
+              pos->has_r = TRUE;
+            }
+        }
 
-      if (pos->has_x && pos->has_y && pos->has_dx && pos->has_dy)
+      if (pos->has_x && pos->has_y && pos->has_dx && pos->has_dy && pos->has_r)
         break;
 
       offsets = offsets->next;
@@ -766,6 +776,8 @@ starts_layout (TextOffset *offsets)
       if (offsets->idx < svg_numbers_get_length (svg_element_get_current_value (offsets->elt, SVG_PROPERTY_TEXT_DX)))
         return TRUE;
       if (offsets->idx < svg_numbers_get_length (svg_element_get_current_value (offsets->elt, SVG_PROPERTY_TEXT_DY)))
+        return TRUE;
+      if (offsets->idx < svg_numbers_get_length (svg_element_get_current_value (offsets->elt, SVG_PROPERTY_TEXT_ROTATE)))
         return TRUE;
 
       offsets = offsets->next;
@@ -803,22 +815,22 @@ apply_pos_to_chunk (TextContext *ctx,
                 {
                   if (ctx->path_measure != NULL)
                     {
-                      float offset = ctx->path_offset + layout->x0 + dx;
+                      float cw = layout->bounds.size.width;
+                      float offset = ctx->path_offset + layout->x0 + cw / 2 + dx;
                       GskPathPoint point;
 
                       if (0 <= offset && offset <= gsk_path_measure_get_length (ctx->path_measure) &&
                           gsk_path_measure_get_point (ctx->path_measure, offset, &point))
                         {
                           graphene_point_t position;
-                          double s, c;
 
                           gsk_path_point_get_position (&point, ctx->path, &position);
-                          layout->r = gsk_path_point_get_rotation (&point, ctx->path, GSK_PATH_TO_END);
-                          _sincos (DEG_TO_RAD (layout->r), &s, &c);
+                          layout->r += gsk_path_point_get_rotation (&point, ctx->path, GSK_PATH_TO_END);
                           layout->x0 = position.x;
                           layout->y0 = position.y;
-                          layout->x = layout->x0 + layout->origin.x * c - layout->origin.y * s;
-                          layout->y = layout->y0 + layout->origin.x * s + layout->origin.y * c;
+                          layout->x = layout->x0;
+                          layout->y = layout->y0;
+                          layout->origin.x -= cw / 2;
                         }
                       else
                         {
@@ -829,8 +841,8 @@ apply_pos_to_chunk (TextContext *ctx,
                     {
                       layout->x0 += dx;
                       layout->y0 += dy;
-                      layout->x = layout->x0 + layout->origin.x;
-                      layout->y = layout->y0 + layout->origin.y;
+                      layout->x = layout->x0;
+                      layout->y = layout->y0;
                     }
                 }
             }
@@ -914,7 +926,7 @@ collect_bounds (SvgElement *shape)
               TextLayout *layout = &g_array_index (node->characters.layouts, TextLayout, j);
               graphene_rect_t bounds;
 
-              graphene_rect_init (&bounds, layout->x, layout->y, layout->bounds.size.width, layout->bounds.size.height);
+              graphene_rect_init (&bounds, layout->x + layout->origin.x, layout->y + layout->origin.y, layout->bounds.size.width, layout->bounds.size.height);
 
               if (!shape->valid_bounds)
                 shape->bounds = bounds;
@@ -954,6 +966,7 @@ do_generate_layouts (SvgElement            *self,
   anchor = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_TEXT_ANCHOR));
 
   text_ctx->space = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_SPACE));
+  text_ctx->r = 0;
 
   if (self->type == SVG_ELEMENT_TEXT_PATH)
     {
@@ -1096,12 +1109,16 @@ do_generate_layouts (SvgElement            *self,
                       {
                         text_ctx->dy += pos.dy;
                       }
+                    if (pos.has_r)
+                      {
+                        text_ctx->r = pos.r;
+                      }
 
                     if (*ch == '\0')
                       break;
 
                     advance_text_offset (&offset, 1);
-                    if (starts_layout (&offset) || text_ctx->path != NULL)
+                    if (starts_layout (&offset) || text_ctx->path != NULL || text_ctx->r != 0)
                       {
                         do
                           {
@@ -1120,10 +1137,13 @@ do_generate_layouts (SvgElement            *self,
                       }
 
                     layout0.layout = text_create_layout (self, context, the_text, len, text_ctx->wmode, &layout0.origin, &layout0.bounds, &is_vertical, &layout0.r);
+
                     layout0.origin.y += text_ctx->baseline_shift + text_ctx->dy;
                     layout0.x0 = text_ctx->x + text_ctx->dx;
                     layout0.y0 = text_ctx->y;
+                    layout0.r += text_ctx->r;
                     layout0.anchor = anchor;
+
                     g_array_append_val (node->characters.layouts, layout0);
 
                     if (is_vertical)
@@ -1168,6 +1188,7 @@ do_generate_layouts (SvgElement            *self,
     }
 
   text_ctx->space = space;
+  text_ctx->r = 0;
 }
 
 #if 0

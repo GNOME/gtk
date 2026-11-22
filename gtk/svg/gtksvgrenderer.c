@@ -3551,6 +3551,7 @@ draw_text_path (SvgElement            *self,
   gtk_snapshot_push_mask (context->snapshot, GSK_MASK_MODE_ALPHA);
   gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (layout->x, layout->y));
   gtk_snapshot_rotate (context->snapshot, layout->r);
+  gtk_snapshot_translate (context->snapshot, &layout->origin);
   if (stroke)
     gtk_snapshot_append_stroke (context->snapshot, path, stroke, &GDK_RGBA_BLACK);
   else
@@ -3682,6 +3683,7 @@ fill_text (PaintContext          *context,
     {
       gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (layout->x, layout->y));
       gtk_snapshot_rotate (context->snapshot, layout->r);
+      gtk_snapshot_translate (context->snapshot, &layout->origin);
       snapshot_add_layout (context->snapshot, layout->layout, svg_paint_get_color (paint), component);
     }
   else if (paint_is_server (svg_paint_get_kind (paint)))
@@ -3691,6 +3693,7 @@ fill_text (PaintContext          *context,
       gtk_snapshot_push_mask (context->snapshot, GSK_MASK_MODE_ALPHA);
       gtk_snapshot_translate (context->snapshot, &GRAPHENE_POINT_INIT (layout->x, layout->y));
       gtk_snapshot_rotate (context->snapshot, layout->r);
+      gtk_snapshot_translate (context->snapshot, &layout->origin);
 
       gdk_color_init_from_rgba (&color, &GDK_RGBA_BLACK);
       snapshot_add_layout (context->snapshot, layout->layout, &color, component);
@@ -3957,12 +3960,16 @@ pick_text (SvgElement   *self,
               transform = gsk_transform_rotate (NULL, layout->r);
               push_transform (context, transform);
               gsk_transform_unref (transform);
+              transform = gsk_transform_translate (NULL, &layout->origin);
+              push_transform (context, transform);
+              gsk_transform_unref (transform);
               if (point_in_layout (layout->layout, &context->picking.p))
                 {
                   context->picking.picked = self;
                   context->picking.done = TRUE;
                   break;
                 }
+              pop_transform (context);
               pop_transform (context);
               pop_transform (context);
             }
