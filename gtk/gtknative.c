@@ -179,12 +179,9 @@ surface_render_cb (GdkSurface     *surface,
                                        root,
                                        widget->priv->render_node);
 
-  if (root != NULL)
-    {
-      gsk_renderer_render (renderer, root, region);
+  gsk_renderer_render (renderer, root, region);
 
-      gsk_render_node_unref (root);
-    }
+  g_clear_pointer (&root, gsk_render_node_unref);
 
   gdk_profiler_end_mark (before_render, "Widget render", "");
 
