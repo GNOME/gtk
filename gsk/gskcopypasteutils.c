@@ -20,23 +20,17 @@
 
 #include "gskcopypasteutilsprivate.h"
 
-#include "gskclipnode.h"
+#include "gskclipnodeprivate.h"
 #include "gskcolornode.h"
 #include "gskcontainernode.h"
 #include "gskcopynode.h"
 #include "gskisolationnode.h"
 #include "gskopacitynode.h"
 #include "gskpastenode.h"
+#include "gskrendernodeprivate.h"
 #include "gskrenderreplay.h"
 #include "gsktransform.h"
 #include "gsktransformnode.h"
-
-#ifdef GTK_COMPILATION
-#include "gskrendernodeprivate.h"
-#include "gskclipnodeprivate.h"
-#else
-#include "gtk/gtksnapshot.h"
-#endif
 
 typedef struct _PartialNode PartialNode;
 struct _PartialNode
@@ -333,19 +327,10 @@ replace_copy_paste_node_record (GskRenderReplay *replay,
               {
                 graphene_rect_t bounds;
                 gsk_render_node_get_bounds (node, &bounds);
-#ifdef GTK_COMPILATION
                 result = gsk_clip_node_new2 (child,
                                              &bounds,
                                              gsk_paste_node_get_snap (node));
                 gsk_render_node_unref (child);
-#else
-                GtkSnapshot *snapshot = gtk_snapshot_new ();
-                gtk_snapshot_set_snap (snapshot, gsk_paste_node_get_snap (node));
-                gtk_snapshot_push_clip (snapshot, &bounds);
-                gtk_snapshot_append_node (snapshot, child);
-                gtk_snapshot_pop (snapshot);
-                result = gtk_snapshot_free_to_node (snapshot);
-#endif
               }
             else
               result = gsk_container_node_new (NULL, 0);

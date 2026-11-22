@@ -23,6 +23,7 @@
 
 struct _GskGpuOcclusion
 {
+  GskNodeWalker *walker;
   GskGpuFrame *frame;
   GskGpuImage *target;
   GdkColorState *target_color_state;
@@ -63,6 +64,7 @@ gsk_gpu_occlusion_user_to_device (GskGpuOcclusion       *self,
 
 static void
 gsk_gpu_occlusion_init (GskGpuOcclusion       *self,
+                        GskNodeWalker         *walker,
                         GskGpuFrame           *frame,
                         GskGpuImage           *target,
                         GdkColorState         *target_color_state,
@@ -70,6 +72,7 @@ gsk_gpu_occlusion_init (GskGpuOcclusion       *self,
                         cairo_region_t        *clip_region,
                         const graphene_rect_t *viewport)
 {
+  self->walker = walker;
   self->frame = frame;
   self->target = target;
   self->target_color_state = target_color_state;
@@ -287,7 +290,7 @@ gsk_gpu_occlusion_try_node_untracked (GskGpuOcclusion *self,
   if (!gsk_gpu_occlusion_push_clip (self, &opaque, GSK_RECT_SNAP_NONE, &prev_clip))
     return NULL;
 
-  result = GSK_RENDER_NODE_GET_CLASS (node)->occlusion (node, self);
+  result = GSK_RENDER_NODE_GET_CLASS (node)->occlusion (node, self->walker, self);
 
   if (result == NULL)
     {
@@ -304,11 +307,15 @@ gsk_gpu_occlusion_try_node (GskGpuOcclusion *self,
 {
   GskGpuRenderPass *result;
 
-  gsk_gpu_frame_start_node (self->frame, node, pos);
+  if (!gsk_node_walker_start_node (self->walker, node, pos))
+    return NULL;
+
+  gsk_gpu_frame_start_node (self->frame, self->walker);
 
   result = gsk_gpu_occlusion_try_node_untracked (self, node);
   
   gsk_gpu_frame_end_node (self->frame);
+  gsk_node_walker_end_node (self->walker);
 
   return result;
 }
@@ -330,7 +337,7 @@ gsk_gpu_occlusion_run (GskGpuOcclusion       *self,
       GskGpuRenderPass *pass;
 
       pass = gsk_gpu_occlusion_begin_rendering_transparent (self);
-      gsk_gpu_node_processor_add_first_node_untracked (pass, node);
+      gsk_gpu_node_processor_add_first_node_untracked (self->walker, pass, node);
       result = FALSE;
     }
   
@@ -342,7 +349,8 @@ gsk_gpu_occlusion_run (GskGpuOcclusion       *self,
 }
 
 void
-gsk_gpu_occlusion_render_node (GskGpuFrame           *frame,
+gsk_gpu_occlusion_render_node (GskNodeWalker         *walker,
+                               GskGpuFrame           *frame,
                                GskGpuImage           *target,
                                GdkColorState         *target_color_state,
                                GskRenderPassType      pass_type,
@@ -356,6 +364,7 @@ gsk_gpu_occlusion_render_node (GskGpuFrame           *frame,
   gboolean do_culling;
 
   gsk_gpu_occlusion_init (&self,
+                          walker,
                           frame,
                           target,
                           target_color_state,

@@ -177,6 +177,7 @@ typedef enum {
   GSK_GPU_OPTIMIZE_SHADOW               = 1 << 10,
   GSK_GPU_OPTIMIZE_FAST_BLUR            = 1 << 11,
   GSK_GPU_OPTIMIZE_PROFILE              = 1 << 12,
+  GSK_GPU_OPTIMIZE_COPY_PASTE           = 1 << 13,
 } GskGpuOptimizations;
 
 typedef enum {

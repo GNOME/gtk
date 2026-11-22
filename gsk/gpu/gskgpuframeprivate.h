@@ -4,6 +4,7 @@
 #include "gskgputypesprivate.h"
 
 #include "gskdebugnodeprivate.h" /* GskDebugProfile */
+#include "gsknodewalkerprivate.h" /* GskDebugProfile */
 
 #include "gdk/gdkdrawcontextprivate.h"
 
@@ -60,8 +61,7 @@ struct _GskGpuFrameClass
   gpointer              (* alloc_op)                                    (GskGpuFrame            *self,
                                                                          const GskGpuOpClass    *op_class);
   void                  (* start_node)                                  (GskGpuFrame            *self,
-                                                                         GskRenderNode          *node,
-                                                                         gsize                   pos);
+                                                                         GskNodeWalker          *walker);
   void                  (* end_node)                                    (GskGpuFrame            *self);
   GskDebugProfile *     (* get_profile)                                 (GskGpuFrame            *self);
 };
@@ -133,8 +133,7 @@ gboolean                gsk_gpu_frame_download_texture                  (GskGpuF
 GskGpuOp               *gsk_gpu_frame_get_last_op                       (GskGpuFrame            *self);
 
 void                    gsk_gpu_frame_start_node                        (GskGpuFrame            *self,
-                                                                         GskRenderNode          *node,
-                                                                         gsize                   pos);
+                                                                         GskNodeWalker          *walker);
 void                    gsk_gpu_frame_end_node                          (GskGpuFrame            *self);
 GskDebugProfile *       gsk_gpu_frame_get_profile                       (GskGpuFrame            *self);
 
