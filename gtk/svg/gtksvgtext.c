@@ -114,6 +114,7 @@ typedef struct
   WritingMode wmode;
   WhiteSpace space;
   gboolean initial;
+  gboolean final;
   gboolean trailing;
   double x0, y0;
   double x, y;
@@ -200,56 +201,16 @@ text_chomp (const char  *in,
         }
     }
 
-  return g_string_free_and_steal (str);
-}
-
-static TextLayout *
-find_last_layout (SvgElement *shape)
-{
-  for (unsigned int i = shape->text->len; i > 0; i--)
+  if (context->trailing && context->final)
     {
-      TextNode *node = &g_array_index (shape->text, TextNode, i - 1);
-      if (node->type == TEXT_NODE_SHAPE)
+      while (str->len > 0 && str->str[str->len - 1] == ' ')
         {
-          TextLayout *layout = find_last_layout (node->shape.shape);
-          if (layout)
-            return layout;
-        }
-      else
-        {
-          if (node->characters.layouts->len > 0)
-            return &g_array_index (node->characters.layouts, TextLayout, node->characters.layouts->len - 1);
+          str->str[str->len - 1] = '\0';
+          str->len--;
         }
     }
 
-  return NULL;
-}
-
-static void
-strip_trailing_space (SvgElement  *shape,
-                      TextContext *context)
-{
-  TextLayout *layout;
-  const char *text;
-  size_t len;
-
-  /* Remove the leftover final space. Note that we rely on text_chomp
-   * only considering single-byte whitespace
-   */
-  layout = find_last_layout (shape);
-  if (layout == NULL)
-    return;
-
-  text = pango_layout_get_text (layout->layout);
-  len = strlen (text);
-
-  if (len == 0)
-    return;
-
-  if ((text[len - 1] == ' ' && !preserve_space (context->space)) ||
-      (text[len - 1] == '\n' && !preserve_newline (context->space)) ||
-      (text[len - 1] == '\t' && !preserve_tab (context->space)))
-    pango_layout_set_text (layout->layout, text, len - 1);
+  return g_string_free_and_steal (str);
 }
 
 /* }}} */
@@ -951,13 +912,14 @@ collect_bounds (SvgElement *shape)
           for (unsigned int j = 0; j < node->characters.layouts->len; j++)
             {
               TextLayout *layout = &g_array_index (node->characters.layouts, TextLayout, j);
+              graphene_rect_t bounds;
 
-               graphene_rect_offset (&layout->bounds, layout->x0, layout->y0);
+              graphene_rect_init (&bounds, layout->x, layout->y, layout->bounds.size.width, layout->bounds.size.height);
 
               if (!shape->valid_bounds)
-                shape->bounds = layout->bounds;
+                shape->bounds = bounds;
               else
-                graphene_rect_union (&shape->bounds, &layout->bounds, &shape->bounds);
+                graphene_rect_union (&shape->bounds, &bounds, &shape->bounds);
               shape->valid_bounds = TRUE;
             }
         }
@@ -1063,6 +1025,8 @@ do_generate_layouts (SvgElement            *self,
             g_assert (node->characters.layouts != NULL);
 
             lang = svg_language_get (svg_element_get_current_value (self, SVG_PROPERTY_LANG), 0);
+
+            text_ctx->final = self->type == SVG_ELEMENT_TEXT && i == self->text->len - 1;
             text = text_chomp (node->characters.text, text_ctx);
             if (text_ctx->path != NULL)
               {
@@ -1269,6 +1233,7 @@ generate_layouts (SvgElement            *shape,
   text_ctx.wmode = wmode;
   text_ctx.space = WHITE_SPACE_NORMAL;
   text_ctx.initial = TRUE;
+  text_ctx.final = FALSE;
   text_ctx.trailing = FALSE;
   text_ctx.x = text_ctx.y = 0;
   text_ctx.x0 = text_ctx.y0 = 0;
@@ -1278,8 +1243,6 @@ generate_layouts (SvgElement            *shape,
   context = svg_element_get_pango_context (shape, get_fontmap (svg), wmode);
 
   do_generate_layouts (shape, context, &text_ctx, NULL, viewport);
-
-  strip_trailing_space (shape, &text_ctx);
   end_chunk (&text_ctx);
 
   collect_bounds (shape);

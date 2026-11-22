@@ -10,7 +10,7 @@ stroke {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,0,0);
   }
   mask: transform {
@@ -27,7 +27,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,0,0);
   }
   mask: transform {
@@ -44,7 +44,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,0,0);
   }
   mask: transform {
@@ -61,7 +61,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,0,0);
   }
   mask: transform {
@@ -78,7 +78,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,0,0);
   }
   mask: transform {
@@ -95,7 +95,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,0,0);
   }
   mask: transform {
@@ -112,7 +112,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,0,0);
   }
   mask: transform {
@@ -129,7 +129,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,0,0);
   }
   mask: transform {
@@ -146,7 +146,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,0,0);
   }
   mask: transform {
@@ -163,7 +163,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,0,0);
   }
   mask: transform {
@@ -180,7 +180,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,0,0);
   }
   mask: transform {
@@ -197,7 +197,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,0,0);
   }
   mask: transform {
@@ -214,7 +214,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,0,0);
   }
   mask: transform {
@@ -231,7 +231,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,128,0);
   }
   mask: transform {
@@ -248,7 +248,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,0,0);
   }
   mask: transform {
@@ -265,7 +265,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,128,0);
   }
   mask: transform {
@@ -282,7 +282,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,0,0);
   }
   mask: transform {
@@ -299,7 +299,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,128,0);
   }
   mask: transform {
@@ -316,7 +316,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,0,0);
   }
   mask: transform {
@@ -333,7 +333,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,128,0);
   }
   mask: transform {
@@ -350,7 +350,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,0,0);
   }
   mask: transform {
@@ -367,7 +367,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,128,0);
   }
   mask: transform {
@@ -384,7 +384,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,0,0);
   }
   mask: transform {
@@ -401,7 +401,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,128,0);
   }
   mask: transform {
@@ -418,7 +418,7 @@ mask {
 }
 mask {
   source: color {
-    bounds: 20 31.0298 380 48.9702;
+    bounds: 13.3626 25.5264 376.637 56.147;
     color: rgb(0,0,0);
   }
   mask: transform {
