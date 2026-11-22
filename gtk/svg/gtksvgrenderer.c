@@ -3832,6 +3832,9 @@ paint_text (SvgElement            *self,
 {
   g_assert (svg_element_holds_text_content (self));
 
+  if (svg_element_conditionally_excluded (self, context->svg))
+    return;
+
   for (unsigned int i = 0; i < self->text->len; i++)
     {
       TextNode *node = &g_array_index (self->text, TextNode, i);
@@ -3922,6 +3925,9 @@ pick_text (SvgElement   *self,
            PaintContext *context)
 {
   g_assert (svg_element_holds_text_content (self));
+
+  if (svg_element_conditionally_excluded (self, context->svg))
+    return;
 
   for (unsigned int i = 0; i < self->text->len; i++)
     {
