@@ -178,7 +178,7 @@ gtk_updates_overlay_snapshot (GtkInspectorOverlay *overlay,
   updates = gtk_update_overlay_lookup_for_widget (self, widget, TRUE);
   now = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
 
-  if (updates->last)
+  if (updates->last && node)
     {
       cairo_region_t *diff;
 
@@ -189,12 +189,15 @@ gtk_updates_overlay_snapshot (GtkInspectorOverlay *overlay,
       else
         gtk_widget_updates_add (updates, now, diff);
     }
-  else
+  else if (updates->last || node)
     {
       cairo_region_t *region;
       graphene_rect_t bounds;
 
-      gsk_render_node_get_bounds (node, &bounds);
+      if (updates->last)
+        gsk_render_node_get_bounds (updates->last, &bounds);
+      else
+        gsk_render_node_get_bounds (node, &bounds);
       region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
                                                   floor (bounds.origin.x),
                                                   floor (bounds.origin.y),

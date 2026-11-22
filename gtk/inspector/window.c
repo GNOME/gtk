@@ -834,7 +834,8 @@ gtk_inspector_prepare_render (GtkWidget            *widget,
       double native_x, native_y;
 
       snapshot = gtk_snapshot_new ();
-      gtk_snapshot_append_node (snapshot, root);
+      if (root)
+        gtk_snapshot_append_node (snapshot, root);
 
       gtk_native_get_surface_transform (GTK_NATIVE (widget), &native_x, &native_y);
 
@@ -848,7 +849,7 @@ gtk_inspector_prepare_render (GtkWidget            *widget,
 
       gtk_snapshot_restore (snapshot);
 
-      gsk_render_node_unref (root);
+      g_clear_pointer (&root, gsk_render_node_unref);
       root = gtk_snapshot_free_to_node (snapshot);
     }
 

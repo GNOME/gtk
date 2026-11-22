@@ -62,7 +62,8 @@ gtk_inspector_render_recording_new (gint64                timestamp,
 
   recording->area = *area;
   recording->clip_region = cairo_region_copy (clip_region);
-  recording->node = gsk_render_node_ref (node);
+  if (node)
+    recording->node = gsk_render_node_ref (node);
   recording->surface = surface;
 
   return GTK_INSPECTOR_RECORDING (recording);
