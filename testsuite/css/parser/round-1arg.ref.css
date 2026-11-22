@@ -1,0 +1,3 @@
+a {
+  color: color(from currentcolor srgb round(nearest, r) g b / alpha);
+}
