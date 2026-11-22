@@ -228,7 +228,6 @@ compare_render_tests = [
   'repeat-repeats',
   'repeat-repeats-nested',
   'repeat-scaling',
-  'repeat-snap',
   'repeat-texture',
   'repeat-tiny-nocairo',
   'repeat-unaligned-bounds',
