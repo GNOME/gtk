@@ -155,7 +155,10 @@ gsk_render_node_content_serializer (GdkContentSerializer *serializer)
 
   value = gdk_content_serializer_get_value (serializer);
   node = gsk_value_get_render_node (value);
-  bytes = gsk_render_node_serialize (node);
+  if (node)
+    bytes = gsk_render_node_serialize (node);
+  else
+    bytes = g_bytes_new (NULL, 0);
 
   gsk_render_node_serialize_bytes (serializer, bytes);
 }
