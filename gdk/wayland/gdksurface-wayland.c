@@ -919,7 +919,12 @@ gdk_wayland_surface_update_content (GdkSurface *surface)
 
   if (self->display_server.background_effect)
     {
-      cairo_region_t *blur = gsk_render_node_compute_background_blur (content);
+      cairo_region_t *blur;
+
+      if (content)
+        blur = gsk_render_node_compute_background_blur (content);
+      else
+        blur = NULL;
 
       self->background_effect_dirty = (blur == NULL && self->background_blur != NULL) ||
                                       (blur != NULL && self->background_blur == NULL) ||
