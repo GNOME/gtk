@@ -1,3 +1,98 @@
+Changes in 4.24.2, 22-11-2026
+-----------------------------
+
+* Bugs fixed:
+  - GNOME/gtksourceview#433 macOS: Number key in the press-and-hold accent menu
+    inserts the digit instead of selecting the accent (João Sacramento)
+  - GNOME/nautilus#3614 Double clicking a file that's slightly off screen
+    doesn't open it (Jing Wang)
+  - #6719 segfaults when using wintab (Alexia Death)
+  - #8455 GTK crashes on launch with floating point exception when wl_output
+    with refresh=0 is encountered (Matthias Clasen)
+  - #8456 Wayland: freeing a GtkMediaFile makes GStreamer eglTerminate() GDK's
+    EGLDisplay (4.24.1 regression) (Benjamin Otte)
+  - #8463 Critical when loading SVG (Matthias Clasen)
+  - #8537 macOS: Press-and-hold accent menu inserts the accented letter without
+    replacing the original one (João Sacramento)
+  - #8563 CSS parsing: use-after-free in gtk_css_parser_end_block_prelude() and
+    three more memory-safety bugs (Matthias Clasen)
+  - !10432 Fix the testsuite and stroke bounds (Benjamin Otte)
+  - !10433 Fix the testsuite and stroke bounds (Benjamin Otte)
+  - !10444 Update Slovenian translation
+  - !10445 Fix various issues (Benjamin Otte)
+  - !10446 Fix various issues (Benjamin Otte)
+  - !10447 Update Chinese (China) translation
+  - !10448 Update Chinese (China) translation
+  - !10459 Update Serbian translation
+  - !10460 Update Serbian (Latin) translation
+  - !10462 Update Georgian translation
+  - !10464 Update Persian translation (Danial Behzadi)
+  - !10466 Update Ukrainian translation
+  - !10469 Update Czech translation (Daniel Rusek)
+  - !10474 Update Belarusian translation (Vasil Pupkin)
+  - !10475 Update Catalan translation (Xavi Ivars)
+  - !10477 Update Norwegian Bokmål translation (Kjartan Maraas)
+  - !10478 Update Norwegian Nynorsk translation (Roy-Magne Mo)
+  - !10484 Update Turkish translation (Emin Tufan Çetin)
+  - !10486 Update Lithuanian translation (Aurimas Černius)
+  - !10487 Declare sysprof counters as G_GNUC_UNUSED (Benjamin Otte)
+  - !10500 nodeparser: Don't crash when someone puts text inside a fill/stroke
+    (Benjamin Otte)
+  - !10502 Update Portuguese translation
+  - !10503 Update Portuguese translation
+  - !10505 nodeparser: Don't crash when someone puts text inside a fill/stroke
+    (Benjamin Otte)
+  - !10524 Update French translation
+  - !10525 Update French translation
+  - !10529 Update Bulgarian translation
+  - !10572 Update Russian translation
+  - !10582 Assorted backports for 4.24 (Zeth (wearing a Fedora), Jing Wang,
+    Felix Häcker, Alexander Davydzik, Martin Fischer, Alexia Death, Sergey
+    Bugaev, Eugenio Depalo, Lukáš Tyrychtr, Dimitriy Ryazantcev, Benjamin Otte,
+    Matthias Clasen, Ignacio Casal Quinteiro)
+  - !10650 Update Kazakh translation
+  - !10680 Update Basque translation
+  - !10683 Update Hebrew translation
+  - !10700 backport gsk(opacity): use original value if opaque region hasn't
+    changed (Arjan Molenaar)
+  - !10707 Update Indonesian translation
+  - !10719 Update Azerbaijani translation
+  - !10721 Update Brazilian Portuguese translation
+  - !10736 backport store-callback-4-24 (Merlijn Sebrechts)
+  - !10743 Update Swedish translation
+  - !10745 Update Galician translation
+  - !10746 macos: Backport input method fixes to gtk-4-24 (João Sacramento)
+  - !10751 gsk: skip unnecessary copy/paste replay (Christian Hergert)
+  - !10758 testsuite: Drop the repeat-snap compare test (Matthias Clasen)
+  - !10760 Backports of assorted css memeory fixes (Matthias Clasen)
+
+* Translation updates:
+  - Azerbaijani (Nicat Xalid)
+  - Basque (Asier Saratsua Garmendia)
+  - Belarusian (Vasil Pupkin)
+  - Bulgarian (twlvnn kraftwerk)
+  - Catalan (Xavi Ivars)
+  - Chinese (China) (luming zh)
+  - Czech (Daniel Rusek)
+  - French (Guillaume Bernard)
+  - Galician (Francisco Diéguez Souto)
+  - Georgian (Ekaterine Papava)
+  - Hebrew (Yaron Shahrabani)
+  - Indonesian (Herpiko Dwi Aguno)
+  - Kazakh (Baurzhan Muftakhidinov)
+  - Lithuanian (Aurimas Černius)
+  - Norwegian Bokmål (Kjartan Maraas)
+  - Norwegian Nynorsk (Roy-Magne Mo)
+  - Persian (Danial Behzadi)
+  - Portuguese (Hugo Carvalho)
+  - Portuguese (Brazil) (burns)
+  - Russian (Artur S0)
+  - Serbian (acey dot)
+  - Slovenian (Martin)
+  - Swedish (Anders Jonsson)
+  - Turkish (Emin Tufan Çetin)
+  - Ukrainian (Yuri Chornoivan)
+
 Overview of Changes in 4.24.1, 01-10-2026
 =========================================
 
