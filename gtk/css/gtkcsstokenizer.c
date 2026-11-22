@@ -942,7 +942,7 @@ scan_name (const char *data,
 static void
 gtk_css_tokenizer_read_name (GtkCssTokenizer *tokenizer)
 {
-  g_string_set_size (tokenizer->name_buffer, 0);
+  g_string_truncate (tokenizer->name_buffer, 0);
 
   do {
       gsize n_characters;
@@ -1231,12 +1231,15 @@ gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
     }
 }
 
+/* Must only be called when the next character is ASCII and not a newline */
 static void
 gtk_css_tokenizer_read_delim (GtkCssTokenizer *tokenizer,
                               GtkCssToken     *token)
 {
-  gtk_css_token_init_delim (token, g_utf8_get_char (tokenizer->data));
-  gtk_css_tokenizer_consume_char (tokenizer, NULL);
+  g_assert (!is_multibyte (*tokenizer->data) && !is_newline (*tokenizer->data));
+
+  gtk_css_token_init_delim (token, *tokenizer->data);
+  gtk_css_tokenizer_consume_ascii (tokenizer);
 }
 
 static gboolean
@@ -1278,7 +1281,7 @@ gtk_css_tokenizer_read_string (GtkCssTokenizer  *tokenizer,
                                GtkCssToken      *token,
                                GError          **error)
 {
-  g_string_set_size (tokenizer->name_buffer, 0);
+  g_string_truncate (tokenizer->name_buffer, 0);
 
   char end = *tokenizer->data;
 
