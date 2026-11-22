@@ -73,8 +73,11 @@ public final class SystemFilesystem {
 			ostream.close();
 		} else {
 			destination.mkdir();
-			for (String file : files)
+			for (String file : files) {
+				if (path.isEmpty() && fingerprint.equals(file))
+					continue;
 				copyFromAssets(context, path.isEmpty() ?  file : path + File.separator + file, new File(destination, file));
+			}
 		}
 	}
 
@@ -83,6 +86,7 @@ public final class SystemFilesystem {
 			File dir = context.getFilesDir();
 			cleanDirectory(dir);
 			copyFromAssets(context, "", dir);
+			copyFromAssets(context, fingerprint, new File(dir, fingerprint));
 		} catch (IOException e) {
 			logger.log(Level.SEVERE, "Failed writing assets to filesystem: " + e);
 		}
