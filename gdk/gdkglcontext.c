@@ -727,7 +727,6 @@ gdk_gl_context_real_begin_frame (GdkDrawContext      *draw_context,
   int i;
 
   content = gdk_surface_get_content (surface);
-  depth = gsk_render_node_get_preferred_depth (content);
   if (content)
     depth = gsk_render_node_get_preferred_depth (content);
   else
