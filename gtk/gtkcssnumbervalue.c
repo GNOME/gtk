@@ -40,6 +40,10 @@ static GtkCssValue * gtk_css_round_value_new            (guint        mode,
 static GtkCssValue * gtk_css_clamp_value_new            (GtkCssValue *min,
                                                          GtkCssValue *center,
                                                          GtkCssValue *max);
+static GtkCssValue * gtk_css_minmax_value_new           (guint         type,
+                                                         guint         mode,
+                                                         GtkCssValue **values,
+                                                         guint         n_values);
 
 static double _round (guint mode, double a, double b);
 static double _mod (double a, double b);
@@ -121,6 +125,11 @@ struct _GtkCssValue {
   };
 };
 
+/* mode is used for round() values, where it indicates
+ * the rounding mode, and for min() and max() values,
+ * where a nonzero mode indicates that they should print
+ * as clamp()
+ */
 static GtkCssValue *
 gtk_css_calc_value_new (guint         type,
                         guint         mode,
@@ -506,17 +515,11 @@ gtk_css_value_number_print (const GtkCssValue *value,
 
         g_string_append (string, function_name[value->type]);
         g_string_append_c (string, '(');
-        if (min != NULL)
-          gtk_css_value_print (min, string);
-        else
-          g_string_append (string, "none");
+        gtk_css_value_print (min, string);
         g_string_append (string, ", ");
         gtk_css_value_print (center, string);
         g_string_append (string, ", ");
-        if (max != NULL)
-          gtk_css_value_print (max, string);
-        else
-          g_string_append (string, "none");
+        gtk_css_value_print (max, string);
         g_string_append_c (string, ')');
       }
       break;
@@ -538,6 +541,30 @@ gtk_css_value_number_print (const GtkCssValue *value,
     case TYPE_COLOR_COORD:
       g_string_append (string, gtk_css_color_space_get_coord_name (value->color_coord.color_space, value->color_coord.coord));
       break;
+
+    case TYPE_MIN:
+    case TYPE_MAX:
+      if (value->calc.mode == 1 && value->calc.n_terms == 2)
+        {
+          if (value->type == TYPE_MIN)
+            {
+              g_string_append (string, "clamp(none, ");
+              gtk_css_value_print (value->calc.terms[0], string);
+              g_string_append (string, ", ");
+              gtk_css_value_print (value->calc.terms[1], string);
+              g_string_append_c (string, ')');
+            }
+          else
+            {
+              g_string_append (string, "clamp(");
+              gtk_css_value_print (value->calc.terms[1], string);
+              g_string_append (string, ", ");
+              gtk_css_value_print (value->calc.terms[0], string);
+              g_string_append (string, ", none)");
+            }
+          break;
+        }
+      G_GNUC_FALLTHROUGH;
 
     default:
       {
@@ -1016,7 +1043,7 @@ gtk_css_number_value_multiply (GtkCssValue *value,
               type = TYPE_MIN;
           }
 
-        return gtk_css_math_value_new (type, 0, values, value->calc.n_terms);
+        return gtk_css_math_value_new (type, value->calc.mode, values, value->calc.n_terms);
       }
 
     case TYPE_CALC:
@@ -1075,11 +1102,9 @@ gtk_css_number_value_multiply (GtkCssValue *value,
         GtkCssValue *center = value->calc.terms[1];
         GtkCssValue *max = value->calc.terms[2];
 
-        if (min)
-          min = gtk_css_number_value_multiply (min, factor);
+        min = gtk_css_number_value_multiply (min, factor);
         center = gtk_css_number_value_multiply (center, factor);
-        if (max)
-          max = gtk_css_number_value_multiply (max, factor);
+        max = gtk_css_number_value_multiply (max, factor);
 
         if (factor < 0)
           {
@@ -1157,7 +1182,6 @@ gtk_css_clamp_value_new (GtkCssValue *min,
                          GtkCssValue *center,
                          GtkCssValue *max)
 {
-  GtkCssValue *values[] = { min, center, max };
   GtkCssUnit unit;
   double min_, center_, max_, v;
 
@@ -1165,7 +1189,23 @@ gtk_css_clamp_value_new (GtkCssValue *min,
     return center;
 
   if (!units_compatible (center, min) || !units_compatible (center, max))
-    return gtk_css_calc_value_new (TYPE_CLAMP, 0, values, 3);
+    {
+      if (min == NULL)
+        {
+          GtkCssValue *values[] = { center, max };
+          return gtk_css_minmax_value_new (TYPE_MIN, 1, values, 2);
+        }
+      else if (max == NULL)
+        {
+          GtkCssValue *values[] = { center, min };
+          return gtk_css_minmax_value_new (TYPE_MAX, 1, values, 2);
+        }
+      else
+        {
+          GtkCssValue *values[] = { min, center, max };
+          return gtk_css_calc_value_new (TYPE_CLAMP, 0, values, 3);
+        }
+    }
 
   unit = canonical_unit (center->dimension.unit);
   min_ = min ? get_converted_value (min, unit) : -INFINITY;
@@ -1207,6 +1247,7 @@ gtk_css_round_value_new (guint        mode,
 
 static GtkCssValue *
 gtk_css_minmax_value_new (guint         type,
+                          guint         mode,
                           GtkCssValue **values,
                           guint         n_values)
 {
@@ -1263,7 +1304,7 @@ gtk_css_minmax_value_new (guint         type,
         }
     }
 
-  return gtk_css_calc_value_new (type, 0, vals, n_vals);
+  return gtk_css_calc_value_new (type, mode, vals, n_vals);
 }
 
 static GtkCssValue *
@@ -1420,7 +1461,7 @@ gtk_css_math_value_new (guint         type,
 
     case TYPE_MIN:
     case TYPE_MAX:
-      return gtk_css_minmax_value_new (type, values, n_values);
+      return gtk_css_minmax_value_new (type, 0, values, n_values);
 
     case TYPE_SIN:
     case TYPE_COS:
