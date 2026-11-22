@@ -972,7 +972,7 @@ do_generate_layouts (SvgElement            *self,
                      const graphene_rect_t *viewport)
 {
   WhiteSpace space = text_ctx->space;
-  double baseline_shift = text_ctx->baseline_shift;
+  double baseline_shift;
   TextAnchor anchor;
   float line_height;
   TextOffset offset;
@@ -991,7 +991,6 @@ do_generate_layouts (SvgElement            *self,
   line_height = svg_element_get_line_height (self, context);
   anchor = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_TEXT_ANCHOR));
 
-  text_ctx->baseline_shift += svg_element_get_baseline_shift (self, context);
   text_ctx->space = svg_enum_get (svg_element_get_current_value (self, SVG_PROPERTY_SPACE));
 
   if (self->type == SVG_ELEMENT_TEXT_PATH)
@@ -1045,7 +1044,10 @@ do_generate_layouts (SvgElement            *self,
       switch (node->type)
         {
         case TEXT_NODE_SHAPE:
+          baseline_shift = text_ctx->baseline_shift;
+          text_ctx->baseline_shift += svg_element_get_baseline_shift (node->shape.shape, context);
           do_generate_layouts (node->shape.shape, context, text_ctx, &offset, viewport);
+          text_ctx->baseline_shift = baseline_shift;
           break;
         case TEXT_NODE_CHARACTERS:
           {
@@ -1201,7 +1203,6 @@ do_generate_layouts (SvgElement            *self,
       g_clear_pointer (&text_ctx->path, gsk_path_unref);
     }
 
-  text_ctx->baseline_shift = baseline_shift;
   text_ctx->space = space;
 }
 
