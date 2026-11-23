@@ -45,7 +45,7 @@
 #include <gst/d3d12/gstd3d12.h>
 #endif
 
-#if GST_GL_HAVE_PLATFORM_EGL && (GST_GL_HAVE_WINDOW_WIN32 || GST_GL_HAVE_WINDOW_X11)
+#if GST_GL_HAVE_PLATFORM_EGL && (GST_GL_HAVE_WINDOW_WAYLAND || GST_GL_HAVE_WINDOW_WIN32 || GST_GL_HAVE_WINDOW_X11)
 #include <gst/gl/egl/gstgldisplay_egl.h>
 #endif
 
