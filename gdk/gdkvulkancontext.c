@@ -43,6 +43,10 @@
 #ifdef G_OS_UNIX
 #include <glib-unix.h>
 #endif
+#ifdef GDK_WINDOWING_WIN32
+#include "win32/gdkprivate-win32.h"
+#endif
+
 #include <glib/gi18n-lib.h>
 #include <math.h>
 
@@ -80,6 +84,9 @@ struct _GdkVulkanPresent
   VkSwapchainKHR vk_swapchain;
   guint32 image_index;
   GdkVulkanContextFrame *frame;
+#ifdef GDK_WINDOWING_WIN32
+  HANDLE vk_fence_handle;
+#endif
 };
 #endif
 
@@ -769,6 +776,15 @@ gdk_vulkan_present_reset (GdkVulkanContext *self,
 }
 
 #define COMPLETION_FD_EVENTS (G_IO_IN | G_IO_OUT | G_IO_ERR | G_IO_PRI | G_IO_HUP)
+#define COMPLETION_HANDLE_EVENTS G_IO_IN
+
+#ifdef GDK_WINDOWING_WIN32
+# if GLIB_SIZEOF_VOID_P == 8 /* We need to cast things for our GPollFD */
+#  define _completion_fd_type __int64
+# else
+#  define _completion_fd_type int
+# endif
+#endif
 
 static gboolean
 gdk_vulkan_present_is_busy (GdkVulkanContext *self,
@@ -781,7 +797,8 @@ gdk_vulkan_present_is_busy (GdkVulkanContext *self,
 
   if (!present->vk_fence)
     return TRUE;
-  
+
+#ifdef G_OS_UNIX
   if (present->frame->completion_fd >= 0)
     {
       GPollFD poll_fd = { present->frame->completion_fd, COMPLETION_FD_EVENTS, 0 };
@@ -791,6 +808,18 @@ gdk_vulkan_present_is_busy (GdkVulkanContext *self,
         return TRUE;
     }
   else
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  if (present->vk_fence_handle != INVALID_HANDLE_VALUE)
+    {
+      GPollFD poll_fd = { (_completion_fd_type)present->vk_fence_handle, COMPLETION_HANDLE_EVENTS, 0 };
+      if (g_poll (&poll_fd, 1, 0) <= 0)
+        return TRUE;
+      if (!(poll_fd.revents & COMPLETION_HANDLE_EVENTS))
+        return TRUE;
+    }
+  else
+#endif
     {
       res = vkGetFenceStatus (gdk_vulkan_context_get_device (self), present->vk_fence);
       if (res != VK_SUCCESS)
@@ -825,7 +854,8 @@ gdk_vulkan_context_wait_present (GdkVulkanContext *self,
             }
         }
     }
-  else if (gdk_vulkan_context_has_feature (self, GDK_VULKAN_FEATURE_FENCE_FD))
+  else if (gdk_vulkan_context_has_feature (self, GDK_VULKAN_FEATURE_FENCE_FD) ||
+           gdk_vulkan_context_has_feature (self, GDK_VULKAN_FEATURE_FENCE_WIN32_HANDLE))
     {
       GPollFD poll_fds[MAX_PRESENTS];
       gsize i, n_polls;
@@ -835,7 +865,12 @@ gdk_vulkan_context_wait_present (GdkVulkanContext *self,
         {
           if (presents[i].frame)
             {
-              poll_fds[n_polls++] = (GPollFD) { presents[i].frame->completion_fd, COMPLETION_FD_EVENTS, 0 };
+              if (presents[i].frame->completion_fd > 0)
+                poll_fds[n_polls++] = (GPollFD) { presents[i].frame->completion_fd, COMPLETION_FD_EVENTS, 0 };
+#ifdef GDK_WINDOWING_WIN32
+              else if (presents[i].vk_fence_handle != INVALID_HANDLE_VALUE)
+                poll_fds[n_polls++] = (GPollFD) { (_completion_fd_type)presents[i].vk_fence_handle, COMPLETION_HANDLE_EVENTS, 0 };
+#endif
             }
         }
 
@@ -1037,13 +1072,53 @@ gdk_vulkan_context_frame_add_fd_completion (GdkVulkanContextFrame *vframe)
 
 #endif
 
+#ifdef GDK_WINDOWING_WIN32
+static gboolean
+gdk_vulkan_context_frame_complete_win32_handle_cb (gint         fd,
+                                                   GIOCondition condition,
+                                                   gpointer     data)
+{
+  GdkVulkanContextFrame *vframe = data;
+  GdkDrawContextFrame *frame = data;
+  GdkVulkanContext *self = GDK_VULKAN_CONTEXT (frame->context);
+  uint64_t timestamp;
+
+  timestamp = g_source_get_time_ns (vframe->completion_source);
+  vframe->completion_source = NULL;
+
+  gdk_vulkan_present_reset (self, vframe->present);
+
+  gdk_draw_context_frame_gpu_complete (frame, timestamp);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gdk_vulkan_context_frame_add_win32_handle_completion (GdkVulkanContextFrame *vframe)
+{
+  if (vframe->present->vk_fence_handle == INVALID_HANDLE_VALUE)
+    return;
+
+  vframe->completion_source =
+    gdk_win32_handle_source_new (vframe->present->vk_fence_handle, COMPLETION_HANDLE_EVENTS);
+
+  g_source_set_callback (vframe->completion_source,
+                         (GSourceFunc) gdk_vulkan_context_frame_complete_win32_handle_cb,
+                         vframe,
+                         NULL);
+}
+#endif
+
 static void
 gdk_vulkan_context_frame_add_completion (GdkVulkanContextFrame *vframe)
 {
   vframe->completion_fd = -1;
-
 #ifdef G_OS_UNIX
   gdk_vulkan_context_frame_add_fd_completion (vframe);
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  if (vframe->completion_source == NULL)
+    gdk_vulkan_context_frame_add_win32_handle_completion (vframe);
 #endif
 
   if (vframe->completion_source == NULL)
@@ -1431,14 +1506,14 @@ gdk_vulkan_context_surface_attach (GdkDrawContext  *context,
               VkExportFenceCreateInfo export_info = {
                   .sType = VK_STRUCTURE_TYPE_EXPORT_FENCE_CREATE_INFO,
               };
-              const void *next;
+              const void *next = NULL;
 
               if (gdk_vulkan_context_has_feature (self, GDK_VULKAN_FEATURE_FENCE_FD))
                 {
                   export_info.handleTypes = VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT;
                   next = &export_info;
                 }
-              if (gdk_vulkan_context_has_feature (self, GDK_VULKAN_FEATURE_FENCE_WIN32_HANDLE))
+              else if (gdk_vulkan_context_has_feature (self, GDK_VULKAN_FEATURE_FENCE_WIN32_HANDLE))
                 {
                   export_info.handleTypes = VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_WIN32_BIT;
                   next = &export_info;
@@ -1451,6 +1526,29 @@ gdk_vulkan_context_surface_attach (GdkDrawContext  *context,
                                            },
                                            NULL,
                                            &priv->presents[i].vk_fence);
+
+#ifdef GDK_WINDOWING_WIN32
+              if (gdk_vulkan_context_has_feature (self, GDK_VULKAN_FEATURE_FENCE_WIN32_HANDLE))
+                {
+                  PFN_vkGetFenceWin32HandleKHR func_vkGetFenceWin32HandleKHR;
+                  func_vkGetFenceWin32HandleKHR =
+                    (PFN_vkGetFenceWin32HandleKHR) vkGetDeviceProcAddr (display->vk_device, "vkGetFenceWin32HandleKHR");
+                  if (func_vkGetFenceWin32HandleKHR)
+                    {
+                      GDK_VK_CHECK (func_vkGetFenceWin32HandleKHR, display->vk_device,
+                                                                   &(VkFenceGetWin32HandleInfoKHR) {
+                                                                     .sType = VK_STRUCTURE_TYPE_FENCE_GET_WIN32_HANDLE_INFO_KHR,
+                                                                     .fence = priv->presents[i].vk_fence,
+                                                                     .handleType = VK_EXTERNAL_FENCE_HANDLE_TYPE_OPAQUE_WIN32_BIT,
+                                                                   },
+                                                                   &priv->presents[i].vk_fence_handle);
+                    }
+                  else
+                    {
+                      g_warning ("\"vkGetFenceWin32HandleKHR\" not defined.");
+                    }
+                }
+#endif
             }
         }
 
@@ -1489,6 +1587,13 @@ gdk_vulkan_context_surface_detach (GdkDrawContext *context)
       priv->presents[i].vk_semaphore = VK_NULL_HANDLE;
       if (priv->presents[i].vk_fence)
         {
+#ifdef GDK_WINDOWING_WIN32
+          if (priv->presents[i].vk_fence_handle != INVALID_HANDLE_VALUE)
+            {
+              CloseHandle (priv->presents[i].vk_fence_handle);
+              priv->presents[i].vk_fence_handle = INVALID_HANDLE_VALUE;
+            }
+#endif
           vkDestroyFence (vk_device,
                           priv->presents[i].vk_fence,
                           NULL);
@@ -1570,6 +1675,13 @@ gdk_vulkan_context_class_init (GdkVulkanContextClass *klass)
 static void
 gdk_vulkan_context_init (GdkVulkanContext *self)
 {
+#ifdef GDK_WINDOWING_WIN32
+  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (self);
+  int i;
+
+  for (i = 0; i < MAX_PRESENTS;i ++)
+    priv->presents[i].vk_fence_handle = INVALID_HANDLE_VALUE;
+#endif
 }
 
 /**
@@ -2101,9 +2213,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
                   g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_MEMORY_WIN32_EXTENSION_NAME);
                 }
               if (features & GDK_VULKAN_FEATURE_WIN32_SEMAPHORE)
-                {
-                  g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_SEMAPHORE_WIN32_EXTENSION_NAME);
-                }
+                g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_SEMAPHORE_WIN32_EXTENSION_NAME);
 #endif
               if (features & (GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT | GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT))
                 {
@@ -2112,9 +2222,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
                   g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
                 }
               if (features & (GDK_VULKAN_FEATURE_FENCE_FD | GDK_VULKAN_FEATURE_FENCE_WIN32_HANDLE))
-                {
-                  g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_FENCE_EXTENSION_NAME);
-                }
+                g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_FENCE_EXTENSION_NAME);
               if (features & GDK_VULKAN_FEATURE_FENCE_FD)
                 g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_FENCE_FD_EXTENSION_NAME);
 #ifdef GDK_WINDOWING_WIN32
