@@ -66,7 +66,6 @@ struct _GtkColorChooserDialog
   GtkDialog parent_instance;
 
   GtkWidget *chooser;
-  GtkWidget *scroller;
 };
 
 struct _GtkColorChooserDialogClass
@@ -221,7 +220,7 @@ gtk_color_chooser_dialog_dispose (GObject *object)
 {
   GtkColorChooserDialog *cc = GTK_COLOR_CHOOSER_DIALOG (object);
 
-  g_clear_pointer (&cc->scroller, gtk_widget_unparent);
+  g_clear_pointer (&cc->chooser, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_color_chooser_dialog_parent_class)->dispose (object);
 }
@@ -260,7 +259,6 @@ gtk_color_chooser_dialog_class_init (GtkColorChooserDialogClass *class)
   gtk_widget_class_set_template_from_resource (widget_class,
 					       "/org/gtk/libgtk/ui/gtkcolorchooserdialog.ui");
   gtk_widget_class_bind_template_child (widget_class, GtkColorChooserDialog, chooser);
-  gtk_widget_class_bind_template_child (widget_class, GtkColorChooserDialog, scroller);
   gtk_widget_class_bind_template_callback (widget_class, propagate_notify);
   gtk_widget_class_bind_template_callback (widget_class, color_activated_cb);
 }
