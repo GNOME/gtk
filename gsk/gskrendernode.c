@@ -394,6 +394,9 @@ gsk_render_node_draw_full (GskRenderNode *node,
   /* Check that the calling function did pass a correct color state */
   g_assert (data->ccs == gdk_color_state_get_rendering_color_state (data->ccs));
 
+  if (cairo_status (cr))
+    return;
+
   cairo_save (cr);
 
   GSK_RENDER_NODE_GET_CLASS (node)->draw (node, cr, data);
