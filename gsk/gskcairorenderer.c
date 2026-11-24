@@ -96,7 +96,7 @@ gsk_cairo_renderer_render_texture (GskRenderer           *renderer,
   cairo_t *cr;
   int width, height;
   /* limit from cairo's source code */
-#define MAX_IMAGE_SIZE 32767
+#define MAX_IMAGE_SIZE 16383
 
   width = ceil (viewport->size.width);
   height = ceil (viewport->size.height);

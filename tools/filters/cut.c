@@ -107,7 +107,7 @@ filter_cut (GskRenderNode  *node,
       data.start = strtoul (argv[1], &s, 0);
       if (s == argv[1] || *s != 0)
         {
-          rnt_context_error (ctx, "cut: Invalid value for end: %s\n", argv[2]);
+          rnt_context_error (ctx, "cut: Invalid value for start: %s\n", argv[1]);
           return NULL;
         }
       break;

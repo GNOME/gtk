@@ -210,8 +210,10 @@ gsk_container_node_replay (GskRenderNode   *node,
 
   if (!changed)
     result = gsk_render_node_ref (node);
-  else
+  else if (array->len > 0)
     result = gsk_container_node_new ((GskRenderNode **) array->pdata, array->len);
+  else
+    result = NULL;
 
   g_ptr_array_unref (array);
 
