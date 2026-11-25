@@ -486,75 +486,30 @@ gtk_text_line_display_cache_invalidate_line (GtkTextLineDisplayCache *cache,
 }
 
 static GSequenceIter *
-find_iter_at_text_iter (GtkTextLineDisplayCache *cache,
-                        GtkTextLayout           *layout,
-                        const GtkTextIter       *iter)
+find_iter_at_or_after_line (GtkTextLineDisplayCache *cache,
+                            int                      line)
 {
   GSequenceIter *left;
   GSequenceIter *right;
-  GSequenceIter *mid;
-  GSequenceIter *end;
-  GtkTextLine *target;
-  guint target_lineno;
 
   g_assert (cache != NULL);
-  g_assert (iter != NULL);
-
-  if (g_sequence_is_empty (cache->sorted_by_line))
-    return NULL;
-
-  /* gtk_text_iter_get_line() will have cached value */
-  target_lineno = gtk_text_iter_get_line (iter);
-  target = _gtk_text_iter_get_text_line (iter);
 
   /* Get some iters so we can work with pointer compare */
-  end = g_sequence_get_end_iter (cache->sorted_by_line);
   left = g_sequence_get_begin_iter (cache->sorted_by_line);
-  right = g_sequence_iter_prev (end);
+  right = g_sequence_get_end_iter (cache->sorted_by_line);
 
-  /* We already checked for empty above */
-  g_assert (!g_sequence_iter_is_end (left));
-  g_assert (!g_sequence_iter_is_end (right));
-
-  for (;;)
+  while (left != right)
     {
-      GtkTextLineDisplay *display;
-      guint lineno;
+      GSequenceIter *mid = g_sequence_range_get_midpoint (left, right);
+      GtkTextLineDisplay *display = g_sequence_get (mid);
 
-      if (left == right)
-        mid = left;
-      else
-        mid = g_sequence_range_get_midpoint (left, right);
-
-      g_assert (mid != NULL);
-      g_assert (!g_sequence_iter_is_end (mid));
-
-      if (mid == end)
-        break;
-
-      display = g_sequence_get (mid);
-
-      g_assert (display != NULL);
-      g_assert (display->line != NULL);
-      g_assert (display->cache_iter != NULL);
-
-      if (target == display->line)
-        return mid;
-
-      if (right == left)
-        break;
-
-      lineno = _gtk_text_line_get_number (display->line);
-
-      if (target_lineno < lineno)
-        right = mid;
-      else if (target_lineno > lineno)
+      if (_gtk_text_line_get_number (display->line) < line)
         left = g_sequence_iter_next (mid);
       else
-        g_assert_not_reached ();
+        right = mid;
     }
 
-  return NULL;
+  return left;
 }
 
 
@@ -574,9 +529,8 @@ gtk_text_line_display_cache_invalidate_range (GtkTextLineDisplayCache *cache,
                                               const GtkTextIter       *end,
                                               gboolean                 cursors_only)
 {
-  GSequenceIter *begin_iter;
-  GSequenceIter *end_iter;
   GSequenceIter *iter;
+  int end_line;
 
   g_assert (cache != NULL);
   g_assert (layout != NULL);
@@ -598,61 +552,32 @@ gtk_text_line_display_cache_invalidate_range (GtkTextLineDisplayCache *cache,
     }
 
   /* Common case, begin/end on same line. Just try to find the line by
-   * line number and invalidate it alone.
+   * pointer and invalidate it alone.
    */
   if G_LIKELY (_gtk_text_iter_same_line (begin, end))
     {
-      begin_iter = find_iter_at_text_iter (cache, layout, begin);
+      GtkTextLineDisplay *display;
 
-      if (begin_iter != NULL)
-        {
-          GtkTextLineDisplay *display = g_sequence_get (begin_iter);
-
-          g_assert (display != NULL);
-          g_assert (display->line != NULL);
-
-          gtk_text_line_display_cache_invalidate_display (cache, display, cursors_only);
-        }
+      display = g_hash_table_lookup (cache->line_to_display, _gtk_text_iter_get_text_line (begin));
+      if (display != NULL)
+        gtk_text_line_display_cache_invalidate_display (cache, display, cursors_only);
 
       return;
     }
 
-  /* Find GSequenceIter containing GtkTextLineDisplay that correspond
-   * to each of the text positions.
-   */
-  begin_iter = find_iter_at_text_iter (cache, layout, begin);
-  end_iter = find_iter_at_text_iter (cache, layout, end);
+  /* gtk_text_iter_get_line() will have cached value */
+  iter = find_iter_at_or_after_line (cache, gtk_text_iter_get_line (begin));
+  end_line = gtk_text_iter_get_line (end);
 
-  /* Short-circuit if we found nothing */
-  if (begin_iter == NULL && end_iter == NULL)
-    return;
-
-  /* If nothing matches the end, we need to walk to the end of our
-   * cached displays. We know there is a non-zero number of items
-   * in the sequence at this point, so we can iter_prev() safely.
-   */
-  if (end_iter == NULL)
-    end_iter = g_sequence_iter_prev (g_sequence_get_end_iter (cache->sorted_by_line));
-
-  /* If nothing matched the begin, we need to walk starting from
-   * the first display we have cached.
-   */
-  if (begin_iter == NULL)
-    begin_iter = g_sequence_get_begin_iter (cache->sorted_by_line);
-
-  iter = begin_iter;
-
-  for (;;)
+  while (!g_sequence_iter_is_end (iter))
     {
       GtkTextLineDisplay *display = g_sequence_get (iter);
-      GSequenceIter *next = g_sequence_iter_next (iter);
 
-      gtk_text_line_display_cache_invalidate_display (cache, display, cursors_only);
-
-      if (iter == end_iter)
+      if (_gtk_text_line_get_number (display->line) > end_line)
         break;
 
-      iter = next;
+      iter = g_sequence_iter_next (iter);
+      gtk_text_line_display_cache_invalidate_display (cache, display, cursors_only);
     }
 }
 
