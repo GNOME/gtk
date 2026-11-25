@@ -641,19 +641,23 @@ gtk_text_line_display_cache_invalidate_y_range (GtkTextLineDisplayCache *cache,
 
   STAT_INC (cache->inval_by_y_range);
 
-  /* A common pattern is to invalidate the whole buffer using y==0 and
-   * old_height==new_height. So special case that instead of walking through
-   * each display item one at a time.
-   */
-  if (y < 0 || (y == 0 && old_height == new_height))
+  if (y < 0 && !cursors_only)
     {
       gtk_text_line_display_cache_invalidate (cache);
       return;
     }
 
   btree = _gtk_text_buffer_get_btree (layout->buffer);
-  iter = find_iter_at_or_after_y (cache, layout, y);
-  end_y = (gint64) y + old_height;
+  if (y < 0)
+    {
+      iter = g_sequence_get_begin_iter (cache->sorted_by_line);
+      end_y = G_MAXINT64;
+    }
+  else
+    {
+      iter = find_iter_at_or_after_y (cache, layout, y);
+      end_y = (gint64) y + old_height;
+    }
 
   while (!g_sequence_iter_is_end (iter))
     {
