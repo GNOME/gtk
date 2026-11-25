@@ -582,73 +582,35 @@ gtk_text_line_display_cache_invalidate_range (GtkTextLineDisplayCache *cache,
 }
 
 static GSequenceIter *
-find_iter_at_at_y (GtkTextLineDisplayCache *cache,
-                   GtkTextLayout           *layout,
-                   int                      y)
+find_iter_at_or_after_y (GtkTextLineDisplayCache *cache,
+                         GtkTextLayout           *layout,
+                         int                      y)
 {
   GtkTextBTree *btree;
   GSequenceIter *left;
   GSequenceIter *right;
-  GSequenceIter *mid;
-  GSequenceIter *end;
 
   g_assert (cache != NULL);
   g_assert (layout != NULL);
 
-  if (g_sequence_is_empty (cache->sorted_by_line))
-    return NULL;
-
   btree = _gtk_text_buffer_get_btree (layout->buffer);
-
   /* Get some iters so we can work with pointer compare */
-  end = g_sequence_get_end_iter (cache->sorted_by_line);
   left = g_sequence_get_begin_iter (cache->sorted_by_line);
-  right = g_sequence_iter_prev (end);
+  right = g_sequence_get_end_iter (cache->sorted_by_line);
 
-  /* We already checked for empty above */
-  g_assert (!g_sequence_iter_is_end (left));
-  g_assert (!g_sequence_iter_is_end (right));
-
-  for (;;)
+  while (left != right)
     {
-      GtkTextLineDisplay *display;
-      int cache_y;
-      int cache_height;
+      GSequenceIter *mid = g_sequence_range_get_midpoint (left, right);
+      GtkTextLineDisplay *display = g_sequence_get (mid);
+      int cache_y = _gtk_text_btree_find_line_top (btree, display->line, layout);
 
-      if (left == right)
-        mid = left;
-      else
-        mid = g_sequence_range_get_midpoint (left, right);
-
-      g_assert (mid != NULL);
-      g_assert (!g_sequence_iter_is_end (mid));
-
-      if (mid == end)
-        break;
-
-      display = g_sequence_get (mid);
-
-      g_assert (display != NULL);
-      g_assert (display->line != NULL);
-
-      cache_y = _gtk_text_btree_find_line_top (btree, display->line, layout);
-      cache_height = display->height;
-
-      if (y >= cache_y && y <= (cache_y + cache_height))
-        return mid;
-
-      if (left == right)
-        break;
-
-      if (y < cache_y)
-        right = mid;
-      else if (y > (cache_y + cache_height))
+      if ((gint64) cache_y + display->height < y)
         left = g_sequence_iter_next (mid);
       else
-        g_assert_not_reached ();
+        right = mid;
     }
 
-  return NULL;
+  return left;
 }
 
 /*
@@ -672,6 +634,7 @@ gtk_text_line_display_cache_invalidate_y_range (GtkTextLineDisplayCache *cache,
 {
   GSequenceIter *iter;
   GtkTextBTree *btree;
+  gint64 end_y;
 
   g_assert (cache != NULL);
   g_assert (layout != NULL);
@@ -689,35 +652,19 @@ gtk_text_line_display_cache_invalidate_y_range (GtkTextLineDisplayCache *cache,
     }
 
   btree = _gtk_text_buffer_get_btree (layout->buffer);
-  iter = find_iter_at_at_y (cache, layout, y);
-
-  if (iter == NULL)
-    return;
+  iter = find_iter_at_or_after_y (cache, layout, y);
+  end_y = (gint64) y + old_height;
 
   while (!g_sequence_iter_is_end (iter))
     {
-      GtkTextLineDisplay *display;
-      int cache_y;
-      int cache_height;
+      GtkTextLineDisplay *display = g_sequence_get (iter);
+      int cache_y = _gtk_text_btree_find_line_top (btree, display->line, layout);
 
-      display = g_sequence_get (iter);
+      if (cache_y > end_y)
+        break;
+
       iter = g_sequence_iter_next (iter);
-
-      cache_y = _gtk_text_btree_find_line_top (btree, display->line, layout);
-      cache_height = display->height;
-
-      if (cache_y + cache_height >= y && cache_y <= y + old_height)
-        {
-          gtk_text_line_display_cache_invalidate_display (cache, display, cursors_only);
-
-          y += cache_height;
-          old_height -= cache_height;
-
-          if (old_height > 0)
-            continue;
-        }
-
-      break;
+      gtk_text_line_display_cache_invalidate_display (cache, display, cursors_only);
     }
 }
 
