@@ -367,3 +367,6 @@ this_module (void)
   return (HMODULE) &__ImageBase;
 }
 
+/* Create a GSource from a win32 HANDLE, adapted from libwing */
+GSource      *gdk_win32_handle_source_new (HANDLE       handle,
+                                            GIOCondition condition);
