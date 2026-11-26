@@ -235,6 +235,7 @@ gboolean            gdk_display_init_egl              (GdkDisplay       *self,
                                                        GError          **error);
 gpointer            gdk_display_get_egl_display       (GdkDisplay       *self);
 gpointer            gdk_display_get_egl_config        (GdkDisplay       *self,
+                                                       GdkGLAPI          api,
                                                        GdkMemoryDepth    depth);
 
 void                gdk_display_set_rgba              (GdkDisplay       *display,
