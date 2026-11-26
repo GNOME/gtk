@@ -52,6 +52,7 @@
 #include "gdkprivate.h"
 
 #include <glib.h>
+#include <glib/gi18n-lib.h>
 #include <glib/gprintf.h>
 #include <stdlib.h>
 #include <string.h>
@@ -2951,6 +2952,7 @@ gdk_x11_display_init_gl_backend (GdkX11Display  *self,
   GdkDisplay *display = GDK_DISPLAY (self);
   Display *dpy = gdk_x11_display_get_xdisplay (GDK_DISPLAY (self));
   EGLDisplay egl_display;
+  EGLConfig gl_config, gles_config;
   XVisualInfo *visinfo;
   int visualid;
 
@@ -2977,16 +2979,48 @@ gdk_x11_display_init_gl_backend (GdkX11Display  *self,
         return FALSE;
     }
 
+  gl_config = gdk_display_get_egl_config (display, GDK_GL_API_GL, GDK_MEMORY_U8);
+  gles_config = gdk_display_get_egl_config (display, GDK_GL_API_GLES, GDK_MEMORY_U8);
+
   if (!eglGetConfigAttrib (gdk_display_get_egl_display (display),
-                           gdk_display_get_egl_config (display, GDK_MEMORY_U8),
+                           gl_config ? gl_config : gles_config,
                            EGL_NATIVE_VISUAL_ID,
                            &visualid))
     {
       /* We guarantee this when rating configs */
       g_assert_not_reached ();
     }
+
   visinfo = gdk_x11_display_get_visual_info_for_visual (self, visualid);
   g_assert (visinfo);
+
+  if (gl_config && gles_config)
+    {
+      int gles_visualid;
+
+      if (!eglGetConfigAttrib (gdk_display_get_egl_display (display),
+                               gles_config,
+                               EGL_NATIVE_VISUAL_ID,
+                               &gles_visualid))
+        {
+          g_assert_not_reached ();
+        }
+      if (gles_visualid != visualid)
+        {
+          XVisualInfo *gles_visinfo = gdk_x11_display_get_visual_info_for_visual (self, visualid);
+          g_assert (gles_visinfo);
+
+          if (visinfo->visual != gles_visinfo->visual ||
+              visinfo->depth != gles_visinfo->depth)
+            {
+              g_set_error_literal (error, GDK_GL_ERROR,
+                                   GDK_GL_ERROR_UNSUPPORTED_FORMAT,
+                                   _("Incompatible visuals for GL and GLES"));
+              return FALSE;
+            }
+        }
+    }
+
   *out_visual = visinfo->visual;
   *out_depth = visinfo->depth;
 

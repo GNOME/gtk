@@ -340,9 +340,15 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
   forward_bit = gdk_gl_context_get_forward_compatible (context);
 
   if (display->have_egl_no_config_context)
-    egl_config = NULL;
+    {
+      egl_config = NULL;
+    }
   else
-    egl_config = gdk_display_get_egl_config (display, GDK_MEMORY_U8);
+    {
+      egl_config = gdk_display_get_egl_config (display, api, GDK_MEMORY_U8);
+      if (egl_config == NULL)
+        return 0;
+    }
 
   if (debug_bit)
     flags |= EGL_CONTEXT_OPENGL_DEBUG_BIT_KHR;
@@ -657,7 +663,7 @@ gdk_gl_context_ensure_egl_surface (GdkGLContext   *self,
 
   if (priv->egl_surface == NULL ||
       (priv->egl_surface != NULL &&
-       gdk_display_get_egl_config (display, priv->egl_surface_depth) != gdk_display_get_egl_config (display, depth)))
+       gdk_display_get_egl_config (display, priv->api, priv->egl_surface_depth) != gdk_display_get_egl_config (display, priv->api, depth)))
     {
       GdkGLContext *cleared;
       EGLint attribs[4];
@@ -670,7 +676,7 @@ gdk_gl_context_ensure_egl_surface (GdkGLContext   *self,
         eglDestroySurface (gdk_display_get_egl_display (display), priv->egl_surface);
 
       egl_display = gdk_display_get_egl_display (display);
-      egl_config = gdk_display_get_egl_config (display, depth);
+      egl_config = gdk_display_get_egl_config (display, priv->api, depth);
 
       i = 0;
 /*
