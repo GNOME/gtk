@@ -1523,10 +1523,18 @@ gdk_display_check_egl_extensions (EGLDisplay   egl_display,
 static const char *
 find_egl_device (EGLDisplay egl_display)
 {
-  EGLAttrib value;
+  EGLAttrib value = 0;
   EGLDeviceEXT egl_device;
 
-  eglQueryDisplayAttribEXT (egl_display, EGL_DEVICE_EXT, &value);
+  PFNEGLQUERYDEVICEATTRIBEXTPROC func_eglQueryDisplayAttribEXT =
+    (void *)eglGetProcAddress ("eglQueryDisplayAttribEXT");
+  PFNEGLQUERYDEVICESTRINGEXTPROC func_eglQueryDeviceStringEXT =
+    (void *)eglGetProcAddress ("eglQueryDeviceStringEXT");
+
+  if (G_UNLIKELY (func_eglQueryDisplayAttribEXT == NULL || func_eglQueryDeviceStringEXT == NULL))
+    return NULL;
+
+  func_eglQueryDisplayAttribEXT (egl_display, EGL_DEVICE_EXT, &value);
 
   egl_device = (EGLDeviceEXT)value;
 
@@ -1534,7 +1542,7 @@ find_egl_device (EGLDisplay egl_display)
 #define EGL_DRM_RENDER_NODE_FILE_EXT 0x3377
 #endif
 
-  return eglQueryDeviceStringEXT (egl_device, EGL_DRM_RENDER_NODE_FILE_EXT);
+  return func_eglQueryDeviceStringEXT (egl_device, EGL_DRM_RENDER_NODE_FILE_EXT);
 }
 
 gboolean
