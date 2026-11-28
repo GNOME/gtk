@@ -92,6 +92,9 @@ gboolean                gtk_media_stream_is_seeking             (GtkMediaStream 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_media_stream_seek                   (GtkMediaStream *self,
                                                                  gint64          timestamp);
+GDK_AVAILABLE_IN_4_26
+void                    gtk_media_stream_scrub                  (GtkMediaStream *self,
+                                                                 gint64          timestamp);
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_media_stream_get_loop               (GtkMediaStream *self);
 GDK_AVAILABLE_IN_ALL

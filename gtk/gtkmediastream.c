@@ -21,6 +21,7 @@
 
 #include "gtkmediastream.h"
 
+#include "gdk/gdkprivate.h"
 
 /**
  * GtkMediaStream:
@@ -52,6 +53,7 @@ struct _GtkMediaStreamPrivate
   gint64 duration;
   GError *error;
   double volume;
+  guint seek_resume_id;
 
   guint has_audio : 1;
   guint has_video : 1;
@@ -256,6 +258,7 @@ gtk_media_stream_dispose (GObject *object)
   GtkMediaStream *self = GTK_MEDIA_STREAM (object);
   GtkMediaStreamPrivate *priv = gtk_media_stream_get_instance_private (self);
 
+  g_clear_handle_id (&priv->seek_resume_id, g_source_remove);
   g_clear_error (&priv->error);
 
   G_OBJECT_CLASS (gtk_media_stream_parent_class)->dispose (object);
@@ -506,8 +509,10 @@ gtk_media_stream_play (GtkMediaStream *self)
   if (priv->error)
     return;
 
-  if (priv->playing)
+  if (priv->playing && priv->seek_resume_id == 0)
     return;
+
+  g_clear_handle_id (&priv->seek_resume_id, g_source_remove);
 
   if (GTK_MEDIA_STREAM_GET_CLASS (self)->play (self))
     {
@@ -547,7 +552,10 @@ gtk_media_stream_pause (GtkMediaStream *self)
   if (!priv->playing)
     return;
 
-  GTK_MEDIA_STREAM_GET_CLASS (self)->pause (self);
+  if (priv->seek_resume_id != 0) /* Already paused for seek, simply don't resume */
+    g_clear_handle_id (&priv->seek_resume_id, g_source_remove);
+  else
+    GTK_MEDIA_STREAM_GET_CLASS (self)->pause (self);
 
   priv->playing = FALSE;
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PLAYING]);
@@ -722,6 +730,52 @@ gtk_media_stream_get_error (GtkMediaStream *self)
   return priv->error;
 }
 
+#define SEEK_SCRUB_TIMEOUT 250
+
+static void
+media_stream_seek_internal (GtkMediaStream *self,
+                            gint64          timestamp,
+                            gboolean        scrubbing)
+{
+  GtkMediaStreamPrivate *priv = gtk_media_stream_get_instance_private (self);
+  gboolean was_seeking;
+
+  g_return_if_fail (GTK_IS_MEDIA_STREAM (self));
+  g_return_if_fail (timestamp >= 0);
+
+  if (priv->error)
+    return;
+
+  if (!priv->seekable)
+    return;
+
+  g_object_freeze_notify (G_OBJECT (self));
+
+  was_seeking = priv->seeking;
+  priv->seeking = TRUE;
+
+  /* Prevent stuttering playback during a seek by briefly pausing */
+  if (scrubbing && priv->playing)
+    {
+      if (priv->seek_resume_id == 0)
+        GTK_MEDIA_STREAM_GET_CLASS (self)->pause (self);
+
+      g_clear_handle_id (&priv->seek_resume_id, g_source_remove);
+      priv->seek_resume_id = g_timeout_add_once (SEEK_SCRUB_TIMEOUT,
+                                                 (GSourceOnceFunc) gtk_media_stream_play,
+                                                 self);
+      gdk_source_set_static_name_by_id (priv->seek_resume_id,
+                                        "[gtk] gtk_media_stream_play");
+    }
+
+  GTK_MEDIA_STREAM_GET_CLASS (self)->seek (self, timestamp);
+
+  if (was_seeking != priv->seeking)
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SEEKING]);
+
+  g_object_thaw_notify (G_OBJECT (self));
+}
+
 /**
  * gtk_media_stream_seek:
  * @self: a `GtkMediaStream`
@@ -743,29 +797,22 @@ void
 gtk_media_stream_seek (GtkMediaStream *self,
                        gint64          timestamp)
 {
-  GtkMediaStreamPrivate *priv = gtk_media_stream_get_instance_private (self);
-  gboolean was_seeking;
+  media_stream_seek_internal(self, timestamp, FALSE);
+}
 
-  g_return_if_fail (GTK_IS_MEDIA_STREAM (self));
-  g_return_if_fail (timestamp >= 0);
-
-  if (priv->error)
-    return;
-
-  if (!priv->seekable)
-    return;
-
-  g_object_freeze_notify (G_OBJECT (self));
-
-  was_seeking = priv->seeking;
-  priv->seeking = TRUE;
-
-  GTK_MEDIA_STREAM_GET_CLASS (self)->seek (self, timestamp);
-
-  if (was_seeking != priv->seeking)
-    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SEEKING]);
-
-  g_object_thaw_notify (G_OBJECT (self));
+/**
+ * gtk_media_stream_scrub:
+ * @self: a `GtkMediaStream`
+ * @timestamp: timestamp to seek to.
+ *
+ * This behaves like [method@Gtk.MediaStream.seek], with the addition that the
+ * media stream is briefly paused.
+ */
+void
+gtk_media_stream_scrub (GtkMediaStream *self,
+                        gint64          timestamp)
+{
+  media_stream_seek_internal(self, timestamp, TRUE);
 }
 
 /**
