@@ -142,8 +142,8 @@ time_adjustment_changed (GtkAdjustment    *adjustment,
   if (gtk_adjustment_get_value (adjustment) == (double) gtk_media_stream_get_timestamp (controls->stream) / G_USEC_PER_SEC)
     return;
 
-  gtk_media_stream_seek (controls->stream,
-                         gtk_adjustment_get_value (adjustment) * G_USEC_PER_SEC + 0.5);
+  gtk_media_stream_scrub (controls->stream,
+                          gtk_adjustment_get_value (adjustment) * G_USEC_PER_SEC + 0.5);
 }
 
 static void
